@@ -27,7 +27,6 @@ class Commander(object):
         CWD      : %s
         Host IPs : %s
         Local IP : %s
-
         %s
         \033[0m
         \033[97m[+] Available commands: %s.\033[0m
