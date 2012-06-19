@@ -45,7 +45,7 @@ class Commander(object):
             print '\n[!] Invalid URL.'
             exit(1)
         try:
-            local_ip = (urlopen('http://85.214.27.38/show_my_ip').readlines())[0].split(':')[1].strip()
+            local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
         except URLError:
             local_ip = 'Unknown'
         available_commands = ['exit', 'clear', 'history', 'info', 'banner', 'writable']
