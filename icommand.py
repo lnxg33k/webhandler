@@ -13,7 +13,7 @@ See the GNU General Public License for more details.
 '''
 
 from sys import argv
-from urllib2 import urlopen, quote, URLError, HTTPError
+from urllib2 import urlopen, quote, unquote, URLError, HTTPError
 from subprocess import Popen
 try:
     import readline
@@ -106,8 +106,8 @@ class Commander(object):
                         Colors.GREEN, self.source[4], Colors.END,
                         Colors.YELLOW, self.source[3], Colors.END)))
                 except IndexError:
-                    command = raw_input('icommand\033[91m@\033[0m\033[92mserver:$ ')
-                history.append(quote(command))
+                    command = quote(raw_input('icommand\033[91m@\033[0m\033[92mserver:$ '))
+                history.append(unquote(command))
                 if command not in ['exit', 'quite', 'bye']:
                     if command == 'clear':
                         Popen('clear', shell=True).wait()
