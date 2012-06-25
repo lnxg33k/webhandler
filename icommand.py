@@ -73,7 +73,7 @@ class ServerInfo(RequestType):
             print '\n[!] Invalid URL.'
             exit(1)
         try:
-            local_ip = ''  # (urlopen('http://ifconfig.me/ip').read()).strip()
+            local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
         except URLError:
             local_ip = 'Unknown'
         available_commands = ['exit', 'clear', 'history', 'info', 'banner', 'writable', 'spread']
