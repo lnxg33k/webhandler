@@ -51,7 +51,6 @@ class RequestType():
 
 
 class ServerInfo(RequestType):
-
     # defining static methods
     @staticmethod
     def banner():
@@ -157,7 +156,6 @@ class Commander(ServerInfo):
                         source = self.get_page_source().read()
                         if source:
                             print source.rstrip()
-                            source = None
                         else:
                             print '{}: command not found'.format(unquote(command))
                 else:
