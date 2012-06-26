@@ -1,26 +1,13 @@
 from urllib2 import urlopen, URLError, HTTPError
 from request_info import RequestType
-from menu import Colors
+from menu import Colors, get_banner
 
 
 class ServerInfo(RequestType):
-    # defining static methods
-    @staticmethod
-    def banner():
-        return """{0}
-\t\t __         ______   ______   .___  ___. .___  ___.      ___      .__   __.  _______
-\t\t|  |       /      | /  __  \  |   \/   | |   \/   |     /   \     |  \ |  | |       \\
-\t\t|  |      |  ,----'|  |  |  | |  \  /  | |  \  /  |    /  ^  \    |   \|  | |  .--.  |
-\t\t|  |      |  |     |  |  |  | |  |\/|  | |  |\/|  |   /  /_\  \   |  . `  | |  |  |  |
-\t\t|  |      |  `----.|  `--'  | |  |  |  | |  |  |  |  /  _____  \  |  |\   | |  '--'  |
-\t\t|__|       \______| \______/  |__|  |__| |__|  |__| /__/     \__\ |__| \__| |_______/
-\t\t--------------------------------------------------------------------------------------
-        {1}""" .format(Colors.YELLOW, Colors.END)
-
     def get_information(self):
         try:
             self.source = source = map(str.strip, self.get_page_source().readlines())
-            print ServerInfo.banner()
+            print  get_banner
         except HTTPError:
             print '\n[!] Invalid URL.'
             exit(1)
