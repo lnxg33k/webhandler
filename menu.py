@@ -11,6 +11,18 @@ class Colors:
     END = '\033[0m'
 
 
+class Banner(object):
+    banner = """{0}
+\t\t __         ______   ______   .___  ___. .___  ___.      ___      .__   __.  _______
+\t\t|  |       /      | /  __  \  |   \/   | |   \/   |     /   \     |  \ |  | |       \\
+\t\t|  |      |  ,----'|  |  |  | |  \  /  | |  \  /  |    /  ^  \    |   \|  | |  .--.  |
+\t\t|  |      |  |     |  |  |  | |  |\/|  | |  |\/|  |   /  /_\  \   |  . `  | |  |  |  |
+\t\t|  |      |  `----.|  `--'  | |  |  |  | |  |  |  |  /  _____  \  |  |\   | |  '--'  |
+\t\t|__|       \______| \______/  |__|  |__| |__|  |__| /__/     \__\ |__| \__| |_______/
+\t\t--------------------------------------------------------------------------------------
+        {1}""" .format(Colors.YELLOW, Colors.END)
+
+
 class GetArgs(object):
     if len(argv) <= 1:
         print'''
@@ -43,3 +55,4 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
     parameter = options.parameter
 
 getargs = GetArgs()
+get_banner = Banner().banner

@@ -2,7 +2,7 @@
 from request_info import url
 from request_info import RequestType
 from server_info import serverinfo
-from menu import Colors
+from menu import Colors, get_banner
 from urllib import unquote
 from subprocess import Popen
 try:
@@ -44,7 +44,7 @@ class Commander(RequestType):
                     elif command == 'info':
                         print serverinfo.info
                     elif command == 'banner':
-                        print serverinfo.banner()
+                        print get_banner
                     elif command == 'writable':
                         self.cmd = "find /var/www/ -xdev -type d \( -perm -0002 -a ! -perm -1000 \) -print"
                         self.writables = map(str.strip, self.get_page_source().readlines())
