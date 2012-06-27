@@ -12,7 +12,8 @@ It sends requests to the server through urllib/urllib2 [Python][] modules
 ### Usage: ###
 * --url is a positional argument withing GET and POST requests:
     - python icommand.py --url http://testserver.com/shell.php?cmd=  
-  	- python icommand.py --url http://testserver.com/shell.php --method POST --parameter cmd
+    - python icommand.py --url http://testserver.com/shell.php --method POST --parameter cmd
+    - python icommand.py -u http://testserver.com -p id --proxy http://127.0.0.1:8080
 
 [Python]: http://www.python.org/download/
 __p.s.__
