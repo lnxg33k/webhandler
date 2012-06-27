@@ -39,20 +39,22 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
             usage='%(prog)s -h',
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog='''
-    Examples:
-        python %(prog)s --url http://www.fbi.gov/shell.php?cmd=
-        python %(prog)s --url http://www.nsa.gov/shell.php --method POST --parameter cmd
+Examples:
+    python %(prog)s --url http://www.fbi.gov/shell.php?cmd=
+    python %(prog)s --url http://www.nsa.gov/shell.php --method POST --parameter cmd
         ''')
     positional = parser.add_argument_group('Positional arguments')
     positional.add_argument('-u', '--url', help='Full URL for the uploaded PHP code', metavar='')
     optional = parser.add_argument_group('Optional arguments')
     optional.add_argument('-h', '--help', action='help', help='Print this help message then exit.')
-    optional.add_argument('-m', '--method', dest='method', help='The method used in the uploaded PHP code (eg. post)', metavar='')
-    optional.add_argument('-p', '--parameter', dest='parameter', help='Parameter that used in the shell (eg. cmd)', metavar='')
+    optional.add_argument('-m', '--method', dest='method', help='The method used in the uploaded PHP code (e.g. post)', metavar='')
+    optional.add_argument('-p', '--parameter', dest='parameter', help='Parameter that used in the shell (e.g. cmd)', metavar='')
+    optional.add_argument('-x', '--proxy', dest='proxy', help='Proxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
     options = parser.parse_args()
     url = options.url
     method = options.method.lower() if options.method else None
     parameter = options.parameter
+    proxy = options.proxy
 
 getargs = GetArgs()
 get_banner = Banner().banner
