@@ -28,6 +28,6 @@ if getargs.url:
         exit(1)
     else:
         print get_banner                            # get icommand banner
-        print serverinfo.get_information()          # call get_information and print info
         request_type.get_page_source()              # call get_page_source method
+        serverinfo.get_information()                # call get_information and print info
         commander.BackConnect()                     # call BackConnect method
