@@ -67,10 +67,8 @@ class Commander(object):
                     else:
                         # setting aliases for some commands to avoid
                         # issues realted to empty directories
-                        if 'ls' in command:
-                            command = command.replace('ls', 'ls -lha')
-                        if 'rm' in command:
-                            command = command.replace('rm', 'rm -v')
+                        command = command.replace('ls', 'ls -lha')
+                        command = command.replace('rm', 'rm -v')
                         request_type.cmd = command
 
                         # get the source code cotenets
