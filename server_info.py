@@ -48,7 +48,7 @@ class ServerInfo(object):
                 host_ip=', '.join(self.source[4:]),
                 local_ip=local_ip,
                 available_commands=available_commands,)
-        return self.info
+        print self.info
 
     # a method to get all writable directories within CWD
     def get_writable(self):
