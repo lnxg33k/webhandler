@@ -20,7 +20,7 @@ class Banner(object):
 \t\t|  |      |  `----.|  `--'  | |  |  |  | |  |  |  |  /  _____  \  |  |\   | |  '--'  |
 \t\t|__|       \______| \______/  |__|  |__| |__|  |__| /__/     \__\ |__| \__| |_______/
 \t\t--------------------------------------------------------------------------------------
-        {1}""" .format(Colors.YELLOW, Colors.END)
+{1}""".format(Colors.YELLOW, Colors.END)
 
 
 class GetArgs(object):
@@ -50,11 +50,15 @@ Examples:
     optional.add_argument('-m', '--method', dest='method', help='The method used in the uploaded PHP code (e.g. post)', metavar='')
     optional.add_argument('-p', '--parameter', dest='parameter', help='Parameter that used in the shell (e.g. cmd)', metavar='')
     optional.add_argument('-x', '--proxy', dest='proxy', help='Proxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
+    optional.add_argument('-g', '--agent', dest='agent', help='user-agent (e.g. \'Mozilla/5.0\')', metavar='')
+    optional.add_argument('-rg', '--random-agent', dest='random_agent', help='icommand will use some random user-agent', action='store_true')
     options = parser.parse_args()
     url = options.url
     method = options.method.lower() if options.method else None
     parameter = options.parameter
     proxy = options.proxy
+    agent = options.agent
+    random_agent = options.random_agent
 
 getargs = GetArgs()
 get_banner = Banner().banner
