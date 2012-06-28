@@ -42,6 +42,7 @@ class RequestType(object):
         self.cmd += 'id;'
         self.cmd += 'uname -a;'
         self.cmd += 'pwd;'
+        self.cmd += 'uptime | awk \'{print $3 ":" $5}\' | tr -d "," |  awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes" }\';'
         self.cmd += '/sbin/ifconfig |grep -B1 "inet addr" |awk \'{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }\' |awk -F: \'{ print $3 }\''
 
     def get_page_source(self):

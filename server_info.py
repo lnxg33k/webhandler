@@ -33,6 +33,7 @@ class ServerInfo(object):
         {red}ID{end}       :  {green}{current_id}{end}
         {red}Kernel{end}   :  {green}{kernel_info}{end}
         {red}CWD{end}      :  {green}{cwd}{end}
+        {red}Uptime{end}   :  {green}{uptime}{end}
         {red}Host IPs{end} :  {green}{host_ip}{end}
         {red}Local IP{end} :  {green}{local_ip}{end}
         {dashed}
@@ -45,7 +46,8 @@ class ServerInfo(object):
                 current_id=self.source[1],
                 kernel_info=self.source[2],
                 cwd=self.source[3],
-                host_ip=', '.join(self.source[4:]),
+                uptime=self.source[4],
+                host_ip=', '.join(self.source[5:]),
                 local_ip=local_ip,
                 available_commands=available_commands,)
         print self.info
