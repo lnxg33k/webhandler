@@ -35,7 +35,7 @@ class ServerInfo(object):
         {red}CWD{end}      :  {green}{cwd}{end}
         {red}Uptime{end}   :  {green}{uptime}{end}
         {red}Host IPs{end} :  {green}{host_ip}{end}
-        {red}Local IP{end} :  {green}{local_ip}{end}
+        {red}External IP{end} :  {green}{local_ip}{end}
         {dashed}
 
         {hot}[+] Available commands: {available_commands}.{end}
