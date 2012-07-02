@@ -86,8 +86,8 @@ class Commander(object):
                             victim_box.upload_file(lfile_path, rfile_path)
 
                     else:
-                        cwd = self.cwd
                         if command.split()[0] == 'cd' and len(command.split()) > 1:
+                            cwd = self.cwd
                             if '../' in command.split()[-1] or '..' in command.split()[-1]:
                                 self.cwd = cwd.rstrip(cwd.split('/').pop()).rstrip('/')
                             else:
