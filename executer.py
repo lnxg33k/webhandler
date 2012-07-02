@@ -4,6 +4,7 @@ from server_info import serverinfo
 from menu import Colors, get_banner
 from urllib import unquote
 from subprocess import Popen
+from os import getcwd
 try:
     import readline
 except ImportError:
@@ -66,16 +67,19 @@ class Commander(object):
                         serverinfo.spread_shell()
 
                     elif command.startswith('download'):
-                        if len(command.split()) != 3:
-                            print '\n[!] Usage: download remote_file_path local_file_path'
+                        if len(command.split()) < 2:
+                            print '\n[!] Usage: download [remote_file_path] [local_file_path| <optional argument>]'
                         else:
                             rfile_path = command.split()[1]
-                            lfile_path = command.split()[2]
+                            if len(command.split()) == 2:
+                                lfile_path = '{0}/{1}'.format(getcwd(), rfile_path.split('/')[-1])
+                            else:
+                                lfile_path = command.split()[2]
                             serverinfo.download_file(rfile_path, lfile_path)
 
                     elif command.startswith('upload'):
                         if len(command.split()) != 3:
-                            print '\n[!] Usage: upload local_file_path remote_file_path'
+                            print '\n[!] Usage: upload [local_file_path] [remote_file_path]'
                         else:
                             lfile_path = command.split()[1]
                             rfile_path = command.split()[2]
