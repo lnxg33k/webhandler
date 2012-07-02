@@ -13,8 +13,7 @@ See the GNU General Public License for more details.
 '''
 
 #importing modules
-from request_info import request_type
-from server_info import serverinfo
+from victim_info import victim_box
 from executer import commander
 from menu import getargs, get_banner
 
@@ -28,6 +27,5 @@ if getargs.url:
         exit(1)
     else:
         print get_banner                            # get icommand banner
-        request_type.get_page_source()              # call get_page_source method
-        serverinfo.get_information()                # call get_information and print info
+        victim_box.get_information()                # call get_information and print info
         commander.BackConnect()                     # call BackConnect method
