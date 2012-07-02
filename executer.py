@@ -28,7 +28,7 @@ class Commander(object):
                     # getting command to be executed from the user
                     command = raw_input('{user}{red}@{end}{green}{host_ip}{end}:~{yellow}({cwd}){end}-$ '.format(user=victim_box.current_user,
                         red=Colors.RED, green=Colors.GREEN, yellow=Colors.YELLOW, end=Colors.END,
-                        host_ip=victim_box.host_ip,
+                        host_ip=victim_box.host_ip.split()[0],
                         cwd=self.cwd))
                 # if something went wrong screw the list
                 except IndexError:
