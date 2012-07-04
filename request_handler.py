@@ -69,7 +69,6 @@ class MakeRequest(object):
                 sc = opener.open('{}{}'.format(self.url, quote(self.cmd)))
                 return sc
             except Exception, e:
-                print self.url, self.cmd  # , self.cmd, self.parameter, self.method
                 print errmsg, e
                 exit(1)
 

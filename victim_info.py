@@ -62,7 +62,6 @@ class VictimBox(object):
     # a method to get all writable directories within CWD
     def get_writable(self):
         make_request.cmd = "find {0} -depth -perm -0002 -type d".format(linux.get_doc_root())
-        print make_request.cmd
         self.writables = map(str.strip, make_request.get_page_source().readlines())
         c = 1
         for path in self.writables:
