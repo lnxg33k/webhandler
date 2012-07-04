@@ -109,9 +109,10 @@ class Commander(object):
 
                         else:
                             # setting aliases for some commands to avoid
-                            # issues realted to empty directories
-                            command = command.replace('ls', 'ls -lha')
-                            command = command.replace('rm', 'rm -v')
+                            # issues realted to empty directorie
+                            command = command.replace('ls', 'ls -lha') if command.split()[0] == 'ls' else command
+                            command = command.replace('rm', 'rm -v') if command.split()[0] == 'rm' else command
+                            command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
                             command = command.replace('ifconfig', '/sbin/ifconfig')
                             make_request.cmd = 'cd {0};{1}'.format(self.cwd, command)
 
@@ -122,7 +123,11 @@ class Commander(object):
 
                             # if the executed command doesn't exist
                             else:
-                                print '{}: command not found'.format(unquote(command))
+                                errmsg = '{}: command not found'.format(unquote(command))
+                                if command.split()[0] == 'echo':
+                                    pass
+                                else:
+                                    print errmsg
 
                 # exist icommand if user provides exit as a command
                 else:
