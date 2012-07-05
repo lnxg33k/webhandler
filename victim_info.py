@@ -3,7 +3,6 @@ from request_handler import make_request
 from menu import Colors, getargs
 from linux_version import linux
 
-
 class VictimBox(object):
     '''
     VictimBox class is used for getting information
@@ -30,7 +29,7 @@ class VictimBox(object):
         # adding another command requires editing two modules
         # 1st- define the method here "victim_info.py" module
         # then add a logic statment in "executer.py" module
-        self.available_commands = "['exit', 'clear', 'history', 'info', 'banner', 'writable', 'spread', 'download', 'upload']"
+        self.available_commands = "['banner', 'clear', 'download', 'exit', 'history', 'info', 'spread', 'upload', 'writable']"
 
     def get_information(self):
         self.info = \
@@ -45,8 +44,8 @@ class VictimBox(object):
         {red}External IP{end} :  {green}{local_ip}{end}
         {dashed}
 
-        {hot}[+] Available commands: {available_commands}.{end}
-        {hot}[+] Inserting{end} {red}!{end} {hot}at the begining of the command will execute it on your box.{end}
+        {hot}[+] Available commands: {available_commands}{end}
+        {hot}[+] Inserting{end} {red}!{end} {hot}at the begining of the command will execute the command locally (on your box){end}
         '''.format(dashed='-' * int(len(self.kernel_info) + 16),
                 red=Colors.RED, green=Colors.GREEN, end=Colors.END, hot=Colors.HOT,
                 current_user=self.current_user,
@@ -91,7 +90,7 @@ class VictimBox(object):
         elif file_type == 'dir':
             print '\n[!] Uploading directories will be implemented soon'
         else:
-            print 'The file/dir doesm\'t exist or I ain\'t have a permission'
+            print 'The file/dir doesn\'t exist or I don\'t have permission'
 
     # a method for uploading files to the box
     def upload_file(self, lfile_path, rfile_path):

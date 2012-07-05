@@ -1,7 +1,6 @@
 from sys import argv
 import argparse
 
-
 class Colors:
     RED = '\033[91m'
     GREEN = '\033[92m'
@@ -40,14 +39,14 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog='''
 Examples:
-    python %(prog)s --url http://www.fbi.gov/shell.php?cmd= --proxy http://127.0.0.1:8080
-    python %(prog)s --url http://www.nsa.gov/shell.php --method POST --parameter cmd
-    python %(prog)s --url http://www.fbi.gov/shell.php?cmd= --random-agent
+    python %(prog)s --url http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
+    python %(prog)s --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
+    python %(prog)s --url http://www.mywebsite.com/shell.php?cmd= --random-agent
         ''')
     positional = parser.add_argument_group('Positional arguments')
     positional.add_argument('-u', '--url', help='Full URL for the uploaded PHP code', metavar='')
     optional = parser.add_argument_group('Optional arguments')
-    optional.add_argument('-h', '--help', action='help', help='Print this help message then exit.')
+    optional.add_argument('-h', '--help', action='help', help='Print this help message then exit')
     optional.add_argument('-m', '--method', dest='method', help='The method used in the uploaded PHP code (e.g. post)', metavar='')
     optional.add_argument('-p', '--parameter', dest='parameter', help='Parameter that used in the shell (e.g. cmd)', metavar='')
     optional.add_argument('-x', '--proxy', dest='proxy', help='Proxy (e.g. \'http://127.0.0.1:8080\')', metavar='')

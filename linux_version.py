@@ -1,6 +1,5 @@
 from request_handler import make_request
 
-
 class LinuxVersion(object):
     def __init__(self):
         self.url = make_request.url

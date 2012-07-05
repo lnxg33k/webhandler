@@ -8,10 +8,9 @@ from os import getcwd
 try:
     import readline
 except ImportError:
-    print '\n[!] readline module is required to provide elaborate line editing and history features.'
+    print '\n[!] readline module is required to provide elaborate line editing and history features'
 else:
     pass
-
 
 class Commander(object):
     '''
@@ -131,12 +130,12 @@ class Commander(object):
 
                 # exist icommand if user provides exit as a command
                 else:
-                    print '\n[+] Preformed {} commands on the server.\n[!] Connection closed ..'.format(i)
+                    print '\n[+] Preformed {} commands on the server.\n[!] Connection closed'.format(i)
                     break
 
             # exit icommand if it recieved a ^c
             except KeyboardInterrupt:
-                print '\n\n[+] Preformed {} commands on the server.\n[!] Connection closed ..'.format(i)
+                print '\n\n[+] Preformed {} commands on the server.\n[!] Connection closed'.format(i)
                 break
             i += 1
 
