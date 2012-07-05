@@ -1,10 +1,10 @@
-icommand - command controller for PHP system function
+icommand - command controller/handler for PHP system function
 ---
 ![My image](http://s9.postimage.org/6u4546aov/icommand.png)  
 
 ### Info: ###
 ---
-icommand is a command controller for PHP _program execution functions_ like system, passthru, exec and etc ...  
+icommand is a command controller to handle PHP _program execution functions_ like system, passthru, exec and etc ...  
 The script tries to simulate Linux bash as it works from CLI.  
 As of optional settings it supports HTTP proxy together with HTTP header values "User-Agent".  
 It sends requests to the server through urllib/urllib2 [Python][] modules.   
