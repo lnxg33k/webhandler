@@ -40,7 +40,6 @@ class MakeRequest(object):
         self.cmd += 'uname -a;'
         self.cmd += 'pwd;'
         self.cmd += 'uptime | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes" }\';'
-        self.cmd += '/usr/bin/awk \'{print $1 " " $2 " " $3}\' /proc/loadavg;'
         self.cmd += "/sbin/ifconfig | grep -e 'inet addr' | grep -v '127.0.0.1' | cut -f2 -d':' | cut -f1 -d' ';"
 
     def get_page_source(self):
@@ -59,7 +58,12 @@ class MakeRequest(object):
             self.method = 'post'
             parameters = urlencode({self.parameter: self.cmd})
             try:
-                sc = opener.open(self.url, parameters)
+                sc = map(str.strip, opener.open(self.url, parameters).readlines())
+                parameters = urlencode({self.parameter: 'uname'})
+                garpage = map(str.strip, opener.open(self.url, parameters).readlines())
+                garpage = list(set(sc).intersection(garpage))
+                sc = [i for i in sc if not i in garpage]
+                #print sc
                 return sc
             except Exception, e:
                 print errmsg, e
@@ -67,7 +71,11 @@ class MakeRequest(object):
         # if the used method set get
         else:
             try:
-                sc = opener.open('{}{}'.format(self.url, quote(self.cmd)))
+                sc = map(str.strip, opener.open('{}{}'.format(self.url, quote(self.cmd))).readlines())
+                self.cmd = 'uname'
+                garpage = map(str.strip, opener.open('{}{}'.format(self.url, quote(self.cmd))).readlines())
+                garpage = list(set(sc).intersection(garpage))
+                sc = [i for i in sc if not i in garpage]
                 return sc
             except Exception, e:
                 print errmsg, e

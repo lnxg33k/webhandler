@@ -98,13 +98,13 @@ class Commander(object):
                                 else:
                                     if command.split()[-1].startswith('/'):
                                         make_request.cmd = '[ -d {0} ] && echo is_valid'.format(command.split()[-1])
-                                        if make_request.get_page_source().read().strip() == 'is_valid':
+                                        if make_request.get_page_source()[0] == 'is_valid':
                                             self.cwd = command.split()[-1]
                                         else:
-                                            print 'bash: cd: {}: No such file or directory'.format(command.split()[01])
+                                            print 'bash: cd: {}: No such file or directory'.format(command.split()[-1])
                                     else:
                                         make_request.cmd = '[ -d {0}/{1} ] && echo is_valid'.format(cwd, command.split()[-1])
-                                        if make_request.get_page_source().read().strip() == 'is_valid':
+                                        if make_request.get_page_source()[0] == 'is_valid':
                                             self.cwd = '{0}/{1}'.format(cwd, command.split()[-1])
                                         else:
                                             print 'bash: cd: {0}: No such file or directory'.format(command.split()[-1])
@@ -119,12 +119,14 @@ class Commander(object):
                                 command = command.replace('rm', 'rm -v') if command.split()[0] == 'rm' else command
                                 command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
                                 command = command.replace('ifconfig', '/sbin/ifconfig')
+
                                 make_request.cmd = 'cd {0};{1}'.format(self.cwd, command)
 
                                 # get the source code cotenets
-                                source = make_request.get_page_source().read()
+                                source = make_request.get_page_source()
                                 if source:
-                                    print source.rstrip()
+                                    for line in source:
+                                        print line
 
                                 # if the executed command doesn't exist
                                 else:
