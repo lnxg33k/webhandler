@@ -43,8 +43,8 @@ class VictimBox(object):
         {red}Kernel{end}      :  {green}{kernel_info}{end}
         {red}CWD{end}         :  {green}{cwd}{end}
         {red}Uptime{end}      :  {green}{uptime}{end}
-        {red}Internal IPs{end}:  {green}{host_ip}{end}
-        {red}External IP{end} :  {green}{local_ip}{end}
+        {red}Targets IPs{end} :  {green}{host_ip}{end}
+        {red}Our IP{end}      :  {green}{local_ip}{end}
         {red}CPU Load{end}    :  {green}{cpu_load}{end}
         {dashed}
 
@@ -89,7 +89,7 @@ class VictimBox(object):
             try:
                 with open(lfile_path, 'w') as dest_file:
                     dest_file.write(make_request.get_page_source().read().rstrip() + '\n')
-                print '\n[+] Successfully downloaded {0} to {1}'.format(rfile_path, lfile_path)
+                print '\n[+] Successfully downloaded "{0}" to "{1}"'.format(rfile_path, lfile_path)
             except IOError, e:
                 print '{0}\n[!] {1}{2}'.format(Colors.RED, e, Colors.END)
         elif file_type == 'dir':
@@ -108,8 +108,8 @@ class VictimBox(object):
                     except IOError, e:
                         print '\n{0}[!] Error: {1}{2}'.format(Colors.RED, e, Colors.END)
                 else:
-                    print '{0}[!] Coudln\'t download the following file:{1} {2}'.format(Colors.RED, Colors.END, file)
-            print '\n{0}[+] Files downloaded successfully to{1} {2}'.format(Colors.GREEN, Colors.END, lfile_path)
+                    print '{0}[!] Coudln\'t download the following file: {1} {2}'.format(Colors.RED, Colors.END, file)
+            print '\n{0}[+] Files downloaded successfully to: {1} {2}'.format(Colors.GREEN, Colors.END, lfile_path)
         else:
             print '\n{0}[!]The file/dir doesn\'t exist or I don\'t have permission{1}'.format(Colors.RED, Colors.END)
 
