@@ -43,9 +43,9 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
         Examples:
         python %(prog)s --url http://www.mywebsite.com/shell.php?cmd=
         python %(prog)s --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
-        python %(prog)s --url http://www.mywebsite.com/shell.php?cmd= --random-agent
-        python %(prog)s --url http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080		
-            ''')
+        python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent
+        python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080	
+        ''')
         positional = parser.add_argument_group('Positional arguments')
         positional.add_argument('-u', '--url', help='Full URL for the uploaded PHP code', metavar='')
         optional = parser.add_argument_group('Optional arguments')

