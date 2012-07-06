@@ -39,7 +39,7 @@ class MakeRequest(object):
         self.cmd += 'id;'
         self.cmd += 'uname -a;'
         self.cmd += 'pwd;'
-        self.cmd += 'uptime | awk \'{print $3 ":" $5}\' | tr -d "," |  awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes" }\';'
+        self.cmd += 'uptime | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes" }\';'
         self.cmd += '/usr/bin/awk \'{print $1 " " $2 " " $3}\' /proc/loadavg;'
         self.cmd += "/sbin/ifconfig | grep -e 'inet addr' | grep -v '127.0.0.1' | cut -f2 -d':' | cut -f1 -d' ';"
 
