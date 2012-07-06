@@ -1,3 +1,12 @@
+now request_handler module returns page's source code in a list
+you don't need to call the make_request.get_page_source() like this:
+    make_request.get_page_source().read() or make_request.get_page_source().readlines()
+if you'd like the return to act like make_request.get_page_source().read just use slicing with just only a single index "0" make_request.get_page_source()[0]
+otherwise use make_request.get_page_source() 
+
+the enumeration need to be excluded from request_handler module though it works great +1 
+
+
 1- Work on enumeration/"loot" functions
     -> http://g0tmi1k.blogspot.co.uk/2011/08/basic-linux-privilege-escalation.html
     -> http://pentestmonkey.net/tools/audit/unix-privesc-check

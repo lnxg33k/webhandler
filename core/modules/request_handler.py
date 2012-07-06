@@ -43,17 +43,17 @@ class MakeRequest(object):
         self.cmd += "/sbin/ifconfig | grep -e 'inet addr' | grep -v '127.0.0.1' | cut -f2 -d':' | cut -f1 -d' ';"
 
         #self.cmd += "/sbin/ifconfig | grep -e 'inet addr' | grep -v '127.0.0.1' | cut -f2 -d':' | cut -f1 -d' ';"
-        #self.cmd += "awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 \"%\"}' /proc/uptime;"
-        #self.cmd += "w -h | wc -l;"
-        #self.cmd += "wc -l /etc/passwd | awk '{print $1}';"
-        #self.cmd += "wc -l /etc/group | awk '{print $1}';"
-        #self.cmd += "awk '{print $1 \" \" $2 \" \" $3}' /proc/loadavg;"
-        #self.cmd += "free -m | grep 'buffers/cache' | awk '{print $3*100/($3+$4)}';"
-        #self.cmd += "netstat -tn | grep ESTABLISHED | wc -l | awk '{print $1}';"
-        #self.cmd += "netstat -atn | grep LISTEN | wc -l | awk \"{print $1}\";"
-        #self.cmd += "awk '{split($4,a,\"/\"); print a[1];}' /proc/loadavg;"
-        #self.cmd += "awk '{split($4,a,\"/\"); print a[2];}' /proc/loadavg;"
-        #self.cmd += "awk '{split($4,a,\"/\"); printf a[1] \" (\"; printf a[2]\")\"}' /proc/loadavg;"
+        self.cmd += "awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 \"%\"}' /proc/uptime;"
+        self.cmd += "w -h | wc -l;"
+        self.cmd += "wc -l /etc/passwd | awk '{print $1}';"
+        self.cmd += "wc -l /etc/group | awk '{print $1}';"
+        self.cmd += "awk '{print $1 \" \" $2 \" \" $3}' /proc/loadavg;"
+        self.cmd += "free -m | grep 'buffers/cache' | awk '{print $3*100/($3+$4)}';"
+        self.cmd += "netstat -tn | grep ESTABLISHED | wc -l | awk '{print $1}';"
+        self.cmd += "netstat -atn | grep LISTEN | wc -l | awk \"{print $1}\";"
+        self.cmd += "awk '{split($4,a,\"/\"); print a[1];}' /proc/loadavg;"
+        self.cmd += "awk '{split($4,a,\"/\"); print a[2];}' /proc/loadavg;"
+        self.cmd += "awk '{split($4,a,\"/\"); printf a[1] \" (\"; printf a[2]\")\"}' /proc/loadavg;"
 
     def get_page_source(self):
         proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
