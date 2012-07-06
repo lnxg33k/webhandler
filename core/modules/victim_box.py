@@ -24,7 +24,7 @@ class VictimBox(object):
         self.host_ip = ', '.join(source[5:])
         try:
             # get the attacker's ip address thx to g0tmi1k and hostess
-            self.local_ip = ''  # (urlopen('http://ifconfig.me/ip').read()).strip()
+            self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
         except URLError:
             self.local_ip = 'Unknown'
 
