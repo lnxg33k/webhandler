@@ -1,47 +1,57 @@
 1- Work on enumeration/"loot" functions
-	-> http://g0tmi1k.blogspot.co.uk/2011/08/basic-linux-privilege-escalation.html
-	-> http://pentestmonkey.net/tools/audit/unix-privesc-check
-2- Update 
-	-> Via GIT itself (git pull)
-	-> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
+    -> http://g0tmi1k.blogspot.co.uk/2011/08/basic-linux-privilege-escalation.html
+    -> http://pentestmonkey.net/tools/audit/unix-privesc-check
+2- Update
+    -> Via GIT itself (git pull)
+    -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
 3- "system" command:
-	-> echo -n "Hostname: "; hostname
-	-> echo -n "Kernel: "; uname -a
-	-> echo -n "OS: ";  cat /etc/*-release | head -n 1
-	-> echo -n "Time: "; date
-	-> echo -n "Timezone (UTC): "; zdump UTC 
-	-> echo -n "Language: ";  echo $LANG
+    -> echo -n "Hostname: "; hostname
+    -> echo -n "Kernel: "; uname -a
+    -> echo -n "OS: "; cat /etc/*-release | head -n 1
+    -> echo -n "Time: "; date
+    -> echo -n "Timezone (UTC): "; zdump UTC
+    -> echo -n "Language: "; echo $LANG
 4- "ip" command:
-	-> echo -n "Internal IP/subnet: "; ip addr show | grep inet | awk '{print $2}'
-	-> echo -n "External IP: "; curl http://ifconfig.me/ip
-	-> echo -n "DNS: "; cat /etc/resolv.conf | awk {'print $2'}
-	-> echo -n "Gateway (eth0): "; route -n | grep eth0 | awk '{print $2}' | head -n 1
-	-> echo -n "DHCP? (eth0): "; if [ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then grep "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-eth0; if [[ $? -eq 1 ]]; then echo "No"; else echo "Yes"; fi; elif [ -f /etc/network/interfaces ] ; then grep "BOOTPROTO=dhcp" /etc/network/interfaces; if [[ $? -eq 1 ]]; then echo "No"; else echo "Yes"; fi; else echo "No"; fi
-	-> echo -n "DHCP Server: "; if [ -f /var/lib/dhcp3/dhclient.leases ]; then cat /var/lib/dhcp3/dhclient.leases ; else echo "N/A"; fi
+    -> echo -n "Internal IP/subnet: "; ip addr show | grep inet | awk '{print $2}'
+    -> echo -n "External IP: "; curl http://ifconfig.me/ip
+    -> echo -n "DNS: "; cat /etc/resolv.conf | awk {'print $2'}
+    -> echo -n "Gateway (eth0): "; route -n | grep eth0 | awk '{print $2}' | head -n 1
+    -> echo -n "DHCP? (eth0): "; if [ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then grep "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-eth0; if [[ $? -eq 1 ]]; then echo "No"; else echo "Yes"; fi; elif [ -f /etc/network/interfaces ] ; then grep "BOOTPROTO=dhcp" /etc/network/interfaces; if [[ $? -eq 1 ]]; then echo "No"; else echo "Yes"; fi; else echo "No"; fi
+    -> echo -n "DHCP Server: "; if [ -f /var/lib/dhcp3/dhclient.leases ]; then cat /var/lib/dhcp3/dhclient.leases ; else echo "N/A"; fi
 5- "health" command:
-	-> echo -n "Uptime: "; uptime | awk '{print $3 ":" $5}' | tr -d "," | awk -F ":" '{print $1 " days, " $2 " hours and " $3 " minutes" }'
-	-> echo -n "Idle time ($): "; awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 "%"}' /proc/uptime
-	-> echo -n "Users Logged in: "; w -h | wc -l 
-	-> echo -n "Total Users: "; wc -l /etc/passwd | awk '{print $1}'
-	-> echo -n "Total Groups: "; wc -l /etc/group | awk '{print $1}'
-	-> echo -n "CPU Load (1, 5, 15 mins): "; awk '{print $1 " " $2 " " $3}' /proc/loadavg
-	-> echo -n "Memory Load (Used %): "; free -m | grep 'buffers/cache' | awk '{print $3*100/($3+$4)}'
-	-> echo -n "Established TCP Connections: "; netstat -tn | grep ESTABLISHED | wc -l | awk "{print $1}"
-	-> echo -n "Listening TCP Services: "; netstat -atn | grep LISTEN | wc -l | awk "{print $1}"
-	-> echo -n "User Processors: "; awk '{split($4,a,"/"); print a[1];}' /proc/loadavg
-	-> echo -n "Total Processors: "; awk '{split($4,a,"/"); print a[2];}' /proc/loadavg
-	-> echo -n "Processors (Total): "; awk '{split($4,a,"/"); printf a[1] " ("; printf a[2]")"}' /proc/loadavg
+    -> echo -n "Uptime: "; uptime | awk '{print $3 ":" $5}' | tr -d "," | awk -F ":" '{print $1 " days, " $2 " hours and " $3 " minutes" }'
+    -> echo -n "Idle time ($): "; awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 "%"}' /proc/uptime
+    -> echo -n "Users Logged in: "; w -h | wc -l
+    -> echo -n "Total Users: "; wc -l /etc/passwd | awk '{print $1}'
+    -> echo -n "Total Groups: "; wc -l /etc/group | awk '{print $1}'
+    -> echo -n "CPU Load (1, 5, 15 mins): "; awk '{print $1 " " $2 " " $3}' /proc/loadavg
+    -> echo -n "Memory Load (Used %): "; free -m | grep 'buffers/cache' | awk '{print $3*100/($3+$4)}'
+    -> echo -n "Established TCP Connections: "; netstat -tn | grep ESTABLISHED | wc -l | awk "{print $1}"
+    -> echo -n "Listening TCP Services: "; netstat -atn | grep LISTEN | wc -l | awk "{print $1}"
+    -> echo -n "User Processors: "; awk '{split($4,a,"/"); print a[1];}' /proc/loadavg
+    -> echo -n "Total Processors: "; awk '{split($4,a,"/"); print a[2];}' /proc/loadavg
+    -> echo -n "Processors (Total): "; awk '{split($4,a,"/"); printf a[1] " ("; printf a[2]")"}' /proc/loadavg
 6- "history" command:
-	-> 	for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do
-			[ -f $i/.bash_history ] && echo "bash_history: $i"; fi
-			[ -f $i/.nano_history ] && echo "nano_history: $i"; fi
-			[ -f $i/.atftp_history ] && echo "atftp_history: $i"; fi
-			[ -f $i/.mysql_history ] && echo "mysql_history: $i"; fi
-			[ -f $i/.php_history ] && echo "php_history: $i"; fi
-		done
+    ->     for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do
+            [ -f $i/.bash_history ] && echo "bash_history: $i"
+            [ -f $i/.nano_history ] && echo "nano_history: $i"
+            [ -f $i/.atftp_history ] && echo "atftp_history: $i"
+            [ -f $i/.mysql_history ] && echo "mysql_history: $i"
+            [ -f $i/.php_history ] && echo "php_history: $i"
+        done
 7- "keys" command:
-	-> echo -n "SSL Certs: "; find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo "{}"'
-	-> echo -n "SSH Public: "; find / -type f -print0 | xargs -0 -I '{}' bash -c 'ssh-keygen -lf {} >/dev/null 2>&1; [[ $? == '0' ]] && echo "{}"'
-	-> echo -n "SSH Private: "; #find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;     					#grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l    # find / -name "*host_key*"
-8- "stealth" command:	
-	-> export HISTFILE=/dev/null
+    -> echo -n "SSL Certs: "; find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo "{}"'
+    -> echo -n "SSH Public: "; find / -type f -print0 | xargs -0 -I '{}' bash -c 'ssh-keygen -lf {} >/dev/null 2>&1; [[ $? == '0' ]] && echo "{}"'
+    -> echo -n "SSH Private: ";     #find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;        #grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l    # find / -name "*host_key*"
+8- "stealth" command:
+    -> export HISTFILE=/dev/null
+
+Known Issues
+bug1.png
+    -> Command and example output shown in screenshot
+bug2.png
+    -> Command and example output shown in screenshot
+bug3.png
+    -> Uptime behaves differntly on machines (depends on how long they have been up for & users)
+    -->	Machine1: 18:40:39 up  4:40,  load average: 0.14, 0.03, 0.01
+    -->	Machine2: 19:40:07 up 19 days, 19:14,  3 users,  load average: 1.07, 1.34, 1.45
