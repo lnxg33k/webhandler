@@ -7,10 +7,10 @@
 3- "system" command:
 	-> echo -n "Hostname: "; hostname
 	-> echo -n "Kernel: "; uname -a
-	-> echo -n "OS: ";  cat /etc/*-release | head -n 1
+	-> echo -n "OS: "; cat /etc/*-release | head -n 1
 	-> echo -n "Time: "; date
 	-> echo -n "Timezone (UTC): "; zdump UTC 
-	-> echo -n "Language: ";  echo $LANG
+	-> echo -n "Language: "; echo $LANG
 4- "ip" command:
 	-> echo -n "Internal IP/subnet: "; ip addr show | grep inet | awk '{print $2}'
 	-> echo -n "External IP: "; curl http://ifconfig.me/ip
@@ -33,15 +33,19 @@
 	-> echo -n "Processors (Total): "; awk '{split($4,a,"/"); printf a[1] " ("; printf a[2]")"}' /proc/loadavg
 6- "history" command:
 	-> 	for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do
-			[ -f $i/.bash_history ] && echo "bash_history: $i"; fi
-			[ -f $i/.nano_history ] && echo "nano_history: $i"; fi
-			[ -f $i/.atftp_history ] && echo "atftp_history: $i"; fi
-			[ -f $i/.mysql_history ] && echo "mysql_history: $i"; fi
-			[ -f $i/.php_history ] && echo "php_history: $i"; fi
+			[ -f $i/.bash_history ] && echo "bash_history: $i"
+			[ -f $i/.nano_history ] && echo "nano_history: $i"
+			[ -f $i/.atftp_history ] && echo "atftp_history: $i"
+			[ -f $i/.mysql_history ] && echo "mysql_history: $i"
+			[ -f $i/.php_history ] && echo "php_history: $i"
 		done
 7- "keys" command:
 	-> echo -n "SSL Certs: "; find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo "{}"'
 	-> echo -n "SSH Public: "; find / -type f -print0 | xargs -0 -I '{}' bash -c 'ssh-keygen -lf {} >/dev/null 2>&1; [[ $? == '0' ]] && echo "{}"'
-	-> echo -n "SSH Private: "; #find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;     					#grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l    # find / -name "*host_key*"
+	-> echo -n "SSH Private: "; 	#find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;		#grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l	# find / -name "*host_key*"
 8- "stealth" command:	
 	-> export HISTFILE=/dev/null
+
+Known Issues
+bug1.png
+	-> Command and example output shown in screenshot
