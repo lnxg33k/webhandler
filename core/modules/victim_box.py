@@ -15,7 +15,12 @@ class VictimBox(object):
     def __init__(self, url=None):
         self.url = url
         # call get_page_source() method then assign it to self.source
-        self.source = source = map(str.strip, make_request.get_page_source().readlines())
+        source = map(str.strip, make_request.get_page_source().readlines())
+        make_request.cmd = 'uname'
+        garpage = map(str.strip, make_request.get_page_source().readlines())
+        garpage = list(set(source).intersection(garpage))
+        self.source = source = [i for i in source if not i in garpage]
+
         self.current_user = source[0]
         self.current_id = source[1]
         self.kernel_info = source[2]
