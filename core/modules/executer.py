@@ -1,6 +1,6 @@
 # importing modules
 from request_handler import make_request
-from victim_info import victim_box
+from victim_box import victim_box
 from menu import Colors, get_banner
 from urllib import unquote
 from subprocess import Popen
