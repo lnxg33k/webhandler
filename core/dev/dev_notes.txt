@@ -49,3 +49,5 @@
 Known Issues
 bug1.png
 	-> Command and example output shown in screenshot
+bug2.png
+	-> Command and example output shown in screenshot
