@@ -33,11 +33,9 @@
 8- "stealth" command:
     -> export HISTFILE=/dev/null
 
-Known Issues
+Known Issues/Bugs
 bug1.png
     -> Command and example output shown in screenshot
-bug2.png
-    -> Command and example output shown in screenshot               <<< Fiexed
 bug3.png
     -> Uptime behaves differntly on machines (depends on how long they have been up for & users)
     -->	Machine1: 18:40:39 up  4:40,  load average: 0.14, 0.03, 0.01
