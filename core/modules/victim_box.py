@@ -42,7 +42,7 @@ class VictimBox(object):
         {red}Kernel{end}      :  {green}{kernel_info}{end}
         {red}CWD{end}         :  {green}{cwd}{end}
         {red}Uptime{end}      :  {green}{uptime}{end}
-        {red}Host IPs{end}    :  {green}{host_ip}{end}
+        {red}Internal IPs{end}:  {green}{host_ip}{end}
         {red}External IP{end} :  {green}{local_ip}{end}
         {dashed}
 
