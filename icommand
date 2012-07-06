@@ -13,7 +13,7 @@ See the GNU General Public License for more details.
 '''
 
 #importing modules
-from core.modules.victim_info import victim_box
+from core.modules.victim_box import victim_box
 from core.modules.executer import commander
 from core.modules.menu import getargs, get_banner
 
