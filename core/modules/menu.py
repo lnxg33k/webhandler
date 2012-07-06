@@ -57,6 +57,7 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
         optional.add_argument('-rg', '--random-agent', dest='random_agent', help='WebHandler will use some random user-agent', action='store_true')
         options = parser.parse_args()
         url = options.url
+        if not url.startswith('http'): url = "http://" + url
         method = options.method.lower() if options.method else None
         parameter = options.parameter
         proxy = options.proxy
