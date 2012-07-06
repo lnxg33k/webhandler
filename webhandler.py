@@ -26,6 +26,6 @@ if getargs.url:
         print '\n[!] Using get method doesn\'t require --parameter flag, check examples'
         exit(1)
     else:
-        print get_banner                            # get icommand banner
+        print get_banner                            # get WebHandler banner
         victim_box.get_information()                # call get_information and print info
         commander.BackConnect()                     # call BackConnect method

@@ -8,7 +8,7 @@ from os import getcwd
 try:
     import readline
 except ImportError:
-    print '\n[!] readline module is required to provide elaborate line editing and history features'
+    print '\n[!] "readline" module is required to provide elaborate line editing and history features'
 else:
     pass
 
@@ -32,7 +32,7 @@ class Commander(object):
                         cwd=self.cwd))
                 # if something went wrong screw the list
                 except IndexError:
-                    command = raw_input('icommand@server:$ ')
+                    command = raw_input('WebHandler@server:$ ')
                 history.append(unquote(command))
                 if command not in ['exit', 'quite', 'bye']:
                     if command == 'clear':
@@ -54,7 +54,7 @@ class Commander(object):
                     elif command == 'info':
                         print victim_box.info
 
-                    # get icommand banner
+                    # get WebHandler banner
                     elif command == 'banner':
                         print get_banner
 
@@ -132,14 +132,14 @@ class Commander(object):
                         except IndexError:
                             pass
 
-                # exist icommand if user provides exit as a command
+                # exist WebHandler if user provides exit as a command
                 else:
-                    print '\n[+] Preformed {} commands on the server.\n[!] Connection closed'.format(i)
+                    print '\n[+] Preformed "{}" commands on the server\n[!] Connection closed'.format(i)
                     break
 
-            # exit icommand if it recieved a ^c
+            # exit WebHandler if it recieved a break (^c)
             except KeyboardInterrupt:
-                print '\n\n[+] Preformed {} commands on the server.\n[!] Connection closed'.format(i)
+                print '\n\n[+] Preformed "{}" commands on the server\n[!] Connection closed'.format(i)
                 break
             i += 1
 
