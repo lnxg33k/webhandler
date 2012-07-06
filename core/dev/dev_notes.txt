@@ -3,7 +3,7 @@
 	-> http://pentestmonkey.net/tools/audit/unix-privesc-check
 2- Update 
 	-> Via GIT itself
-	-> wget https://github.com/lnxg33k/icommand/zipball/master -O /tmp/icommand.zip && unzip /tmp/icommand.zip -d /tmp/icommand && mv -f /tmp/icommand/lnxg33k-icommand-*/* ./ && rm -rf /tmp/icommand{/,zip}
+	-> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
 3- "System" command:
 	-> echo -n "Hostname: "; /bin/hostname
 	-> echo -n "Kernel: "; /bin/uname -a
