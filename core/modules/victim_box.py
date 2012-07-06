@@ -21,7 +21,8 @@ class VictimBox(object):
         self.kernel_info = source[2]
         self.cwd = source[3]
         self.uptime = source[4]
-        self.host_ip = ', '.join(source[5:])
+        self.cpu_load = source[5]
+        self.host_ip = ', '.join(source[6:])
         try:
             # get the attacker's ip address thx to hostess
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
@@ -44,6 +45,7 @@ class VictimBox(object):
         {red}Uptime{end}      :  {green}{uptime}{end}
         {red}Internal IPs{end}:  {green}{host_ip}{end}
         {red}External IP{end} :  {green}{local_ip}{end}
+        {red}CPU Load{end}    :  {green}{cpu_load}{end}
         {dashed}
 
         {hot}[+] Available commands: {available_commands}{end}
@@ -57,6 +59,7 @@ class VictimBox(object):
                 uptime=self.uptime,
                 host_ip=self.host_ip,
                 local_ip=self.local_ip,
+                cpu_load=self.cpu_load,
                 available_commands=self.available_commands,)
         print self.info
 
