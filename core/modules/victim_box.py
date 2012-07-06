@@ -23,7 +23,7 @@ class VictimBox(object):
         self.uptime = source[4]
         self.host_ip = ', '.join(source[5:])
         try:
-            # get the attacker's ip address thx to g0tmi1k and hostess
+            # get the attacker's ip address thx to hostess
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
         except URLError:
             self.local_ip = 'Unknown'

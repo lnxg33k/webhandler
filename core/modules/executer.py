@@ -131,12 +131,12 @@ class Commander(object):
 
                 # exist icommand if user provides exit as a command
                 else:
-                    print '\n[+] Preformed {} commands on the server.\n[!] Connection closed'.format(i)
+                    print '\n[+] Preformed {} commands on the server\n[!] Connection closed'.format(i)
                     break
 
             # exit icommand if it recieved a ^c
             except KeyboardInterrupt:
-                print '\n\n[+] Preformed {} commands on the server.\n[!] Connection closed'.format(i)
+                print '\n\n[+] Preformed {} commands on the server\n[!] Connection closed'.format(i)
                 break
             i += 1
 
