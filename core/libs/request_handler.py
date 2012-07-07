@@ -1,7 +1,9 @@
 from urllib import urlencode, quote
 from urllib2 import ProxyHandler, build_opener, install_opener
-from core.libs.menu import getargs, Colors
 from random import randint
+from httplib import InvalidURL
+
+from core.libs.menu import getargs, Colors
 
 USER_AGENTS = [
         "curl/7.7.2 (powerpc-apple-darwin6.0) libcurl 7.7.2 (OpenSSL 0.9.6b)",
@@ -58,11 +60,9 @@ class MakeRequest(object):
                 garpage = map(str.rstrip, opener.open(self.url, parameters).readlines())
                 garpage = list(set(sc).intersection(garpage))
                 sc = [i for i in sc if not i in garpage]
-                #print sc
                 return sc
-            except Exception, e:
-                print errmsg, e
-                exit(1)
+            except InvalidURL:
+                exit(errmsg)
         # if the used method set get
         else:
             try:
@@ -71,8 +71,7 @@ class MakeRequest(object):
                 garpage = list(set(sc).intersection(garpage))
                 sc = [i for i in sc if not i in garpage]
                 return sc
-            except Exception, e:
-                print errmsg, e
-                exit(1)
+            except InvalidURL:
+                exit(errmsg)
 
 make_request = MakeRequest()
