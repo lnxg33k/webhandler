@@ -13,9 +13,9 @@ See the GNU General Public License for more details.
 '''
 
 #importing modules
-from core.modules.victim_box import victim_box
-from core.modules.executer import commander
-from core.modules.menu import getargs, get_banner
+from core.libs.info import info
+from core.libs.executer import commander
+from core.libs.menu import getargs, banner
 
 # check for arguments dependencies
 if getargs.url:
@@ -26,6 +26,6 @@ if getargs.url:
         print '\n[!] Using get method doesn\'t require --parameter flag, check examples'
         exit(1)
     else:
-        print get_banner                            # get WebHandler banner
-        victim_box.get_information()                # call get_information and print info
+        print banner                            # get WebHandler banner
+        info.get_information()                # call get_information and print info
         commander.BackConnect()                     # call BackConnect method

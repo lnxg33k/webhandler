@@ -22,17 +22,17 @@ class VictimBox(object):
         self.kernel_info = source[2]
         self.cwd = source[3]
         self.uptime = source[4]
-        self.host_ip = ', '.join(source[5:])
-        self.idletime = source[6]
-        self.usersloggedin = source[7]
-        self.totalusers = source[8]
-        self.totalgroup = source[9]
-        self.cpuload = source[10]
-        self.memload = source[11]
-        self.estabtcp = source[12]
-        self.listtcp = source[13]
-        self.userproc = source[14]
-        self.totalproc = source[15]
+        self.idletime = source[5]
+        self.usersloggedin = source[6]
+        self.totalusers = source[7]
+        self.totalgroup = source[8]
+        self.cpuload = source[9]
+        self.memload = source[10]
+        self.estabtcp = source[11]
+        self.listtcp = source[12]
+        self.userproc = source[13]
+        self.totalproc = source[14]
+        self.host_ip = ', '.join(source[15:])
         try:
             # get the attacker's ip address thx to hostess
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
