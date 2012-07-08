@@ -14,7 +14,7 @@ class Enumerate(object):
         cmd += "netstat -atn | grep LISTEN | wc -l | awk \"{print $1}\";"
         cmd += "awk '{split($4,a,\"/\"); print a[1];}' /proc/loadavg;"
         cmd += "awk '{split($4,a,\"/\"); print a[2];}' /proc/loadavg;"
-        cmd += "awk '{split($4,a,\"/\"); printf a[1] \" (\"; printf a[2]\")\"}' /proc/loadavg;"
+        #cmd += "awk '{split($4,a,\"/\"); printf a[1] \" (\"; printf a[2]\")\"}' /proc/loadavg;"
 
         health = make_request.get_page_source(cmd)
 
