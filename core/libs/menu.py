@@ -40,17 +40,17 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
                 usage='%(prog)s -h',
                 formatter_class=argparse.RawDescriptionHelpFormatter,
                 epilog='''
-        Examples:
-        python %(prog)s --url http://www.mywebsite.com/shell.php?cmd=
-        python %(prog)s --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
-        python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent
-        python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
-        ''')
+Examples:
+    python %(prog)s --url http://www.mywebsite.com/shell.php?cmd=
+    python %(prog)s --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
+    python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent
+    python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080''')
         positional = parser.add_argument_group('Positional arguments')
         positional.add_argument('-u', '--url', help='Full URL for the uploaded PHP code', metavar='')
         optional = parser.add_argument_group('Optional arguments')
         optional.add_argument('-h', '--help', action='help', help='Print this help message then exit')
         optional.add_argument('-m', '--method', dest='method', help='The method used in the uploaded PHP code (e.g. post)', metavar='')
+        optional.add_argument('-c', '--clean', dest='clean', help='Remove any returned garbage after commands execution', action='store_true')
         optional.add_argument('-p', '--parameter', dest='parameter', help='Parameter that used in the shell (e.g. cmd)', metavar='')
         optional.add_argument('-x', '--proxy', dest='proxy', help='Proxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
         optional.add_argument('-g', '--agent', dest='agent', help='user-agent (e.g. \'Mozilla/5.0\')', metavar='')
@@ -62,6 +62,7 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
         proxy = options.proxy
         agent = options.agent
         random_agent = options.random_agent
+        clean = options.clean
 
 getargs = GetArgs()
 banner = Banner().banner

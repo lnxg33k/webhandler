@@ -37,6 +37,7 @@ class MakeRequest(object):
         self.proxy = getargs.proxy
         self.user_agent = getargs.agent
         self.random_agent = getargs.random_agent
+        self.clean = getargs.clean
 
     def get_page_source(self, cmd):
         self.cmd = cmd
@@ -56,10 +57,11 @@ class MakeRequest(object):
             parameters = urlencode({self.parameter: self.cmd})
             try:
                 sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
-                parameters = urlencode({self.parameter: 'uname'})
-                garpage = map(str.rstrip, opener.open(self.url, parameters).readlines())
-                garpage = list(set(sc).intersection(garpage))
-                sc = [i for i in sc if not i in garpage]
+                if self.clean:
+                    parameters = urlencode({self.parameter: 'uname'})
+                    garpage = map(str.rstrip, opener.open(self.url, parameters).readlines())
+                    garpage = list(set(sc).intersection(garpage))
+                    sc = [i for i in sc if not i in garpage]
                 return sc
             except InvalidURL:
                 exit(errmsg)
@@ -67,9 +69,10 @@ class MakeRequest(object):
         else:
             try:
                 sc = map(str.rstrip, opener.open('{}{}'.format(self.url, quote(self.cmd))).readlines())
-                garpage = map(str.rstrip, opener.open('{}{}'.format(self.url, quote('uname'))).readlines())
-                garpage = list(set(sc).intersection(garpage))
-                sc = [i for i in sc if not i in garpage]
+                if self.clean:
+                    garpage = map(str.rstrip, opener.open('{}{}'.format(self.url, quote('uname'))).readlines())
+                    garpage = list(set(sc).intersection(garpage))
+                    sc = [i for i in sc if not i in garpage]
                 return sc
             except InvalidURL:
                 exit(errmsg)
