@@ -1,5 +1,6 @@
 from core.libs.menu import Colors, getargs
 from core.libs.request_handler import make_request
+from urllib2 import urlopen
 
 
 class LinuxVersion(object):
@@ -11,8 +12,7 @@ class LinuxVersion(object):
         # make a request to create a php file thx @0xAli
         if make_request.get_page_source(cmd)[0] == 'exists':
             make_request.url = make_request.url.replace(make_request.url.split('/')[-1], '~doc_root.php')
-            cmd = ''
-            doc_root = make_request.get_page_source(cmd)[0]
+            doc_root = urlopen(make_request.url).read().strip()
             make_request.url = self.url
             cmd = "rm ~doc_root.php"
             make_request.get_page_source(cmd)
