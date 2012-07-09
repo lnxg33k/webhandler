@@ -8,12 +8,12 @@ except ImportError:
 else:
     pass
 
+from core.libs.menu import Colors, banner
 from core.libs.request_handler import make_request
-from core.libs.info import info
+from core.modules.info import info
 from core.modules.shell_handler import shell_handler
 from core.modules.file_handler import file_handler
 from core.modules.enumerate import enumerate
-from core.libs.menu import Colors, banner
 
 
 class Commander(object):
@@ -69,22 +69,22 @@ class Commander(object):
                     # displays the target's 'health' (CPU, Memory usage etc)
                     elif command.startswith('enum'):
                         if len(command.split()) == 2:
-							if command.split()[1] == "health":
-								enumerate.health()
-							elif command.split()[1] == "history":
-								enumerate.history()
-							elif command.split()[1] == "ip":
-								enumerate.ip()
-							elif command.split()[1] == "os":
-								enumerate.os()
-							elif command.split()[1] == "keys":
-								enumerate.keys()
-							elif command.split()[1] == "writable":
-								enumerate.writable()
-							else:
-								enumerate.list()
+                            if command.split()[1] == "health":
+                                enumerate.health()
+                            elif command.split()[1] == "history":
+                                enumerate.history()
+                            elif command.split()[1] == "ip":
+                                enumerate.ip()
+                            elif command.split()[1] == "os":
+                                enumerate.os()
+                            elif command.split()[1] == "keys":
+                                enumerate.keys()
+                            elif command.split()[1] == "writable":
+                                enumerate.writable()
+                            else:
+                                enumerate.list()
                         else:
-							enumerate.list()
+                            enumerate.list()
 
                     elif command.startswith('download'):
                         if len(command.split()) < 2:
