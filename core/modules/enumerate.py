@@ -4,7 +4,7 @@ from core.libs.menu import Colors
 
 class Enumerate(object):
     def health(self):
-        cmd = "input=`uptime` && if [[ $input == *day* ]] ; then echo $input | awk '{print $3 \":\" $5}' | tr -d \",\" | awk -F \":\" '{print $1 \" days, \" $2 \" hours and \" $3 \" minutes\" }'; else echo $input | awk '{print $3}' | tr -d \",\" | awk -F \":\" '{print $1 \" hours and \" $2 \" minutes\" }'; fi;"
+        cmd = 'input=`uptime` && if [[ \'$input\' == *day* ]] ; then echo $input | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes"}\'; else echo $input | awk \'{print $3}\' | tr -d "," | awk -F ":" \'{print $1 " hours and " $2 " minutes"}\'; fi;'
         cmd += "awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 \"%\"}' /proc/uptime;"
         cmd += "w -h | wc -l;"
         cmd += "wc -l /etc/passwd | awk '{print $1}';"
