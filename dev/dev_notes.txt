@@ -1,7 +1,5 @@
 -Known Issues/Bugs
-bug1.png
-    -> Command and example output shown in screenshot
-bug3.png
+bug03.png
     -> Uptime behaves differntly on machines (depends on how long they have been up for & users)
     -->	Machine1: 18:40:39 up  4:40,  load average: 0.14, 0.03, 0.01
     -->	Machine2: 19:40:07 up 19 days, 19:14,  3 users,  load average: 1.07, 1.34, 1.45

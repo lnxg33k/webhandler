@@ -51,6 +51,7 @@ class MakeRequest(object):
             pass
         install_opener(opener)
         errmsg = '\n{0}[!] Check your connection or the proxy if you\'re using it{1}'.format(Colors.RED, Colors.END)
+        fourzerofourmsg = '\n{0}[!] Please make sure the page requested exists (HTTP Code: 404)!{1}'.format(Colors.RED, Colors.END)
         # check if the method is post or get
         if self.method == 'post' or self.parameter:
             self.method = 'post'
@@ -65,6 +66,8 @@ class MakeRequest(object):
                 return sc
             except InvalidURL:
                 exit(errmsg)
+            except:
+                exit(fourzerofourmsg)
         # if the used method set get
         else:
             try:
@@ -76,5 +79,7 @@ class MakeRequest(object):
                 return sc
             except InvalidURL:
                 exit(errmsg)
+            except:
+                exit(fourzerofourmsg)
 
 make_request = MakeRequest()
