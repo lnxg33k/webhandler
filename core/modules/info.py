@@ -60,7 +60,7 @@ class VictimBox(object):
                 uptime=self.uptime,
                 available_commands=self.available_commands,)
         print self.info
- 
+
 
     # *** Doesn't (yet) work ***
     def update(self):
@@ -70,13 +70,13 @@ class VictimBox(object):
             print '{0}\n[!] Coming later {1}'.format(Colors.RED, Colors.END)
         else:
             try:
-                child = Popen("bash -c 'for x in `whereis git`; do file $x | grep executable; done'", stdout=PIPE).wait()            
+                child = Popen("bash -c 'for x in `whereis git`; do file $x | grep executable; done'", stdout=PIPE).wait()
                 if child != 0:
                     cmd = "wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}"
                 else:
                     cmd = "git pull"  # git clone git://github.com/lnxg33k/webhandler.git && cd webhandler/
                 Popen(cmd, shell=True).wait()
             except:
-                print '\n[!] Failed to update'                
+                print '\n[!] Failed to update'
 
 info = VictimBox()

@@ -4,10 +4,11 @@
     -> http://pentestmonkey.net/tools/audit/unix-privesc-check
 2- Update
     -> Via GIT itself (git pull)
-    -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip} 
+    -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
+    -> Version? Display on menu?
 3- "stealth" command:
     -> export HISTFILE=/dev/null
-4- "encode" communication 
+4- "encode" communication
     -> *cough*base64*cough*
 5- Windows Support
     -> Client (powershell)
