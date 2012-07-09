@@ -4,7 +4,8 @@ from core.libs.menu import Colors
 
 class Enumerate(object):
     def health(self):
-        cmd = "awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 \"%\"}' /proc/uptime;"
+        cmd = "input=`uptime` && if [[ $input == *day* ]] ; then echo $input | awk '{print $3 \":\" $5}' | tr -d \",\" | awk -F \":\" '{print $1 \" days, \" $2 \" hours and \" $3 \" minutes\" }'; else echo $input | awk '{print $3}' | tr -d \",\" | awk -F \":\" '{print $1 \" hours and \" $2 \" minutes\" }'; fi;"
+        cmd += "awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 \"%\"}' /proc/uptime;"
         cmd += "w -h | wc -l;"
         cmd += "wc -l /etc/passwd | awk '{print $1}';"
         cmd += "wc -l /etc/group | awk '{print $1}';"
@@ -18,7 +19,8 @@ class Enumerate(object):
 
         health = make_request.get_page_source(cmd)
 
-        print '\n{0}[+] Idletime: {1} {2}'.format(Colors.GREEN, health[0], Colors.END)
+        print '\n{0}[+] Uptime: {1} {2}'.format(Colors.GREEN, health[0], Colors.END)
+        print '{0}[+] Idletime: {1} {2}'.format(Colors.GREEN, health[0], Colors.END)
         print '{0}[+] Users Logged in: {1} {2}'.format(Colors.GREEN, health[1], Colors.END)
         print '{0}[+] Total Users: {1} {2}'.format(Colors.GREEN, health[2], Colors.END)
         print '{0}[+] Total Groups: {1} {2}'.format(Colors.GREEN, health[3], Colors.END)
