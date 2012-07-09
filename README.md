@@ -28,10 +28,12 @@ __p.s.__
 ---
 If your [Python][]'s version < 2.7.x
 Then [argparse][] **is required**.
-To install it run:
+
+To install it run (as root):
 `easy_install argparse` **OR** `pip --install argparse`
 
 [readline][] **is optional**.
+
 This module it used to provide elaborate line editing and history features
 
 [Python]: http://www.python.org/download/
