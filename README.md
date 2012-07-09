@@ -26,16 +26,11 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
 
 __Requirements__
 ---
-If your [Python][]'s version < 2.7.x
-Then [argparse][] **is required**.
-
-To install it run (as root):
-`easy_install argparse` **OR** `pip --install argparse`
+If your [Python][]'s version < 2.7.x, then [argparse][] **is required**.
+To install it run (as root): `easy_install argparse` **OR** `pip --install argparse`
 
 
-
-[readline][] **is optional**.
-
+[readline][] **is optional**. 
 This module it used to provide elaborate line editing and history features
 
 [Python]: http://www.python.org/download/
