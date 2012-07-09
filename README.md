@@ -22,6 +22,8 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
     - python webhandler.py --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
     - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --random-agent
     - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
+
+
 __p.s.__
 ---
 If your [Python][]'s version < 2.7.x
