@@ -9,13 +9,6 @@
 2- Update
     -> Via GIT itself (git pull)
     -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
-3- "system" command:
-    -> echo -n "Hostname: "; hostname
-    -> echo -n "Kernel: "; uname -a
-    -> echo -n "OS: "; cat /etc/*-release | head -n 1
-    -> echo -n "Time: "; date
-    -> echo -n "Timezone (UTC): "; zdump UTC
-    -> echo -n "Language: "; echo $LANG
 6- "history" command:
     ->     for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do
             [ -f $i/.bash_history ] && echo "bash_history: $i"

@@ -4,8 +4,9 @@ from core.libs.menu import Colors
 
 class Enumerate(object):
     def list(self):		
-		print '\n[!] Usage: enum health   \t To get general info about the system'
-		print '[!] Usage: enum ip   \t To get general networking info about the system'		
+		print '\n[!] Usage: enum health\tTo get general info about the system'
+		print '[!] Usage: enum ip\tTo get general networking info about the system'		
+		print '[!] Usage: enum os\tTo get general operating system info about the system'		
 
     def health(self):
         cmd = 'input=`uptime` && if [[ \'$input\' == *day* ]] ; then echo $input | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes"}\'; else echo $input | awk \'{print $3}\' | tr -d "," | awk -F ":" \'{print $1 " hours and " $2 " minutes"}\'; fi;'
@@ -33,9 +34,10 @@ class Enumerate(object):
         print '{0}[+] Listening TCP Services: {1} {2}'.format(Colors.GREEN, health[8], Colors.END)
         print '{0}[+] User Processors: {1} {2}'.format(Colors.GREEN, health[9], Colors.END)
         print '{0}[+] Total Processor: {1} {2}'.format(Colors.GREEN, health[10], Colors.END)
-        
+ 
+ 
     def ip(self):
-        cmd = "ip addr show | grep inet | awk '{printf \", \" $2}' | sed 's/^, *//' && echo; "
+        cmd = "ip addr show | grep inet | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
         cmd += "curl http://ifconfig.me/ip;"
         cmd += "cat /etc/resolv.conf | grep nameserver | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
         cmd += "/sbin/route -n | grep eth0 | awk '{print $2}' | grep -v 0.0.0.0 | head -n 1;"
@@ -49,7 +51,26 @@ class Enumerate(object):
         print '{0}[+] External IP: {1} {2}'.format(Colors.GREEN, ip[1], Colors.END)        
         print '{0}[+] DNS: {1} {2}'.format(Colors.GREEN, ip[2], Colors.END)        
         print '{0}[+] Gateway (eth0): {1} {2}'.format(Colors.GREEN, ip[3], Colors.END)        
-        print '{0}[+] DHCP? : {1} {2}'.format(Colors.GREEN, ip[4], Colors.END)        
+        print '{0}[+] DHCP? : {1} {2}'.format(Colors.GREEN, ip[4], Colors.END)    
+ 
+ 
+    def os(self):
+        cmd = "hostname;"
+        cmd += "uname -a;"
+		#cmd += "grep DISTRIB_DESCRIPTION /etc/*-release | head -n 1;"
+        cmd += "cat /etc/*-release | head -n 1;"        
+        cmd += "date;"
+        cmd += "zdump UTC;"
+        cmd += "echo $LANG;"
+        
+        os = make_request.get_page_source(cmd)
+        
+        print '\n{0}[+] Hostname: {1} {2}'.format(Colors.GREEN, os[0], Colors.END)
+        print '{0}[+] Kernel: {1} {2}'.format(Colors.GREEN, os[1], Colors.END)              
+        print '{0}[+] OS: {1} {2}'.format(Colors.GREEN, os[2], Colors.END)              
+        print '{0}[+] Time: {1} {2}'.format(Colors.GREEN, os[3], Colors.END)              
+        print '{0}[+] Timezone (UTC): {1} {2}'.format(Colors.GREEN, os[4], Colors.END)              
+        print '{0}[+] Language: {1} {2}'.format(Colors.GREEN, os[5], Colors.END)              
 
 enumerate = Enumerate()
 
