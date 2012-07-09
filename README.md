@@ -24,13 +24,15 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
     - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
 
 
-__p.s.__
+__Requirements__
 ---
 If your [Python][]'s version < 2.7.x
 Then [argparse][] **is required**.
 
 To install it run (as root):
 `easy_install argparse` **OR** `pip --install argparse`
+
+
 
 [readline][] **is optional**.
 
