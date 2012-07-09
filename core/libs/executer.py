@@ -71,6 +71,8 @@ class Commander(object):
                         if len(command.split()) == 2:
 							if command.split()[1] == "health":
 								enumerate.health()
+							elif command.split()[1] == "history":
+								enumerate.history()
 							elif command.split()[1] == "ip":
 								enumerate.ip()
 							elif command.split()[1] == "os":

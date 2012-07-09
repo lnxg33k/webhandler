@@ -8,15 +8,7 @@
     -> http://pentestmonkey.net/tools/audit/unix-privesc-check
 2- Update
     -> Via GIT itself (git pull)
-    -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
-6- "history" command:
-    ->     for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do
-            [ -f $i/.bash_history ] && echo "bash_history: $i"
-            [ -f $i/.nano_history ] && echo "nano_history: $i"
-            [ -f $i/.atftp_history ] && echo "atftp_history: $i"
-            [ -f $i/.mysql_history ] && echo "mysql_history: $i"
-            [ -f $i/.php_history ] && echo "php_history: $i"
-        done
+    -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip} 
 8- "stealth" command:
     -> export HISTFILE=/dev/null
 -9 "Encoding"

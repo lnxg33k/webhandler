@@ -5,6 +5,7 @@ from core.libs.menu import Colors
 class Enumerate(object):
     def list(self):        
         print '\n[!] Usage: enum health\tTo get general info about the system'
+        print '[!] Usage: enum history\tTo list \'intressing\' ~/.*-history files'
         print '[!] Usage: enum ip\tTo get general networking info about the system'        
         print '[!] Usage: enum keys\tTo get private SSH & SSL keys/certs'        
         print '[!] Usage: enum os\tTo get general operating system info about the system'
@@ -109,5 +110,18 @@ class Enumerate(object):
                 print '{0:2d}- {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!]Can\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)    
+            print '\n{0}[!]Can\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
+			
+			
+    def history(self):
+        cmd = 'for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do [ -f $i/.bash_history ] && echo "bash_history: $i"; [ -f $i/.nano_history ] && echo "nano_history: $i"; [ -f $i/.atftp_history ] && echo "atftp_history: $i"; [ -f $i/.mysql_history ] && echo "mysql_history: $i"; [ -f $i/.php_history ] && echo "php_history: $i";done'
+        self.history = make_request.get_page_source(cmd)
+        if self.history:
+            c = 1
+            for path in self.history:
+                print '{0:2d}- {1}'.format(c, path)
+                c += 1
+        else:
+            print '\n{0}[!]Can\'t find any \'history\' files{1}'.format(Colors.RED, Colors.END)
+
 enumerate = Enumerate()
