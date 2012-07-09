@@ -16,9 +16,9 @@ Developers:
 '''
 
 #importing modules
-from core.libs.info import info
 from core.libs.executer import commander
 from core.libs.menu import getargs, banner
+from core.modules.info import info
 
 # check for arguments dependencies
 if getargs.url:
