@@ -15,7 +15,7 @@ class FileHandler(object):
                     dest_file.write('\n'.join(make_request.get_page_source(cmd)))
                 print '\n[+] Successfully downloaded "{0}" to "{1}"'.format(rfile_path, lfile_path)
             except IOError, e:
-                print '{0}\n[!] {1}{2}'.format(Colors.RED, e, Colors.END)
+                print '{0}\n[!] {1} {2}'.format(Colors.RED, e, Colors.END)
         elif file_type == 'dir':
             cmd = 'find {0} | while read f;do echo "$f";done'.format(rfile_path)
             files = make_request.get_page_source(cmd)
@@ -30,7 +30,7 @@ class FileHandler(object):
                         with open(os.path.join(lfile_path, file), 'w') as dest_file:
                             dest_file.write('\n'.join(make_request.get_page_source(cmd)))
                     except IOError, e:
-                        print '\n{0}[!] Error: {1}{2}'.format(Colors.RED, e, Colors.END)
+                        print '\n{0}[!] Error: {1} {2}'.format(Colors.RED, e, Colors.END)
                 else:
                     print '{0}[!] Coudln\'t download the following file: {1} {2}'.format(Colors.RED, Colors.END, file)
             print '\n{0}[+] Files downloaded successfully to: {1} {2}'.format(Colors.GREEN, Colors.END, lfile_path)

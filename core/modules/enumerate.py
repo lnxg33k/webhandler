@@ -83,7 +83,7 @@ class Enumerate(object):
                 print '{0:2d}- {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!]Can\'t find any SSL certs{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!]Didn\'t find any SSL certs{1}'.format(Colors.RED, Colors.END)
 
         cmd = "find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo \"{}\"'"
         self.sshpub = make_request.get_page_source(cmd)
@@ -93,7 +93,7 @@ class Enumerate(object):
                 print '{0:2d}- {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!]Can\'t find any public SSH keys{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!]Didn\'t find any public SSH keys{1}'.format(Colors.RED, Colors.END)
 
         #Private keys
         #find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;        #grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l    # find / -name "*host_key*"
@@ -105,10 +105,10 @@ class Enumerate(object):
         if self.writables:
             c = 1
             for path in self.writables:
-                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
         else:
-            print '\n{0}[!]Can\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!]Didn\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
 
     def history(self):
         cmd = 'for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do [ -f $i/.bash_history ] && echo "bash_history: $i"; [ -f $i/.nano_history ] && echo "nano_history: $i"; [ -f $i/.atftp_history ] && echo "atftp_history: $i"; [ -f $i/.mysql_history ] && echo "mysql_history: $i"; [ -f $i/.php_history ] && echo "php_history: $i";done'
@@ -119,6 +119,6 @@ class Enumerate(object):
                 print '{0:2d}- {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!]Can\'t find any \'history\' files{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!]Didn\'t find any \'history\' files{1}'.format(Colors.RED, Colors.END)
 
 enumerate = Enumerate()

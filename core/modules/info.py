@@ -1,3 +1,4 @@
+from subprocess import Popen, PIPE
 from urllib2 import urlopen, URLError
 from core.libs.request_handler import make_request
 from core.libs.menu import Colors
@@ -30,7 +31,7 @@ class VictimBox(object):
         except URLError:
             self.local_ip = 'Unknown'
 
-        self.available_commands = "['banner', 'clear', 'download', 'enum', 'exit', 'history', 'info', 'spread', 'upload']"
+        self.available_commands = "['banner', 'clear', 'download', 'enum', 'exit', 'history', 'info', 'spread', 'update', 'upload']"
 
     def get_information(self):
         self.info = \
@@ -59,5 +60,23 @@ class VictimBox(object):
                 uptime=self.uptime,
                 available_commands=self.available_commands,)
         print self.info
+ 
+
+    # *** Doesn't (yet) work ***
+    def update(self):
+        import platform
+        os = platform.platform()
+        if "windows" in os.lower():
+            print '{0}\n[!] Coming later {1}'.format(Colors.RED, Colors.END)
+        else:
+            try:
+                child = Popen("bash -c 'for x in `whereis git`; do file $x | grep executable; done'", stdout=PIPE).wait()            
+                if child != 0:
+                    cmd = "wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}"
+                else:
+                    cmd = "git pull"  # git clone git://github.com/lnxg33k/webhandler.git && cd webhandler/
+                Popen(cmd, shell=True).wait()
+            except:
+                print '\n[!] Failed to update'                
 
 info = VictimBox()

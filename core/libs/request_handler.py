@@ -50,8 +50,8 @@ class MakeRequest(object):
         else:
             pass
         install_opener(opener)
-        errmsg = '\n{0}[!] Check your connection or the proxy if you\'re using it{1}'.format(Colors.RED, Colors.END)
-        fourzerofourmsg = '\n{0}[!] Please make sure the page requested exists (HTTP Code: 404)!{1}'.format(Colors.RED, Colors.END)
+        errmsg = '\n{0}[!] Check your network connection and/or the proxy (if you\'re using one){1}'.format(Colors.RED, Colors.END)
+        fourzerofourmsg = '\n{0}[!] Please make sure the page requested exists!{1}'.format(Colors.RED, Colors.END)
         # check if the method is post or get
         if self.method == 'post' or self.parameter:
             self.method = 'post'
@@ -71,9 +71,9 @@ class MakeRequest(object):
         # if the used method set get
         else:
             try:
-                sc = map(str.rstrip, opener.open('{}{}'.format(self.url, quote(self.cmd))).readlines())
+                sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd))).readlines())
                 if self.clean:
-                    garpage = map(str.rstrip, opener.open('{}{}'.format(self.url, quote('uname'))).readlines())
+                    garpage = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('uname'))).readlines())
                     garpage = list(set(sc).intersection(garpage))
                     sc = [i for i in sc if not i in garpage]
                 return sc

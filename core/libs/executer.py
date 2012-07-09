@@ -57,6 +57,10 @@ class Commander(object):
                     # get stored info from
                     elif command == 'info':
                         info.get_information()
+                        
+                    # update WebHandler
+                    elif command == 'update':
+                        info.update()
 
                     # get WebHandler banner
                     elif command == 'banner':

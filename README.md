@@ -26,7 +26,7 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
 __p.s.__
 ---
 [argparse]: http://docs.python.org/library/argparse.html
-If your [Python][]'s version < 7.X
+If your [Python][]'s version < 2.7.x
 Then [argparse][] is required.
 To install it run:
-`easy_install argparse` **OR** `pip install argparse`
+`easy_install argparse` **OR** `pip --install argparse`
