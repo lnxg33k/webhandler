@@ -47,7 +47,7 @@ class Enumerate(object):
         cmd = "ip addr show | grep inet | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
         cmd += "curl http://ifconfig.me/ip;"
         cmd += "cat /etc/resolv.conf | grep nameserver | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
-        cmd += "/sbin/route -n | grep eth0 | awk '{print $2}' | grep -v 0.0.0.0 | head -n 1;"
+        cmd += "/sbin/route -n | awk '{print $2}' | grep -v 0.0.0.0 | head -n 1;"
         #grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null
         #grep -q "inet dhcp" /etc/network/interfaces 2>/dev/null
         cmd += 'dhcp_ip=`grep dhcp-server /var/lib/dhcp*/dhclient.* 2>/dev/null | uniq | awk \'{print $4}\' | tr -d ";"`; if [ $dhcp_ip ] ; then echo "Yes ($dhcp_ip)"; else echo "No"; fi;'
@@ -57,7 +57,7 @@ class Enumerate(object):
         print '\n{0}[+] Internal IP/subnet: {1} {2}'.format(Colors.GREEN, ip[0], Colors.END)
         print '{0}[+] External IP: {1} {2}'.format(Colors.GREEN, ip[1], Colors.END)
         print '{0}[+] DNS: {1} {2}'.format(Colors.GREEN, ip[2], Colors.END)
-        print '{0}[+] Gateway (eth0): {1} {2}'.format(Colors.GREEN, ip[3], Colors.END)
+        print '{0}[+] Gateway: {1} {2}'.format(Colors.GREEN, ip[3], Colors.END)
         print '{0}[+] DHCP? : {1} {2}'.format(Colors.GREEN, ip[4], Colors.END)
 
 
@@ -69,6 +69,7 @@ class Enumerate(object):
         cmd += "cat /etc/*-release | head -n 1;"
         cmd += "date;"
         cmd += "zdump UTC;"
+		#cmd += "python -c 'import locale; print locale.getdefaultlocale()[0];';"
         cmd += "echo $LANG;"
 
         os = make_request.get_page_source(cmd)
@@ -76,7 +77,7 @@ class Enumerate(object):
         print '\n{0}[+] Hostname: {1} {2}'.format(Colors.GREEN, os[0], Colors.END)
         print '{0}[+] Kernel: {1} {2}'.format(Colors.GREEN, os[1], Colors.END)
         print '{0}[+] OS: {1} {2}'.format(Colors.GREEN, os[2], Colors.END)
-        print '{0}[+] Time: {1} {2}'.format(Colors.GREEN, os[3], Colors.END)
+        print '{0}[+] Local Time: {1} {2}'.format(Colors.GREEN, os[3], Colors.END)
         print '{0}[+] Timezone (UTC): {1} {2}'.format(Colors.GREEN, os[4], Colors.END)
         print '{0}[+] Language: {1} {2}'.format(Colors.GREEN, os[5], Colors.END)
 
