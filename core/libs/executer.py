@@ -1,4 +1,3 @@
-# importing modules
 from urllib import unquote
 from subprocess import Popen
 from os import getcwd
@@ -63,10 +62,6 @@ class Commander(object):
                     elif command == 'banner':
                         print banner
 
-                    # get all writable directories
-                    elif command == 'writable':
-                        shell_handler.get_writable()
-
                     # spreat the shell to all writable directories
                     elif command == 'spread':
                         shell_handler.spread_shell()
@@ -78,6 +73,12 @@ class Commander(object):
 								enumerate.health()
 							elif command.split()[1] == "ip":
 								enumerate.ip()
+							elif command.split()[1] == "os":
+								enumerate.os()
+							elif command.split()[1] == "keys":
+								enumerate.keys()
+							elif command.split()[1] == "writable":
+								enumerate.writable()
 							else:
 								enumerate.list()
                         else:

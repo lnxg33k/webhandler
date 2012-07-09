@@ -17,10 +17,6 @@
             [ -f $i/.mysql_history ] && echo "mysql_history: $i"
             [ -f $i/.php_history ] && echo "php_history: $i"
         done
-7- "keys" command:
-    -> echo -n "SSL Certs: "; find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo "{}"'
-    -> echo -n "SSH Public: "; find / -type f -print0 | xargs -0 -I '{}' bash -c 'ssh-keygen -lf {} >/dev/null 2>&1; [[ $? == '0' ]] && echo "{}"'
-    -> echo -n "SSH Private: ";     #find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;        #grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l    # find / -name "*host_key*"
 8- "stealth" command:
     -> export HISTFILE=/dev/null
 -9 "Encoding"

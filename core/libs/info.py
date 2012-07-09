@@ -30,7 +30,7 @@ class VictimBox(object):
         except URLError:
             self.local_ip = 'Unknown'
 
-        self.available_commands = "['banner', 'clear', 'download', 'enum', 'exit', 'history', 'info', 'spread', 'upload', 'writable']"
+        self.available_commands = "['banner', 'clear', 'download', 'enum', 'exit', 'history', 'info', 'spread', 'upload']"
 
     def get_information(self):
         self.info = \

@@ -37,18 +37,6 @@ class LinuxVersion(object):
 
 
 class ShellHandler(object):
-    # a method to get all writable directories within CWD
-    def get_writable(self):
-        cmd = "find {0} -depth -perm -0002 -type d".format(linux.get_doc_root())
-        self.writables = make_request.get_page_source(cmd)
-        if self.writables:
-            c = 1
-            for path in self.writables:
-                print '{0:2d}- {1}'.format(c, path)
-                c += 1
-        else:
-            print '\n{0}[!]Can\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
-
     # a method to spread the shell in all writable directories
     def spread_shell(self):
         provided_shell_name = raw_input('\n{0}[!] Current shell name{1}: '.format(Colors.RED, Colors.END))
