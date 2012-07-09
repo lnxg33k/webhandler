@@ -28,7 +28,7 @@ class MakeRequest(object):
     '''
     Check for the used method POST or GET
     Adding some commands to cmd requires updating
-    self.info in VictimBox class 'victim_info.py'
+    self.info in TargetBox class 'target_info.py'
     '''
     def __init__(self, url=None, method='get', parameter=None):
         self.url = getargs.url

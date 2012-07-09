@@ -17,7 +17,10 @@
 
 
 ---Known Issues/Bugs
-*None!* =)
+->Uptime:
+--->Machine01: 12:31:38 up 1 day, 50 min,  2 users,  load average: 0.09, 0.06, 0.01
+--->Machine02: 18:40:39 up  4:40,  load average: 0.14, 0.03, 0.01
+--->Machine03: 19:40:07 up 19 days, 19:14,  3 users,  load average: 1.07, 1.34, 1.45
 
 
 ---Notes

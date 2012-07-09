@@ -4,7 +4,7 @@ from core.libs.request_handler import make_request
 from core.libs.menu import Colors
 
 
-class VictimBox(object):
+class TargetBox(object):
     def __init__(self, url=None):
         self.url = url
         self.cmd = 'whoami;'
@@ -42,7 +42,7 @@ class VictimBox(object):
         {red}Kernel{end}      :  {green}{kernel_info}{end}
         {red}CWD{end}         :  {green}{cwd}{end}\t{hot}{perm_cwd}{end}
         {red}Uptime{end}      :  {green}{uptime}{end}
-        {red}Targets IPs{end} :  {green}{host_ip}{end}
+        {red}Target's IPs{end}:  {green}{host_ip}{end}
         {red}Our IP{end}      :  {green}{local_ip}{end}
         {dashed}
 
@@ -79,4 +79,4 @@ class VictimBox(object):
             except:
                 print '\n[!] Failed to update'
 
-info = VictimBox()
+info = TargetBox()

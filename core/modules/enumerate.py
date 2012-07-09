@@ -5,12 +5,12 @@ from core.modules.shell_handler import linux
 
 class Enumerate(object):
     def list(self):
-        print '\n[!] Usage: enum health\tTo get general info about the system'
-        print '[!] Usage: enum history\tTo list \'intressing\' ~/.*-history files'
-        print '[!] Usage: enum ip\tTo get general networking info about the system'
-        print '[!] Usage: enum keys\tTo get private SSH & SSL keys/certs'
-        print '[!] Usage: enum os\tTo get general operating system info about the system'
-        print '[!] Usage: enum writables\tTo get all writable paths withing the document root'
+        print '\n[i] Usage: enum health\t\t\tGeneral infomation about the system'
+        print '[i] Usage: enum history\t\t\tList \'intressing\' (~/.*-history files)'
+        print '[i] Usage: enum ip\t\t\t\t\tGeneral networking infomation about the system'
+        print '[i] Usage: enum keys\t\t\t\tList private SSH & SSL keys/certs'
+        print '[i] Usage: enum os\t\t\t\t\tGeneral operating system infomation'
+        print '[i] Usage: enum writables\t\tList writable paths within the document\'s root directory'
 
 
 
