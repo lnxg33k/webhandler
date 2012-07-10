@@ -14,7 +14,7 @@ class Backdoor(object):
     if you use substitute "/bin/sh -i" with "cmd.exe".
     '''
     def list(self):
-        print '\n[i] Usage: backdoor [module] <*ip:port>'
+        print '\n[i] Usage: @backdoor [module] <*ip:port>'
         print '[i] Modules:'
         #print '[i] \t*bash\t\tUse bash to create a reverse shell (not all versions support this!)'
         #print '[i] \t*java\t\tUse java to create a reverse shell'

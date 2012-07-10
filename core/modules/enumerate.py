@@ -5,7 +5,8 @@ from core.modules.shell_handler import linux
 
 class Enumerate(object):
     def list(self):
-        print '\n[i] Modules:'
+        print '\n[i] Usage: @enum [module]'
+        print '[i] Modules:'
         print '[i] \thealth\t\t\tGeneral infomation about the system'
         print '[i] \thistory\t\t\tList \'intressing\' (~/.*-history files)'
         print '[i] \tip\t\t\t\t\tGeneral networking infomation about the system'
