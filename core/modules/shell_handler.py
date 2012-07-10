@@ -1,6 +1,6 @@
-from core.libs.menu import Colors, getargs
-from core.libs.request_handler import make_request
 from urllib2 import urlopen
+
+from core.libs.request_handler import make_request
 
 
 class LinuxVersion(object):
@@ -34,6 +34,5 @@ class LinuxVersion(object):
                     pass
 
         return doc_root
-
 
 linux = LinuxVersion()

@@ -61,7 +61,6 @@ class TargetBox(object):
                 available_commands=self.available_commands,)
         print self.info
 
-
     # *** Doesn't (yet) work ***
     def update(self):
         import platform
