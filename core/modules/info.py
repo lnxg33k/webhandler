@@ -26,12 +26,12 @@ class TargetBox(object):
         self.uptime = source[5]
         self.host_ip = ', '.join(source[6:])
         try:
-            # Get the attacker's ip address (thanks @mandreko)
+            # Get the attacker's ip address (Thanks @mandreko)
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
         except URLError:
             self.local_ip = 'Unknown'
 
-        self.available_commands = "['banner', 'clear', 'download', 'enum', 'exit', 'history', 'info', 'spread', 'update', 'upload']"
+        self.available_commands = "['backdoor', 'banner', 'clear', 'download', 'enum', 'exit', 'history', 'info', 'spread', 'update', 'upload']"
 
     def get_information(self):
         self.info = \
@@ -67,7 +67,7 @@ class TargetBox(object):
         import platform
         os = platform.platform()
         if "windows" in os.lower():
-            print '{0}\n[!] Coming later {1}'.format(Colors.RED, Colors.END)
+            print '{0}\n[!] Coming later (Windows) {1}'.format(Colors.RED, Colors.END)
         else:
             try:
                 child = Popen("bash -c 'for x in `whereis git`; do file $x | grep executable; done'", stdout=PIPE).wait()

