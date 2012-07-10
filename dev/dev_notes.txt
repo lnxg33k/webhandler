@@ -3,7 +3,7 @@
     -> http://g0tmi1k.blogspot.co.uk/2011/08/basic-linux-privilege-escalation.html
     -> http://pentestmonkey.net/tools/audit/unix-privesc-check
 2- Update
-    -> Via GIT itself (git pull)
+    -> Via git itself (git pull)
     -> http://blog.hackthology.com/how-to-write-self-updating-python-programs-us
     -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
     -> Version? Display on menu?
@@ -20,7 +20,7 @@
     -> Create a while loop to forever connect back to attacker (every 5 mins?)
 7- Multiple sessions
     -> ...Like Metasploit
-    -> Able to handle 'reverse' connections too (e.g. alternative netcat)
+    -> Able to handle 'reverse' connections too (e.g. an alternative netcat)
 
 
 ---Known Issues/Bugs
