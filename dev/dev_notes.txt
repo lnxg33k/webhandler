@@ -4,18 +4,29 @@
     -> http://pentestmonkey.net/tools/audit/unix-privesc-check
 2- Update
     -> Via GIT itself (git pull)
+    -> http://blog.hackthology.com/how-to-write-self-updating-python-programs-us
     -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
     -> Version? Display on menu?
 3- "stealth" command:
     -> export HISTFILE=/dev/null
 4- "encode" communication
     -> *cough*base64*cough*
-5- Windows Support
+5- Windows support
     -> Client (powershell)
     -> Server (Commands)
     -> Update (git)
-6- Update Screenshot/Readme 
+6- Update screenshot/README 
     -> Still says iCommand!
+7- Backdoor
+    -> PHP Meterperter (MSF)
+    -> Bash (netcat)
+    -> Python
+    -> Perl
+    -> Ruby
+    -> Move "spread" to here
+    -> Create a while look to forever connect back to attacker
+8- Multiple sessions
+    -> ...Like Metasploit
 
 
 ---Known Issues/Bugs
@@ -27,3 +38,4 @@
 
 ---Notes
 * g0tmi1k: Had to call it a day, working on update feature. Free feel to try and fix it ;)
+* g0tmi1k: All "our" commands, have a "@" in-front, then all "local" commands have "!" in-front, then "normal" is "normal" on attacker?
