@@ -5,12 +5,13 @@ from core.modules.shell_handler import linux
 
 class Enumerate(object):
     def list(self):
-        print '\n[!] Usage: enum health\tTo get general info about the system'
-        print '[!] Usage: enum history\tTo list \'intressing\' ~/.*-history files'
-        print '[!] Usage: enum ip\tTo get general networking info about the system'
-        print '[!] Usage: enum keys\tTo get private SSH & SSL keys/certs'
-        print '[!] Usage: enum os\tTo get general operating system info about the system'
-        print '[!] Usage: enum writables\tTo get all writable paths withing the document root'
+        print '''[!] Usage:
+        {0}enum health{1}    \t\tTo get general info about the system
+        {0}enum history{1}   \t\tTo list \'intressing\' ~/.*-history files
+        {0}enum ip{1}        \t\tTo get general networking info about the system
+        {0}enum keys{1}      \t\tTo get private SSH & SSL keys/certs
+        {0}enum os{1}        \t\tTo get general operating system info about the system
+        {0}enum writables{1} \t\tTo get all writable paths withing the document root'''.format(Colors.GREEN, Colors.END)
 
     def health(self):
         cmd = 'input=`uptime` && if [[ \'$input\' == *day* ]] ; then echo $input | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes"}\'; else echo $input | awk \'{print $3}\' | tr -d "," | awk -F ":" \'{print $1 " hours and " $2 " minutes"}\'; fi;'
