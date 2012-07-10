@@ -32,6 +32,9 @@
 ->bug04.png
 ---> Image sums it up well. If there is any text on the injection page - it causes errors in the handler. An idea to fix it? Have a uniq sig, which is displayed before the command, and then grep for it
 
+->bug05.png
+---> Running the backdoor command twice in a row, causes webhandler to crash.
+
 
 ---Notes
 * g0tmi1k: Had to call it a day, working on update feature. Free feel to try and fix it ;)
