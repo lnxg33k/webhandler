@@ -23,9 +23,12 @@
     -> Able to handle 'reverse' connections too (e.g. an alternative netcat)
 8- Banner
     -> "refresh" the commands which are displayed in the banner
-9- Logging
-    -> Log all commands entered
+9- Handling/Logging
+    -> Disable 'break' (Ctrl + C) quitting WebHandler
+    -> Enable 'Tab Complete' on commands
+    -> Log all commands entered (history to file)
     -> Log the display to a file
+
 
 
 ---Known Issues/Bugs
@@ -37,6 +40,5 @@
 
 ---Notes
 * g0tmi1k: Had to call it a day, working on update feature. Free feel to try and fix it ;)
-* g0tmi1k: All "our" commands, have a "@" in-front, then all "local" commands have "!" in-front, then "normal" is "normal" on attacker?
 * g0tmi1k: Tested a few backdoors methonds out - need to finish testing the rest ASAP
 * g0tmi1k: Break (Ctrl + C), not to close/Remove wget for self updating

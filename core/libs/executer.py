@@ -43,7 +43,7 @@ class Commander(object):
                         Popen('clear', shell=True).wait()
 
                     # Getting all commands attackr's did on the server
-                    elif command == 'history':
+                    elif command == '@history':
                         x = 1
                         for command in history:
                             print '{0:2d} {1}'.format(x, command)
@@ -54,18 +54,18 @@ class Commander(object):
                         Popen(command[1:], shell=True).wait()
 
                     # Get stored info from
-                    elif command == 'info':
+                    elif command == '@info':
                         info.get_information()
 
                     # Update WebHandler
-                    elif command == 'update':
+                    elif command == '@update':
                         info.update()
 
                     # Get WebHandler banner
-                    elif command == 'banner':
+                    elif command == '@banner':
                         print banner
 
-                    elif command.startswith('backdoor'):
+                    elif command.startswith('@backdoor'):
                         if len(command.split()) == 3:
                             ip = command.split()[2].split(':')[0]
                             port = command.split()[2].split(':')[1]
@@ -97,7 +97,7 @@ class Commander(object):
                         else:
                             backdoor.list()
 
-                    elif command.startswith('enum'):
+                    elif command.startswith('@enum'):
                         if len(command.split()) == 2:
                             if command.split()[1] == "health":
                                 enumerate.health()
@@ -116,7 +116,7 @@ class Commander(object):
                         else:
                             enumerate.list()
 
-                    elif command.startswith('download'):
+                    elif command.startswith('@download'):
                         if len(command.split()) < 2:
                             print '\n[!] Usage: download [remote_file_path] <local_file_path>'
                         else:
@@ -127,7 +127,7 @@ class Commander(object):
                                 lfile_path = command.split()[2]
                                 file_handler.download_file(rfile_path, lfile_path)
 
-                    elif command.startswith('upload'):
+                    elif command.startswith('@upload'):
                         if len(command.split()) != 3:
                             print '\n[!] Usage: upload [local_file_path] [remote_file_path]'
                         else:
