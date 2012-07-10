@@ -22,7 +22,7 @@ class LinuxVersion(object):
                 distrib_description = make_request.get_page_source(command)[0].lower()
                 if distrib_description:
                     if 'ubuntu' in distrib_description:
-                        cmd = "grep -i \"DocumentRoot\" /etc/apache2/sites-available/default| awk '{print $2}'"
+                        cmd = "grep -i \"DocumentRoot\" /etc/apache2/sites-available/default | awk '{print $2}'"
                         doc_root = make_request.get_page_source(cmd)[0]
                     elif 'centos' in distrib_description or 'fedora' in distrib_description or 'red hat' in distrib_description:
                         cmd = "grep -i 'DocumentRoot' /etc/httpd/conf/httpd.conf"
@@ -34,5 +34,6 @@ class LinuxVersion(object):
                     pass
 
         return doc_root
+
 
 linux = LinuxVersion()
