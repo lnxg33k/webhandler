@@ -69,7 +69,7 @@ class Enumerate(object):
         cmd += "cat /etc/*-release | head -n 1;"
         cmd += "date;"
         cmd += "zdump UTC;"
-		#cmd += "python -c 'import locale; print locale.getdefaultlocale()[0];';"
+        #cmd += "python -c 'import locale; print locale.getdefaultlocale()[0];';"
         cmd += "echo $LANG;"
 
         os = make_request.get_page_source(cmd)
@@ -122,7 +122,7 @@ class Enumerate(object):
             print '\n{0}[!]Didn\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
 
 
-	
+
     def history(self):
         cmd = 'for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do [ -f $i/.bash_history ] && echo "bash_history: $i"; [ -f $i/.nano_history ] && echo "nano_history: $i"; [ -f $i/.atftp_history ] && echo "atftp_history: $i"; [ -f $i/.mysql_history ] && echo "mysql_history: $i"; [ -f $i/.php_history ] && echo "php_history: $i";done'
         self.history = make_request.get_page_source(cmd)

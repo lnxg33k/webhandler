@@ -7,17 +7,16 @@
     -> http://blog.hackthology.com/how-to-write-self-updating-python-programs-us
     -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
     -> Version? Display on menu?
-3- "stealth" command:
+3- "stealth"/"encode" communication:
     -> export HISTFILE=/dev/null
-4- "encode" communication
     -> *cough*base64*cough*
-5- Windows support
+4- Windows support
     -> Client (powershell)
     -> Server (Commands)
     -> Update (git)
-6- Update screenshot/README 
+5- Update screenshot/README 
     -> Still says iCommand!
-7- Backdoor
+6- Backdoor
     -> PHP Meterperter (MSF)
     -> Bash (netcat)
     -> Python
@@ -25,8 +24,9 @@
     -> Ruby
     -> Move "spread" to here
     -> Create a while look to forever connect back to attacker
-8- Multiple sessions
+7- Multiple sessions
     -> ...Like Metasploit
+    -> Able to handle 'reverse' connections too (e.g. alternative netcat)
 
 
 ---Known Issues/Bugs
@@ -34,6 +34,9 @@
 --->Machine01: 12:31:38 up 1 day, 50 min,  2 users,  load average: 0.09, 0.06, 0.01
 --->Machine02: 18:40:39 up  4:40,  load average: 0.14, 0.03, 0.01
 --->Machine03: 19:40:07 up 19 days, 19:14,  3 users,  load average: 1.07, 1.34, 1.45
+
+->bug04.png
+---> image sums it up well. If there is any text on the injection page - it causes errors in the handler. An idea to fix it? Have a uniq sig, which is displayed before the command, and then grep for it
 
 
 ---Notes
