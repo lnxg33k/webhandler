@@ -21,6 +21,8 @@
 7- Multiple sessions
     -> ...Like Metasploit
     -> Able to handle 'reverse' connections too (e.g. an alternative netcat)
+8- Banner
+    -> "refresh" the commands which are displayed in the banner
 
 
 ---Known Issues/Bugs
