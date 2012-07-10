@@ -24,7 +24,6 @@
 8- Banner
     -> "refresh" the commands which are displayed in the banner
 9- Handling/Logging
-    -> Disable 'break' (Ctrl + C) quitting WebHandler
     -> Enable 'Tab Complete' on commands
     -> Log all commands entered (history to file)
     -> Log the display to a file

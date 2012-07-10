@@ -189,10 +189,9 @@ class Commander(object):
                     print '\n[+] Preformed "{0}" commands on the server, {1}\n[!] Connection closed'.format(i, info.host_ip.split(',')[0])
                     break
 
-            # Exit WebHandler if it recieved a break (^c)
+            # If recieved a break (^c)... Do nothing!
             except KeyboardInterrupt:
-                print '\n[+] Preformed "{0}" commands on the server, {1}\n[!] Connection closed'.format(i, info.host_ip.split(',')[0])
-                break
+				print ""
             i += 1
 
 # Taking an instance from the main class
