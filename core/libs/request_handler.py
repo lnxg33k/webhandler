@@ -28,7 +28,7 @@ class MakeRequest(object):
     '''
     Check for the used method POST or GET
     Adding some commands to cmd requires updating
-    self.info in VictimBox class 'victim_info.py'
+    self.info in TargetBox class 'target_info.py'
     '''
     def __init__(self, url=None, method='get', parameter=None):
         self.url = getargs.url
@@ -50,9 +50,9 @@ class MakeRequest(object):
         else:
             pass
         install_opener(opener)
-        errmsg = '\n{0}[!] Check your connection or the proxy if you\'re using it{1}'.format(Colors.RED, Colors.END)
-        fourzerofourmsg = '\n{0}[!] Please make sure the page requested exists (HTTP Code: 404)!{1}'.format(Colors.RED, Colors.END)
-        # check if the method is post or get
+        errmsg = '\n{0}[!] Check your network connection and/or the proxy (if you\'re using one){1}'.format(Colors.RED, Colors.END)
+        fourzerofourmsg = '\n{0}[!] Please make sure the page requested exists!{1}'.format(Colors.RED, Colors.END)
+        # Check if the method is post or get
         if self.method == 'post' or self.parameter:
             self.method = 'post'
             parameters = urlencode({self.parameter: self.cmd})
@@ -68,12 +68,12 @@ class MakeRequest(object):
                 exit(errmsg)
             except:
                 exit(fourzerofourmsg)
-        # if the used method set get
+        # If the used method set get
         else:
             try:
-                sc = map(str.rstrip, opener.open('{}{}'.format(self.url, quote(self.cmd))).readlines())
+                sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd))).readlines())
                 if self.clean:
-                    garpage = map(str.rstrip, opener.open('{}{}'.format(self.url, quote('uname'))).readlines())
+                    garpage = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('uname'))).readlines())
                     garpage = list(set(sc).intersection(garpage))
                     sc = [i for i in sc if not i in garpage]
                 return sc

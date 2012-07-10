@@ -1,3 +1,4 @@
+
 WebHandler - command controller for PHP system function
 ---
 ![My image](http://s9.postimage.org/6u4546aov/icommand.png)
@@ -22,11 +23,16 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
     - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --random-agent
     - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
 
-[Python]: http://www.python.org/download/
-__p.s.__
+
+__Requirements__
 ---
+If your [Python][]'s version < 2.7.x, then [argparse][] **is required**.
+To install it run (as root): `easy_install argparse` **OR** `pip --install argparse`
+
+
+[readline][] **is optional**. 
+This module it used to provide elaborate line editing and history features
+
+[Python]: http://www.python.org/download/
 [argparse]: http://docs.python.org/library/argparse.html
-If your [Python][]'s version < 7.X
-Then [argparse][] is required.
-To install it run:
-`easy_install argparse` **OR** `pip install argparse`
+[readline]: http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
