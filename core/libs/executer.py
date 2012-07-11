@@ -9,6 +9,7 @@ else:
     pass
 
 from core.libs.menu import Colors, banner
+from core.libs.update import update
 from core.libs.request_handler import make_request
 from core.modules.info import info
 from core.modules.backdoor import backdoor
@@ -59,7 +60,7 @@ class Commander(object):
 
                     # Update WebHandler
                     elif command == '@update':
-                        info.update()
+                        update()
 
                     # Get WebHandler banner
                     elif command == '@banner':

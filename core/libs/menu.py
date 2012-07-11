@@ -39,7 +39,7 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
         parser = argparse.ArgumentParser(
                 add_help=False,
                 usage='%(prog)s -h',
-                formatter_class=argparse.RawDescriptionHelpFormatter,
+                formatter_class=argparse.RawTextHelpFormatter,
                 epilog='''
 Examples:
     python %(prog)s --url http://www.mywebsite.com/shell.php?cmd=
@@ -47,15 +47,16 @@ Examples:
     python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent
     python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080''')
         positional = parser.add_argument_group('Positional arguments')
-        positional.add_argument('-u', '--url', help='Full URL for the uploaded PHP code', metavar='')
+        positional.add_argument('-u', '--url', help='\t\tFull URL for the uploaded PHP code', metavar='')
         optional = parser.add_argument_group('Optional arguments')
-        optional.add_argument('-h', '--help', action='help', help='Print this help message then exit')
-        optional.add_argument('-m', '--method', dest='method', help='The method used in the uploaded PHP code (e.g. post)', metavar='')
-        optional.add_argument('-c', '--clean', dest='clean', help='Remove any returned garbage after commands execution', action='store_true')
-        optional.add_argument('-p', '--parameter', dest='parameter', help='Parameter that used in the shell (e.g. cmd)', metavar='')
-        optional.add_argument('-x', '--proxy', dest='proxy', help='Proxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
-        optional.add_argument('-g', '--agent', dest='agent', help='user-agent (e.g. \'Mozilla/5.0\')', metavar='')
-        optional.add_argument('-rg', '--random-agent', dest='random_agent', help='WebHandler will use some random user-agent', action='store_true')
+        optional.add_argument('-h', '--help', action='help', help='\t\tPrint this help message then exit')
+        optional.add_argument('-c', '--turbo', dest='turbo', help='\t\tIncrease the execution speed if the out-put doesn\'t contain garbage', action='store_true')
+        optional.add_argument('-m', '--method', dest='method', help='\t\tThe method used in the uploaded PHP code (e.g. post)', metavar='')
+        optional.add_argument('-p', '--parameter', dest='parameter', help='\t\tParameter that used in the shell (e.g. cmd)', metavar='')
+        optional.add_argument('-x', '--proxy', dest='proxy', help='\t\tProxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
+        optional.add_argument('-g', '--user-agent', dest='agent', help='\t\tuser-agent (e.g. \'Mozilla/5.0\')', metavar='')
+        optional.add_argument('-rg', '--random-agent', dest='random_agent', help='\t\tWebHandler will use some random user-agent', action='store_true')
+        optional.add_argument('-up', '--update', dest='update', help='\t\tUpdate webhandler from git cli  "GitHub repo"', action='store_true')
         options = parser.parse_args()
         url = options.url if options.url.startswith('http') else "http://" + options.url
         method = options.method.lower() if options.method else None
@@ -63,7 +64,8 @@ Examples:
         proxy = options.proxy
         agent = options.agent
         random_agent = options.random_agent
-        clean = options.clean
+        turbo = options.turbo
+        update = options.update
 
 getargs = GetArgs()
 banner = Banner().banner

@@ -16,6 +16,7 @@ Developers:
 '''
 
 # Importing modules
+from core.libs.update import update
 from core.libs.executer import commander
 from core.libs.menu import getargs, banner
 from core.modules.info import info
@@ -32,3 +33,6 @@ if getargs.url:
         print banner                            # Get WebHandler banner
         info.get_information()                  # Call get_information and print info
         commander.BackConnect()                 # Call BackConnect method
+
+if getargs.update:
+    update()
