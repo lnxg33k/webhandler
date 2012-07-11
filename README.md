@@ -1,4 +1,3 @@
-
 WebHandler - command controller for PHP system function
 ---
 ![My image](http://s11.postimage.org/nq2hdsvpf/webhandler.png)
