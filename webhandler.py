@@ -18,15 +18,17 @@ Developers:
 # Importing modules
 from core.libs.update import update
 from core.libs.executer import commander
-from core.libs.menu import getargs, banner
+from core.libs.menu import getargs, banner, Colors
 from core.modules.info import info
 
 # Check for arguments dependencies
 if getargs.url:
     if getargs.method == 'post' and not getargs.parameter:
-        exit('\n[!] Using post method requires --parameter flag, check help')
+        errmsg = '\n{[!] Using post method requires --parameter flag, check help'
+        exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
     if getargs.method == 'get' and getargs.parameter:
-        exit('\n[!] Using get method doesn\'t require --parameter flag, check help')
+        errmsg = '\n[!] Using get method doesn\'t require --parameter flag, check help'
+        exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
     else:
         print banner                            # Get WebHandler banner
         info.get_information()                  # Call get_information and print info

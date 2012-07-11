@@ -51,7 +51,7 @@ class MakeRequest(object):
             pass
         install_opener(opener)
         errmsg = '\n{0}[!] Check your network connection and/or the proxy (if you\'re using one){1}'.format(Colors.RED, Colors.END)
-        fourzerofourmsg = '\n{0}[!] Please make sure the page requested exists!{1}'.format(Colors.RED, Colors.END)
+        fourzerofourmsg = '\n{0}[!] Please make sure the page (\'{1}\') requested exists!{2}'.format(Colors.RED, self.url, Colors.END)
         # Check if the method is post or get
         if self.method == 'post' or self.parameter:
             self.method = 'post'

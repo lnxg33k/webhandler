@@ -19,18 +19,22 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
 * --url is a positional argument withing GET and POST requests:
     - python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=
     - python webhandler.py --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
-    - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --random-agent
+    - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --random-agent --turbo
     - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
 
 
 __Requirements__
 ---
 If your [Python][]'s version < 2.7.x, then [argparse][] **is required**.  
-To install it run (as root): `easy_install argparse` **OR** `pip --install argparse`  
+To install it run: `sudo apt-get install python-setuptools && sudo easy_install argparse` **OR** `sudo pip --install argparse`  
 
 [readline][] **is optional**.  
 This module it used to provide elaborate line editing and history features
 
+[git][] **is optional**.  
+This allows for the project to be kept up-to-date
+
 [Python]: http://www.python.org/download/
 [argparse]: http://docs.python.org/library/argparse.html
 [readline]: http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
+[git]: http://git-scm.com
