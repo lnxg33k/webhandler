@@ -4,7 +4,7 @@ from os import getcwd
 try:
     import readline
 except ImportError:
-    print '\n{0}[!] The "readline" module is required to provide elaborate line editing and history features{1}'.format(Colors.RED, Colors.END)
+    print '\n[!] The "readline" module is required to provide elaborate line editing and history features'
 else:
     pass
 

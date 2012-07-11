@@ -15,8 +15,9 @@ class Colors(object):
 
 class Banner(object):
     banner = ''
+    current_commit = '???'
     if not path.exists(path.join(getcwd(), ".git")):
-        banner = '\n{0}[!]"non-git"!\n\n{1}'.format(Colors.RED, Colors.END)
+        banner = '\n{0}[!] "non-git". Keep up-to-date by running \'--update\'{1}'.format(Colors.RED, Colors.END)
     else:
         f = Popen('git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
         current_commit = f.communicate()[0]
@@ -29,7 +30,7 @@ class Banner(object):
 \t\t   \  /\  /  __/ |_) | |  | | (_| | | | | (_| | |  __/ |
 \t\t    \/  \/ \___|_.__/|_|  |_|\__,_|_| |_|\__,_|_|\___|_|
 \t\t-----------------------------------------------------------
-\t\t\t\t\t\t\tVersion: {1}{2}""".format(Colors.YELLOW, current_commit, Colors.END)
+\t\t\t\t\t\t\t{3}{1}Version: {2}{3}""".format(Colors.YELLOW, Colors.GREEN, current_commit, Colors.END)
 
 
 class GetArgs(object):
