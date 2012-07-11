@@ -21,7 +21,7 @@ class Banner(object):
     else:
         f = Popen('git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
         current_commit = f.communicate()[0]
-        
+
     banner = banner + """{0}
 \t\t__          __  _     _    _                 _ _
 \t\t\ \        / / | |   | |  | |               | | |
@@ -83,6 +83,6 @@ Examples:
             if not options.url.startswith('http'):
                 url = "http://" + options.url
 
-                
+
 getargs = GetArgs()
 banner = Banner().banner

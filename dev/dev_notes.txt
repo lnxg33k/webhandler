@@ -32,6 +32,5 @@ bash -c 'input=`uptime`; out=""; if [[ $input == *day* ]];then out=`echo $input|
 echo 'bash -c '\''input=`uptime`; out=""; if [[ $input == *day* ]];then out=`echo $input|awk '\''\'\'''\''{print $3" "$4}'\''\'\'''\''|tr -d ","`; fi&&if [[ $input == *min* ]];then echo `echo "$out and "&&echo $input|awk '\''\'\'''\''{print $5" minutes"}'\''\'\'''\''`; else echo `echo "$out, "&&echo $input|awk '\''\'\'''\''{print $5}'\''\'\'''\''|tr -d ","|awk -F":" '\''\'\'''\''{print $1" hours and "$2" minutes"}'\''\'\'''\''`; fi'\'';'
 
 
----Notes
-* g0tmi1k: Had to call it a day, working on update feature. Free feel to try and fix it ;)
-* g0tmi1k: Tested a few backdoors methonds out - need to finish testing the rest ASAP
+->BackDoors:
+---> Tested a few backdoors methonds out - need to finish testing the rest ASAP

