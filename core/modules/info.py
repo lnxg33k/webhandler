@@ -1,5 +1,5 @@
-from subprocess import Popen, PIPE
 from urllib2 import urlopen, URLError
+
 from core.libs.request_handler import make_request
 from core.libs.menu import Colors
 
@@ -15,6 +15,9 @@ class TargetBox(object):
         self.cmd += 'input=`uptime` && if [[ \'$input\' == *day* ]] ; then echo $input | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes"}\'; else echo $input | awk \'{print $3}\' | tr -d "," | awk -F ":" \'{print $1 " hours and " $2 " minutes"}\'; fi;'
         self.cmd += "/sbin/ifconfig | grep -e 'inet addr' | grep -v '127.0.0.1' | cut -f2 -d':' | cut -f1 -d' ';"
 
+        self.available_commands = "['@backdoor', '@spread', '@upload', '@download', '@enum', '@history', '@info', '@update', 'clear', 'exit']"
+
+    def get_information(self):
         # Call get_page_source() method then assign it to self.source
         source = make_request.get_page_source(self.cmd)
 
@@ -31,9 +34,6 @@ class TargetBox(object):
         except URLError:
             self.local_ip = 'Unknown'
 
-        self.available_commands = "['@backdoor', '@banner', '@download', '@enum', '@history', '@info', '@spread', '@update', '@upload', 'clear', 'exit']"
-
-    def get_information(self):
         self.info = \
         '''
         {dashed}
@@ -60,22 +60,5 @@ class TargetBox(object):
                 uptime=self.uptime,
                 available_commands=self.available_commands,)
         print self.info
-
-    # *** Doesn't (yet) work ***
-    def update(self):
-        import platform
-        os = platform.platform()
-        if "windows" in os.lower():
-            print '{0}\n[!] Coming later (Windows) {1}'.format(Colors.RED, Colors.END)
-        else:
-            try:
-                child = Popen("bash -c 'for x in `whereis git`; do file $x | grep executable; done'", stdout=PIPE).wait()
-                if child != 0:
-                    cmd = "wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}"
-                else:
-                    cmd = "git pull"  # git clone git://github.com/lnxg33k/webhandler.git && cd webhandler/
-                Popen(cmd, shell=True).wait()
-            except:
-                print '\n[!] Failed to update'
 
 info = TargetBox()

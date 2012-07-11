@@ -7,11 +7,11 @@ class Enumerate(object):
     def list(self):
         print '\n[i] Usage: @enum [module]'
         print '[i] Modules:'
-        print '[i] \thealth\t\t\tGeneral infomation about the system'
-        print '[i] \thistory\t\t\tList \'intressing\' (~/.*-history files)'
-        print '[i] \tip\t\t\t\t\tGeneral networking infomation about the system'
-        print '[i] \tkeys\t\t\t\tList private SSH & SSL keys/certs'
-        print '[i] \tos\t\t\t\t\tGeneral operating system infomation'
+        print '[i] \thealth    \t\tGeneral infomation about the system'
+        print '[i] \thistory   \t\tList \'intressing\' (~/.*-history files)'
+        print '[i] \tip        \t\tGeneral networking infomation about the system'
+        print '[i] \tkeys      \t\tList private SSH & SSL keys/certs'
+        print '[i] \tos        \t\tGeneral operating system infomation'
         print '[i] \twritables\t\tList writable paths within the document\'s root directory'
 
     def health(self):
