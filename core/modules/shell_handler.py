@@ -1,6 +1,7 @@
 from urllib2 import urlopen
 
 from core.libs.request_handler import make_request
+from core.libs.menu import Colors
 
 
 class LinuxVersion(object):
@@ -34,6 +35,16 @@ class LinuxVersion(object):
                     pass
 
         return doc_root
+
+
+    def get_writble_dir(self):
+        cmd = "find / -perm -0003 -type d 2>/dev/null| sort -R | head -n 1"  #-print -quit
+        result = make_request.get_page_source(cmd)[0]
+        if result:
+            print '\n{0}[+] Found a writable directory: \'{1}\'{2}'.format(Colors.GREEN, result, Colors.END)
+        else:
+            print '\n{0}[!] Unable to find a wriable directory'.format(Colors.RED, Colors.END)
+        return result
 
 
 linux = LinuxVersion()

