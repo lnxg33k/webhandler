@@ -2,32 +2,25 @@
 1- Work on enumeration/"loot" functions
     -> http://g0tmi1k.blogspot.co.uk/2011/08/basic-linux-privilege-escalation.html
     -> http://pentestmonkey.net/tools/audit/unix-privesc-check
-2- Update
-    -> Via git itself (git pull)
-    -> http://blog.hackthology.com/how-to-write-self-updating-python-programs-us
-    -> wget https://github.com/lnxg33k/webhandler/zipball/master -O /tmp/webhandler.zip && unzip /tmp/webhandler.zip -d /tmp/webhandler && mv -f /tmp/webhandler/lnxg33k-webhandler-*/* ./ && rm -rf /tmp/webhandler{/,zip}
-    -> Version? Display on menu?
-3- "stealth"/"encode" communication:
+2- "stealth"/"encode" communication:
     -> export HISTFILE=/dev/null
     -> *cough*base64*cough*
-4- Windows support
+3- Windows support
     -> Client (powershell)
     -> Server (Commands)
     -> Update (git)
-5- Update screenshot/README
-    -> Still says iCommand!
-6- Backdoor
+4- Backdoor
     -> Create a while loop to forever connect back to attacker (every 5 mins?)
-7- Multiple sessions
+5- Multiple sessions
     -> ...Like Metasploit
     -> Able to handle 'reverse' connections too (e.g. an alternative netcat)
-8- Banner
-    -> "refresh" the commands which are displayed in the banner
-9- Handling/Logging
+6- Handling/Logging
     -> Enable 'Tab Complete' on commands
-    -> Log all commands entered (history to file)
-    -> Log the display to a file
-
+    -> Log all commands entered (e.g. @history to file)
+    -> Log the display to a file (e.g. |tee to file)
+8- Banner
+    -> "refresh" the commands which are displayed in the banner	
+	-> Version? 
 
 
 ---Known Issues/Bugs
@@ -40,4 +33,3 @@
 ---Notes
 * g0tmi1k: Had to call it a day, working on update feature. Free feel to try and fix it ;)
 * g0tmi1k: Tested a few backdoors methonds out - need to finish testing the rest ASAP
-* g0tmi1k: Break (Ctrl + C), not to close/Remove wget for self updating

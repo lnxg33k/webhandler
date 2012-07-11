@@ -16,16 +16,16 @@ class Backdoor(object):
     def list(self):
         print '\n[i] Usage: @backdoor [module] <*ip:port>'
         print '[i] Modules:'
-        #print '[i] \t*bash\t\tUse bash to create a reverse shell (not all versions support this!)'
-        #print '[i] \t*java\t\tUse java to create a reverse shell'
-        #print '[i] \t*msf\t\tUse a PHP metereter to create a reverse shell'
-        print '[i] \t*netcat\t\tUse netcat traditional to create a reverse shell (not netcat openbsd)'
-        print '[i] \t*perl\t\tUse perl to create a reverse shell'
-        #print '[i] \t*php\t\tUse php-cli to create a reverse shell'
-        print '[i] \t*python\t\tUse python to create a reverse shell'
-        print '[i] \t*ruby\t\tUse ruby to create a reverse shell'
-        print '[i] \tspread\t\tSpread our shell around'
-        #print '[i] \t*xterm\t\tUse xterm to create a reverse shell'
+        #print '[i] \t*bash   \t\tUse bash to create a reverse shell (not all versions support this!)'
+        #print '[i] \t*java   \t\tUse java to create a reverse shell'
+        #print '[i] \t*msf    \t\tUse a PHP metereter to create a reverse shell'
+        print '[i] \t*netcat \t\tUse netcat traditional to create a reverse shell (not netcat openbsd)'
+        print '[i] \t*perl   \t\tUse perl to create a reverse shell'
+        #print '[i] \t*php    \t\tUse php-cli to create a reverse shell'
+        print '[i] \t*python \t\tUse python to create a reverse shell'
+        print '[i] \t*ruby   \t\tUse ruby to create a reverse shell'
+        print '[i] \tspread  \t\tSpread our shell around'
+        #print '[i] \t*xterm  \t\tUse xterm to create a reverse shell'
 
     # Redefinition on function "netcat"
     #def netcat(self, ip, port):

