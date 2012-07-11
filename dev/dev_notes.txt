@@ -8,7 +8,6 @@
 3- Windows support
     -> Client (powershell)
     -> Server (Commands)
-    -> Update (git)
 4- Backdoor
     -> Create a while loop to forever connect back to attacker (every 5 mins?)
 5- Multiple sessions
@@ -18,9 +17,8 @@
     -> Enable 'Tab Complete' on commands
     -> Log all commands entered (e.g. @history to file)
     -> Log the display to a file (e.g. |tee to file)
-8- Banner
-    -> "refresh" the commands which are displayed in the banner	
-	-> Version? 
+7- Banner
+    -> "refresh" the commands which are displayed in the banner
 
 
 ---Known Issues/Bugs

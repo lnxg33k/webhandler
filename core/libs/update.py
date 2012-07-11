@@ -13,7 +13,6 @@ def update():
         f = Popen('git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
         current_commit = f.communicate()[0]
         msg = '\n[+] WebHandler current commit: {0}'.format(current_commit)
-        msg += '[+] Updating webhandler to the latest commit'
         msg += '\n[+] Update in progress, please wait...'
         print ('{0}{1}{2}'.format(Colors.GREEN, msg, Colors.END))
         f = Popen('git pull; git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
@@ -22,6 +21,6 @@ def update():
             msg = '[+] Updated successfully to: {0}'.format(out.split()[-1])
             print '{0}{1}{2}'.format(Colors.GREEN, msg, Colors.END)
         else:
-            errmsg = '\n[!] git is required to update webhandler from CLI'
+            errmsg = '\n[!] \'git\' is required to update webhandler from CLI'
             errmsg += '\n[!] To install it (e.g. sudo apt-get install git OR sudo yum install git)'
             print '{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END)

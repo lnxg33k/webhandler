@@ -1,3 +1,5 @@
+from os import path, getcwd
+from subprocess import Popen, PIPE
 from sys import argv
 import argparse
 
@@ -12,7 +14,14 @@ class Colors(object):
 
 
 class Banner(object):
-    banner = """{0}
+    banner = ''
+    if not path.exists(path.join(getcwd(), ".git")):
+        banner = '\n{0}[!]"non-git"!\n\n{1}'.format(Colors.RED, Colors.END)
+    else:
+        f = Popen('git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
+        current_commit = f.communicate()[0]
+        
+    banner = banner + """{0}
 \t\t__          __  _     _    _                 _ _
 \t\t\ \        / / | |   | |  | |               | | |
 \t\t \ \  /\  / /__| |__ | |__| | __ _ _ __   __| | | ___ _ __
@@ -20,7 +29,7 @@ class Banner(object):
 \t\t   \  /\  /  __/ |_) | |  | | (_| | | | | (_| | |  __/ |
 \t\t    \/  \/ \___|_.__/|_|  |_|\__,_|_| |_|\__,_|_|\___|_|
 \t\t-----------------------------------------------------------
-{1}""".format(Colors.YELLOW, Colors.END)
+\t\t\t\t\t\t\tVersion: {1}{2}""".format(Colors.YELLOW, current_commit, Colors.END)
 
 
 class GetArgs(object):
@@ -71,7 +80,7 @@ Examples:
         if options.url:
             # Did they forget to add "http" infront?
             if not options.url.startswith('http'):
-                "http://" + options.url
+                url = "http://" + options.url
 
                 
 getargs = GetArgs()

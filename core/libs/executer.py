@@ -4,7 +4,7 @@ from os import getcwd
 try:
     import readline
 except ImportError:
-    print '\n[!] "readline" module is required to provide elaborate line editing and history features'
+    print '\n{0}[!] The "readline" module is required to provide elaborate line editing and history features{1}'.format(Colors.RED, Colors.END)
 else:
     pass
 
@@ -119,7 +119,7 @@ class Commander(object):
 
                     elif command.startswith('@download'):
                         if len(command.split()) < 2:
-                            print '\n[!] Usage: download [remote_file_path] <local_file_path>'
+                            print '\n{0}[!] Usage: @download [remote_file_path] <local_file_path>{1}'.format(Colors.RED, Colors.END)
                         else:
                             rfile_path = command.split()[1]
                             if len(command.split()) == 2:
@@ -130,7 +130,7 @@ class Commander(object):
 
                     elif command.startswith('@upload'):
                         if len(command.split()) != 3:
-                            print '\n[!] Usage: upload [local_file_path] [remote_file_path]'
+                            print '\n{0}[!] Usage: @upload [local_file_path] [remote_file_path]{1}'.format(Colors.RED, Colors.END)
                         else:
                             lfile_path = command.split()[1]
                             rfile_path = command.split()[2]
@@ -187,7 +187,7 @@ class Commander(object):
 
                 # Exit WebHandler if user provides exit as a command
                 else:
-                    print '\n[+] Preformed "{0}" commands on the server, {1}\n[!] Connection closed'.format(i, info.host_ip.split(',')[0])
+                    print '\n[+] Preformed "{0}" commands on the server, {1}\n[*] Connection closed'.format(i, info.host_ip.split(',')[0])
                     break
 
             # If recieved a break (^c)... Do nothing!
