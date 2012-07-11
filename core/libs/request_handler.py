@@ -37,7 +37,7 @@ class MakeRequest(object):
         self.proxy = getargs.proxy
         self.user_agent = getargs.agent
         self.random_agent = getargs.random_agent
-        self.clean = getargs.clean
+        self.turbo = getargs.turbo
 
     def get_page_source(self, cmd):
         self.cmd = cmd
@@ -58,8 +58,8 @@ class MakeRequest(object):
             parameters = urlencode({self.parameter: self.cmd})
             try:
                 sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
-                if self.clean:
-                    parameters = urlencode({self.parameter: 'uname'})
+                if not self.turbo:
+                    parameters = urlencode({self.parameter: ''})
                     garpage = map(str.rstrip, opener.open(self.url, parameters).readlines())
                     garpage = list(set(sc).intersection(garpage))
                     sc = [i for i in sc if not i in garpage]
@@ -72,8 +72,8 @@ class MakeRequest(object):
         else:
             try:
                 sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd))).readlines())
-                if self.clean:
-                    garpage = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('uname'))).readlines())
+                if not self.turbo:
+                    garpage = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(''))).readlines())
                     garpage = list(set(sc).intersection(garpage))
                     sc = [i for i in sc if not i in garpage]
                 return sc
