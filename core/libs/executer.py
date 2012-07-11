@@ -39,9 +39,14 @@ class Commander(object):
                     command = raw_input('WebHandler@server:$ ')
 
                 history.append(unquote(command))
-                if command not in ['exit', 'quite', 'bye']:
+                if command not in ['exit', 'quit', 'bye']:
                     if command == 'clear':
-                        Popen('clear', shell=True).wait()
+                        import platform
+                        os = platform.platform()
+                        if "windows" in os.lower():
+                            Popen('cls', shell=True).wait()
+                        else:
+                            Popen('clear', shell=True).wait()
 
                     # Getting all commands attackr's did on the server
                     elif command == '@history':
