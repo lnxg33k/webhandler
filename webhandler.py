@@ -24,11 +24,9 @@ from core.modules.info import info
 # Check for arguments dependencies
 if getargs.url:
     if getargs.method == 'post' and not getargs.parameter:
-        print '\n[!] Using post method requires --parameter flag, check help'
-        exit(1)
+        exit('\n[!] Using post method requires --parameter flag, check help')
     if getargs.method == 'get' and getargs.parameter:
-        print '\n[!] Using get method doesn\'t require --parameter flag, check help'
-        exit(1)
+        exit('\n[!] Using get method doesn\'t require --parameter flag, check help')
     else:
         print banner                            # Get WebHandler banner
         info.get_information()                  # Call get_information and print info
