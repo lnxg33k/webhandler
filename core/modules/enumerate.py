@@ -29,17 +29,17 @@ class Enumerate(object):
 
         health = make_request.get_page_source(cmd)
 
-        print '\n{0}[+] Uptime: {1} {2}'.format(Colors.GREEN, health[0], Colors.END)
-        print '{0}[+] Idletime: {1} {2}'.format(Colors.GREEN, health[1], Colors.END)
-        print '{0}[+] Users Logged in: {1} {2}'.format(Colors.GREEN, health[2], Colors.END)
-        print '{0}[+] Total Users: {1} {2}'.format(Colors.GREEN, health[3], Colors.END)
-        print '{0}[+] Total Groups: {1} {2}'.format(Colors.GREEN, health[4], Colors.END)
-        print '{0}[+] CPU Load (1, 5, 15 mins): {1} {2}'.format(Colors.GREEN, health[5], Colors.END)
-        print '{0}[+] Memory Load (Used %): {1} {2}'.format(Colors.GREEN, health[6], Colors.END)
-        print '{0}[+] Established TCP Connections: {1} {2}'.format(Colors.GREEN, health[7], Colors.END)
-        print '{0}[+] Listening TCP Services: {1} {2}'.format(Colors.GREEN, health[8], Colors.END)
-        print '{0}[+] User Processors: {1} {2}'.format(Colors.GREEN, health[9], Colors.END)
-        print '{0}[+] Total Processor: {1} {2}'.format(Colors.GREEN, health[10], Colors.END)
+        print '\n{0}[+] Uptime: {1}{2}'.format(Colors.GREEN, health[0], Colors.END)
+        print '{0}[+] Idletime: {1}{2}'.format(Colors.GREEN, health[1], Colors.END)
+        print '{0}[+] Users Logged in: {1}{2}'.format(Colors.GREEN, health[2], Colors.END)
+        print '{0}[+] Total Users: {1}{2}'.format(Colors.GREEN, health[3], Colors.END)
+        print '{0}[+] Total Groups: {1}{2}'.format(Colors.GREEN, health[4], Colors.END)
+        print '{0}[+] CPU Load (1, 5, 15 mins): {1}{2}'.format(Colors.GREEN, health[5], Colors.END)
+        print '{0}[+] Memory Load (Used %): {1}{2}'.format(Colors.GREEN, health[6], Colors.END)
+        print '{0}[+] Established TCP Connections: {1}{2}'.format(Colors.GREEN, health[7], Colors.END)
+        print '{0}[+] Listening TCP Services: {1}{2}'.format(Colors.GREEN, health[8], Colors.END)
+        print '{0}[+] User Processors: {1}{2}'.format(Colors.GREEN, health[9], Colors.END)
+        print '{0}[+] Total Processor: {1}{2}'.format(Colors.GREEN, health[10], Colors.END)
 
     def ip(self):
         cmd = "ip addr show | grep inet | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
@@ -52,11 +52,11 @@ class Enumerate(object):
 
         ip = make_request.get_page_source(cmd)
 
-        print '\n{0}[+] Internal IP/subnet: {1} {2}'.format(Colors.GREEN, ip[0], Colors.END)
-        print '{0}[+] External IP: {1} {2}'.format(Colors.GREEN, ip[1], Colors.END)
-        print '{0}[+] DNS: {1} {2}'.format(Colors.GREEN, ip[2], Colors.END)
-        print '{0}[+] Gateway: {1} {2}'.format(Colors.GREEN, ip[3], Colors.END)
-        print '{0}[+] DHCP? : {1} {2}'.format(Colors.GREEN, ip[4], Colors.END)
+        print '\n{0}[+] Internal IP/subnet: {1}{2}'.format(Colors.GREEN, ip[0], Colors.END)
+        print '{0}[+] External IP: {1}{2}'.format(Colors.GREEN, ip[1], Colors.END)
+        print '{0}[+] DNS: {1}{2}'.format(Colors.GREEN, ip[2], Colors.END)
+        print '{0}[+] Gateway: {1}{2}'.format(Colors.GREEN, ip[3], Colors.END)
+        print '{0}[+] DHCP? : {1}{2}'.format(Colors.GREEN, ip[4], Colors.END)
 
     def os(self):
         cmd = "hostname;"
@@ -70,12 +70,12 @@ class Enumerate(object):
 
         os = make_request.get_page_source(cmd)
 
-        print '\n{0}[+] Hostname: {1} {2}'.format(Colors.GREEN, os[0], Colors.END)
-        print '{0}[+] Kernel: {1} {2}'.format(Colors.GREEN, os[1], Colors.END)
-        print '{0}[+] OS: {1} {2}'.format(Colors.GREEN, os[2], Colors.END)
-        print '{0}[+] Local Time: {1} {2}'.format(Colors.GREEN, os[3], Colors.END)
-        print '{0}[+] Timezone (UTC): {1} {2}'.format(Colors.GREEN, os[4], Colors.END)
-        print '{0}[+] Language: {1} {2}'.format(Colors.GREEN, os[5], Colors.END)
+        print '\n{0}[+] Hostname: {1}{2}'.format(Colors.GREEN, os[0], Colors.END)
+        print '{0}[+] Kernel: {1}{2}'.format(Colors.GREEN, os[1], Colors.END)
+        print '{0}[+] OS: {1}{2}'.format(Colors.GREEN, os[2], Colors.END)
+        print '{0}[+] Local Time: {1}{2}'.format(Colors.GREEN, os[3], Colors.END)
+        print '{0}[+] Timezone (UTC): {1}{2}'.format(Colors.GREEN, os[4], Colors.END)
+        print '{0}[+] Language: {1}{2}'.format(Colors.GREEN, os[5], Colors.END)
 
     def keys(self):
         cmd = "find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo \"{}\"'"
@@ -108,7 +108,7 @@ class Enumerate(object):
         if self.writables:
             c = 1
             for path in self.writables:
-                print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d{2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
         else:
             print '\n{0}[!]Didn\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)

