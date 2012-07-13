@@ -104,10 +104,10 @@ class Enumerate(object):
     # A method to get all writable directories within CWD
     def writable(self):
         cmd = "find {0} -depth -perm -0002 -type d".format(linux.get_doc_root())
-        self.writables = make_request.get_page_source(cmd)
-        if self.writables:
+        self.writable = make_request.get_page_source(cmd)
+        if self.writable:
             c = 1
-            for path in self.writables:
+            for path in self.writable:
                 print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
         else:

