@@ -4,10 +4,10 @@ WebHandler - command controller for PHP system function
 
 ### Info: ###
 ---
-WebHandler is a command controller to handle PHP _program execution functions_ like system, passthru, exec and etc...  
-The script tries to simulate Linux bash as it works from CLI.  
-As of optional settings it supports HTTP proxy together with HTTP header values "User-Agent".  
-It sends requests to the server through urllib/urllib2 [Python][] modules.  
+WebHandler is a command controller to handle PHP _program execution functions_ like system, passthru, exec and etc...
+The script tries to simulate Linux bash as it works from CLI.
+As of optional settings it supports HTTP proxy together with HTTP header values "User-Agent".
+It sends requests to the server through urllib/urllib2 [Python][] modules.
 
 * WebHandler works for **POST** and **GET** requests:
     - `<?php system($_GET['cmd']); ?>`
@@ -25,13 +25,13 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
 
 __Requirements__
 ---
-If your [Python][]'s version < 2.7.x, then [argparse][] **is required**.  
-To install it run: `sudo apt-get install python-setuptools && sudo easy_install argparse` **OR** `sudo pip --install argparse`  
+If your [Python][]'s version < 2.7.x, then [argparse][] **is required**.
+To install it run: `sudo apt-get install python-setuptools && sudo easy_install argparse` **OR** `sudo pip --install argparse`
 
-[readline][] **is optional**.  
+[readline][] **is optional**.
 This module it used to provide elaborate line editing and history features
 
-[git][] **is optional**.  
+[git][] **is optional**.
 This allows for the project to be kept up-to-date
 
 [Python]: http://www.python.org/download/
