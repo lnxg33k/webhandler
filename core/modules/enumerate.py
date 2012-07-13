@@ -12,7 +12,7 @@ class Enumerate(object):
         print '[i] \tkeys      \t\tList private SSH & SSL keys/certs'
         print '[i] \tos        \t\tGeneral operating system infomation'
         print '[i] \tsystem    \t\tGeneral infomation about the system'
-        print '[i] \twritables\t\tList writable paths within the document\'s root directory'
+        print '[i] \twritable\t\tList writable paths within the document\'s root directory'
         
     def system(self):
         cmd = 'input=`uptime` && if [[ \'$input\' == *day* ]] ; then echo $input | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes"}\'; else echo $input | awk \'{print $3}\' | tr -d "," | awk -F ":" \'{print $1 " hours and " $2 " minutes"}\'; fi;'
@@ -108,7 +108,7 @@ class Enumerate(object):
         if self.writables:
             c = 1
             for path in self.writables:
-                print '{0}{1:2d)- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
         else:
             print '\n{0}[!] Didn\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
