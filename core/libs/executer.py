@@ -107,8 +107,8 @@ class Commander(object):
 
                     elif command.startswith('@enum'):
                         if len(command.split()) == 2:
-                            if command.split()[1] == "health":
-                                enumerate.health()
+                            if command.split()[1] == "system":
+                                enumerate.system()
                             elif command.split()[1] == "history":
                                 enumerate.history()
                             elif command.split()[1] == "ip":

