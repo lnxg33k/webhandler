@@ -38,12 +38,13 @@ class LinuxVersion(object):
 
 
     def get_writble_dir(self):
-        cmd = "find / -perm -0003 -type d 2>/dev/null| sort -R | head -n 1"  #-print -quit
-        result = make_request.get_page_source(cmd)[0]
+        cmd = "find / -perm -0003 -type d 2>/dev/null | sort -R | head -n 1"  #-print -quit
+        result = make_request.get_page_source(cmd)
         if result:
-            print '\n{0}[+] Found a writable directory: \'{1}\'{2}'.format(Colors.GREEN, result, Colors.END)
+            result = result[0]
+            print '\n{0}[+] Found a directory to use: \'{1}\'{2}'.format(Colors.GREEN, result, Colors.END)
         else:
-            print '\n{0}[!] Unable to find a wriable directory'.format(Colors.RED, Colors.END)
+            print '\n{0}[!] Unable to find a suitable directory'.format(Colors.RED, Colors.END)
         return result
 
 

