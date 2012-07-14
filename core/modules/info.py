@@ -18,6 +18,9 @@ class TargetBox(object):
         self.available_commands = "['@backdoor', '@upload', '@download', '@enum', '@history', '@info', '@update', 'clear', 'exit']"
 
     def get_information(self):
+        import datetime
+        now = datetime.datetime.now()        
+
         # Call get_page_source() method then assign it to self.source
         source = make_request.get_page_source(self.cmd)
 
@@ -28,6 +31,7 @@ class TargetBox(object):
         self.perm_cwd = source[4]
         self.uptime = source[5]
         self.host_ip = ', '.join(source[6:])
+        self.session = '{0}_-_{1}'.format(now.strftime("%Y-%m-%d_%H-%M"), self.host_ip)
         try:
             # Get the attacker's ip address (Thanks @mandreko)
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
