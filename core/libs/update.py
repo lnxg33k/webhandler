@@ -13,7 +13,7 @@ def update():
         f = Popen('git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
         current_commit = f.communicate()[0]
         msg = '\n[+] WebHandler current commit: {0}'.format(current_commit)
-        msg += '\n[+] Update in progress, please wait...'
+        msg += '[+] Update in progress, please wait...'
         print ('{0}{1}{2}'.format(Colors.GREEN, msg, Colors.END))
         f = Popen('git pull; git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
         out, err = f.communicate()
