@@ -1,4 +1,4 @@
-WebHandler - command controller for PHP system function
+WebHandler - Command controller for PHP system functions
 ---
 ![My image](http://s12.postimage.org/t5ujo2om5/Untitled_1.png)
 
