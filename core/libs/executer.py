@@ -52,7 +52,7 @@ class Commander(object):
                     elif command == '@history':
                         x = 1
                         for command in history:
-                            print '{0:2d} {1}'.format(x, command)
+                            print '{0:2d}.) {1}'.format(x, command)
                             x += 1
 
                     # Execute the command on the attacker's box if '!' provided at the first of the command

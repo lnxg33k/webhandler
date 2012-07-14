@@ -83,7 +83,7 @@ class Enumerate(object):
         if self.ssl:
             c = 1
             for path in self.ssl:
-                print '{0:2d}- {1}'.format(c, path)
+                print '{0:2d}.) {1}'.format(c, path)
                 c += 1
         else:
             print '\n{0}[!] Didn\'t find any SSL certs{1}'.format(Colors.RED, Colors.END)
@@ -93,7 +93,7 @@ class Enumerate(object):
         if self.sshpub:
             c = 1
             for path in self.sshpub:
-                print '{0:2d}- {1}'.format(c, path)
+                print '{0:2d}.) {1}'.format(c, path)
                 c += 1
         else:
             print '\n{0}[!] Didn\'t find any public SSH keys{1}'.format(Colors.RED, Colors.END)
@@ -119,7 +119,7 @@ class Enumerate(object):
         if self.history:
             c = 1
             for path in self.history:
-                print '{0:2d}- {1}'.format(c, path)
+                print '{0:2d}.) {1}'.format(c, path)
                 c += 1
         else:
             print '\n{0}[!] Didn\'t find any \'history\' files{1}'.format(Colors.RED, Colors.END)
