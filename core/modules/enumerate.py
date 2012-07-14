@@ -56,7 +56,7 @@ class Enumerate(object):
         print '{0}[+] External IP: {1}{2}'.format(Colors.GREEN, ip[1], Colors.END)
         print '{0}[+] DNS: {1}{2}'.format(Colors.GREEN, ip[2], Colors.END)
         print '{0}[+] Gateway: {1}{2}'.format(Colors.GREEN, ip[3], Colors.END)
-        print '{0}[+] DHCP? : {1}{2}'.format(Colors.GREEN, ip[4], Colors.END)
+        print '{0}[+] DHCP?: {1}{2}'.format(Colors.GREEN, ip[4], Colors.END)
 
     def os(self):
         cmd = "hostname;"

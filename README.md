@@ -1,6 +1,6 @@
 WebHandler - command controller for PHP system function
 ---
-![My image](http://s12.postimage.org/hs80cve3g/Untitled_1.jpg)
+![My image](http://s12.postimage.org/t5ujo2om5/Untitled_1.png)
 
 ### Info: ###
 ---
