@@ -34,7 +34,15 @@ This module it used to provide elaborate line editing and history features
 [git][] **is optional**.
 This allows for the project to be kept up-to-date
 
+__Links__
+---
+[Wiki][] 
+
+[Known Bugs][]
+
 [Python]: http://www.python.org/download/
 [argparse]: http://docs.python.org/library/argparse.html
 [readline]: http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
 [git]: http://git-scm.com
+[Wiki]: https://github.com/lnxg33k/webhandler/wiki
+[Known Bugs]: https://github.com/lnxg33k/webhandler/issues
