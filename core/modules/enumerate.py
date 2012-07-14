@@ -8,11 +8,11 @@ class Enumerate(object):
         print '\n[i] Usage: @enum [module]'
         print '[i] Modules:'
         print '[i] \thistory   \t\tList \'intressing\' (~/.*-history files)'
-        print '[i] \tip        \t\tGeneral networking infomation about the system'
         print '[i] \tkeys      \t\tList private SSH & SSL keys/certs'
+        print '[i] \tnetwork        \t\tGeneral networking infomation about the system'
         print '[i] \tos        \t\tGeneral operating system infomation'
         print '[i] \tsystem    \t\tGeneral infomation about the system'
-        print '[i] \twritable\t\tList writable paths within the document\'s root directory'
+        print '[i] \twritable\t\tList writable paths within the document\'s root directory'  
         
     def system(self):
         cmd = 'bash -c "input=\$(uptime); if [[ \$input == *day* ]]; then out=\$(echo \$input | awk \'{print \$3\\" days\\"}\'); if [[ \$input == *min* ]]; then out=\$(echo \\"\$out and \\" && echo \$input | awk \'{print \$5\\" minutes\\"}\'); else out=\$(echo \\"\$out, \\" && echo \$input | awk \'{print \$5}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi elif [[ \$input == *min* ]]; then out=\$(echo \$input | awk \'{print \$3\\" minutes\\"}\'); else out=\$(echo \$input | awk \'{print \$3}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi; echo \$out;" ;'

@@ -111,7 +111,7 @@ class Commander(object):
                                 enumerate.system()
                             elif command.split()[1] == "history":
                                 enumerate.history()
-                            elif command.split()[1] == "ip":
+                            elif command.split()[1] == "network" or command.split()[1] == "ip":
                                 enumerate.ip()
                             elif command.split()[1] == "os":
                                 enumerate.os()
