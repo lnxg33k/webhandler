@@ -125,7 +125,7 @@ class Commander(object):
                             enumerate.list()
 
                     elif command.startswith('@download'):
-                        if len(command.split()) < 2:
+                        if len(command.split()) != 2 and len(command.split()) != 3 :
                             print '\n{0}[!] Usage: @download [remote_file_path] <local_file_path>{1}'.format(Colors.RED, Colors.END)
                         else:
                             rfile_path = command.split()[1]
@@ -133,7 +133,7 @@ class Commander(object):
                                 lfile_path = '{0}/{1}'.format(getcwd(), rfile_path.split('/')[-1])
                             else:
                                 lfile_path = command.split()[2]
-                                file_handler.download_file(rfile_path, lfile_path)
+                            file_handler.download_file(rfile_path, lfile_path)
 
                     elif command.startswith('@upload'):
                         if len(command.split()) != 3:
