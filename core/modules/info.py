@@ -1,7 +1,7 @@
 from urllib2 import urlopen, URLError
 
-from core.libs.request_handler import make_request
 from core.libs.menu import Colors
+from core.libs.request_handler import make_request
 
 
 class TargetBox(object):

@@ -1,9 +1,10 @@
+from httplib import InvalidURL
+from random import randint
 from urllib import urlencode, quote
 from urllib2 import ProxyHandler, build_opener, install_opener
-from random import randint
-from httplib import InvalidURL
 
 from core.libs.menu import getargs, Colors
+
 
 USER_AGENTS = [
         "curl/7.7.2 (powerpc-apple-darwin6.0) libcurl 7.7.2 (OpenSSL 0.9.6b)",

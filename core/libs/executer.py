@@ -1,6 +1,18 @@
-from urllib import unquote
-from subprocess import Popen
 from os import getcwd
+from subprocess import Popen
+from urllib import unquote
+
+import platform
+import os
+
+from core.libs.menu import Colors, banner
+from core.libs.request_handler import make_request
+from core.libs.update import update
+from core.modules.backdoor import backdoor
+from core.modules.enumerate import enumerate
+from core.modules.file_handler import file_handler
+from core.modules.info import info
+
 try:
     import readline
 except ImportError:
@@ -8,15 +20,7 @@ except ImportError:
 else:
     pass
 
-from core.libs.menu import Colors, banner
-from core.libs.update import update
-from core.libs.request_handler import make_request
-from core.modules.info import info
-from core.modules.backdoor import backdoor
-from core.modules.file_handler import file_handler
-from core.modules.enumerate import enumerate
-
-
+    
 class Commander(object):
     '''
     Class to execute commands on the target
@@ -41,7 +45,6 @@ class Commander(object):
                 history.append(unquote(command))
                 if command not in ['exit', 'quit', 'bye']:
                     if command == 'clear':
-                        import platform
                         os = platform.platform()
                         if "windows" in os.lower():
                             Popen('cls', shell=True).wait()
@@ -132,7 +135,6 @@ class Commander(object):
                             if len(command.split()) == 2:
                                 lfile_path = '{0}/loot/{1}{2}'.format(getcwd(),info.session, rfile_path)
                                 lfolder = '/'.join(lfile_path.split('/')[:-1])
-                                import os
                                 if not os.path.exists(lfolder): os.makedirs(lfolder)
                             else:
                                 lfile_path = command.split()[2]

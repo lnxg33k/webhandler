@@ -1,7 +1,7 @@
 from urllib2 import urlopen
 
-from core.libs.request_handler import make_request
 from core.libs.menu import Colors
+from core.libs.request_handler import make_request
 
 
 class LinuxVersion(object):

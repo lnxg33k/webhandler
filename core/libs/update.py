@@ -1,5 +1,5 @@
-from subprocess import Popen, PIPE
 from os import path, getcwd
+from subprocess import Popen, PIPE
 
 from core.libs.menu import Colors
 

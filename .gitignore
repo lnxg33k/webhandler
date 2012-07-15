@@ -131,8 +131,8 @@ Desktop.ini
 ## Python
 #############
 
-.py[co]
-*.pyc
+*.py[co]
+
 # Packages
 *.egg
 *.egg-info
@@ -153,11 +153,19 @@ pip-log.txt
 .coverage
 .tox
 
-#Translations
+# Translations
 *.mo
 
-#Mr Developer
+# Mr Developer
 .mr.developer.cfg
 
-# Mac crap
+# Mac "Stuff"
 .DS_Store
+
+
+
+#############
+## WebHandler
+#############
+
+loot/*

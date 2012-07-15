@@ -1,6 +1,7 @@
 import os
-from core.libs.request_handler import make_request
+
 from core.libs.menu import Colors
+from core.libs.request_handler import make_request
 
 
 class FileHandler(object):
