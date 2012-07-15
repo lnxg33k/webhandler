@@ -36,9 +36,8 @@ class LinuxVersion(object):
 
         return doc_root
 
-
     def get_writble_dir(self):
-        cmd = "find / -perm -0003 -type d 2>/dev/null | sort -R | head -n 1"  #-print -quit
+        cmd = "find / -perm -0003 -type d 2>/dev/null | sort -R"  # -print -quit
         result = make_request.get_page_source(cmd)
         if result:
             result = result[0]
