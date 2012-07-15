@@ -114,7 +114,9 @@ class Commander(object):
 
                     elif command.startswith('@enum'):
                         if len(command.split()) == 2:
-                            if command.split()[1] == "history":
+                            if command.split()[1] == "groups":
+                                enumerate.groups()
+                            elif command.split()[1] == "history":
                                 enumerate.history()
                             elif command.split()[1] == "keys":
                                 enumerate.keys()
