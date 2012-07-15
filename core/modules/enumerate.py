@@ -12,7 +12,31 @@ class Enumerate(object):
         print '[i] \tnetwork        \t\tGeneral networking infomation about the system'
         print '[i] \tos        \t\tGeneral operating system infomation'
         print '[i] \tsystem    \t\tGeneral infomation about the system'
+        print '[i] \tusers        \t\tUser accounts on the system'
         print '[i] \twritable\t\tList writable paths within the document\'s root directory'
+        
+    def users(self):
+        #cmd = 'cut -d: -f6 /etc/passwd | sort | uniq;'
+        cmd = 'cat /etc/passwd;'
+                
+        users = make_request.get_page_source(cmd)
+        print '{0}[+] Total Number of users: {1}{2}'.format(Colors.GREEN, len(users), Colors.END)
+        print '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(Colors.GREEN, "Username", "Password", "User ID", "Group ID", "User Info", "Home Directory", "Shell", Colors.END)
+        print '{0}{1}{2}'.format(Colors.GREEN, "-"*125, Colors.END)
+        c = 1
+        for user in users:
+            uname=user.split(':')[0]
+            passwd=user.split(':')[1]
+            if passwd == "x": passwd = "*In shadow*" 
+            uid=user.split(':')[2]
+            guid=user.split(':')[3]
+            uinfo=user.split(':')[4]
+            home=user.split(':')[5]
+            shell=user.split(':')[6]
+            print '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(Colors.GREEN, uname, passwd, uid, guid, uinfo, home, shell, Colors.END)
+            c += 1
+        print '{0}{1}{2}'.format(Colors.GREEN, "-"*125, Colors.END)
+        
 
     def system(self):
         cmd = 'bash -c "input=\$(uptime); if [[ \$input == *day* ]]; then out=\$(echo \$input | awk \'{print \$3\\" days\\"}\'); if [[ \$input == *min* ]]; then out=\$(echo \\"\$out and \\" && echo \$input | awk \'{print \$5\\" minutes\\"}\'); else out=\$(echo \\"\$out, \\" && echo \$input | awk \'{print \$5}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi elif [[ \$input == *min* ]]; then out=\$(echo \$input | awk \'{print \$3\\" minutes\\"}\'); else out=\$(echo \$input | awk \'{print \$3}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi; echo \$out;" ;'
@@ -108,7 +132,7 @@ class Enumerate(object):
         if self.writable:
             c = 1
             for path in self.writable:
-                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
         else:
             print '\n{0}[!] Didn\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)

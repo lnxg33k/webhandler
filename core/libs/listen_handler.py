@@ -9,7 +9,7 @@ from core.libs.menu import getargs, Colors
 
 class Listener(object):
     def __init__(self, port=None):
-        self.port = int(getargs.listen)
+        if getargs.mode == "listen": self.port = int(getargs.listen)
 
     def wait_connection(self):
         os = platform.platform()
@@ -49,7 +49,7 @@ class Listener(object):
             try:
                 cmd = raw_input("Command [>]: ")                         
                 if(self.socket.sendall(cmd + "\n") != None):                       
-                    return                              
+                    print '\n{0}[!] Error in sending data{1}'.format(Colors.RED, Colors.END)                  
                 time.sleep(0.1)
             except KeyboardInterrupt:
                 pass

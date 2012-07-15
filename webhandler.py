@@ -34,7 +34,7 @@ from core.modules.info import info
 
 
 # Check for arguments dependencies
-if getargs.url:
+if getargs.mode == "url":
     if getargs.method == 'post' and not getargs.parameter:
         errmsg = '\n{[!] Using post method requires --parameter flag, check help'
         exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
@@ -46,10 +46,10 @@ if getargs.url:
         info.get_information()                  # Call get_information and print info
         commander.BackConnect()                 # Call BackConnect method to handle input
 
-elif getargs.listen:
+elif getargs.mode == "listen":
     print banner                                # Print the banner
     listen.wait_connection()                    # Call wait_connection to wait for a connection
     listen.connected()                          # Call connected and print info
 
-elif getargs.update:
+elif getargs.mode == "update":
     update()                                    # Update the script

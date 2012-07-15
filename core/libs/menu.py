@@ -86,12 +86,19 @@ Examples:
         random_agent = options.random_agent
         turbo = options.turbo
         update = options.update
+        
+        if url:
+            mode = "url"
+        elif listen:
+            mode = "listen"
+        else:
+            mode = "update"
 
         # URL might not be set (e.g. 'update'/'listen')
-        if options.url:
+        if url:
             # Did they forget to add "http" infront?
-            if not options.url.startswith('http'):
-                url = "http://" + options.url
+            if not url.startswith('http'):
+                url = "http://" + url
 
 getargs = GetArgs()
 banner = Banner().banner
