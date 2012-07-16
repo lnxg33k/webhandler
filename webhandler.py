@@ -32,24 +32,22 @@ from core.libs.menu import getargs, banner, Colors
 from core.libs.update import update
 from core.modules.info import info
 
+from core.libs.request_handler import make_request
+
 
 # Check for arguments dependencies
-if getargs.mode == "url":
+if getargs.mode == 'url' or getargs.mode == 'listen':
     if getargs.method == 'post' and not getargs.parameter:
         errmsg = '\n{[!] Using post method requires --parameter flag, check help'
         exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
-    if getargs.method == 'get' and getargs.parameter:
+    elif getargs.method == 'get' and getargs.parameter:
         errmsg = '\n[!] Using get method doesn\'t require --parameter flag, check help'
         exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
     else:
-        print banner                            # Print the banner
-        info.get_information()                  # Call get_information and print info
-        commander.BackConnect()                 # Call BackConnect method to handle input
-
-elif getargs.mode == "listen":
-    print banner                                # Print the banner
-    listen.wait_connection()                    # Call wait_connection to wait for a connection
-    listen.connected()                          # Call connected and print info
+        print banner                                            # Print the banner
+        if getargs.mode == "listen": listen.wait_connection()   # Call wait_connection to wait for a connection
+        info.get_information()                                  # Call get_information and print info
+        commander.BackConnect()                                 # Call BackConnect method to handle input
 
 elif getargs.mode == "update":
     update()                                    # Update the script

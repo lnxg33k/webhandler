@@ -5,23 +5,23 @@ from core.modules.shell_handler import linux
 
 class Enumerate(object):
     def list(self):
-        print '\n[i] Usage: @enum [module]'       
+        print '\n[i] Usage: @enum [module]'
         print '[i] Modules:'
-        print '[i] \tgroups      \t\tGroups for user accounts on the system'
-        print '[i] \thistory   \t\tList \'intressing\' (~/.*-history files)'
-        print '[i] \tkeys      \t\tList private SSH & SSL keys/certs'
+        print '[i] \tgroup      \t\tGroups for user accounts on the system'
+        print '[i] \thistory   \t\tList previously entered commands (~/.*-history files)'
+        print '[i] \tkeys      \t\tList SSH keys & SSL certificates'
         print '[i] \tnetwork        \t\tGeneral networking infomation about the system'
         print '[i] \tos        \t\tGeneral operating system infomation'
+        print '[i] \tpasswd        \t\tUser accounts on the system'
         print '[i] \tsystem    \t\tGeneral infomation about the system'
-        print '[i] \tusers        \t\tUser accounts on the system'
         print '[i] \twritable\t\tList writable paths within the document\'s root directory'
-     
-    def groups(self):
+
+    def group(self):
         cmd = 'cat /etc/group;'
         groups = make_request.get_page_source(cmd)
-        
+
         line='{0}{1}{2}'.format(Colors.GREEN, "-"*55, Colors.END)
-        
+
         print '{0}[+] Total number of groups: {1}{2}'.format(Colors.GREEN, len(groups), Colors.END)
         print line
         print '{0}{1:10} | {2:11} | {3:8} | {4:8}{5}'.format(Colors.GREEN, "Group Name", "Password", "Group ID", "Group List", Colors.END)
@@ -30,19 +30,19 @@ class Enumerate(object):
         for group in groups:
             gname=group.split(':')[0]
             passwd=group.split(':')[1]
-            if passwd == "x": passwd = "*In shadow*" 
+            if passwd == "x": passwd = "*In shadow*"
             guid=group.split(':')[2]
             glist=group.split(':')[3]
             print '{0}{1:10} | {2:11} | {3:8} | {4:8}{5}'.format(Colors.GREEN, gname, passwd, guid, glist, Colors.END)
             c += 1
         print line
-        
-    def users(self):
-        cmd = 'cat /etc/passwd;'                
+
+    def passwd(self):
+        cmd = 'cat /etc/passwd;'
         users = make_request.get_page_source(cmd)
 
         line='{0}{1}{2}'.format(Colors.GREEN, "-"*125, Colors.END)
-        
+
         print '{0}[+] Total number of users: {1}{2}'.format(Colors.GREEN, len(users), Colors.END)
         print line
         print '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(Colors.GREEN, "Username", "Password", "User ID", "Group ID", "User Info", "Home Directory", "Shell", Colors.END)
@@ -51,7 +51,7 @@ class Enumerate(object):
         for user in users:
             uname=user.split(':')[0]
             passwd=user.split(':')[1]
-            if passwd == "x": passwd = "*In shadow*" 
+            if passwd == "x": passwd = "*In shadow*"
             uid=user.split(':')[2]
             guid=user.split(':')[3]
             uinfo=user.split(':')[4]
@@ -60,7 +60,7 @@ class Enumerate(object):
             print '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(Colors.GREEN, uname, passwd, uid, guid, uinfo, home, shell, Colors.END)
             c += 1
         print line
-        
+
 
     def system(self):
         cmd = 'bash -c "input=\$(uptime); if [[ \$input == *day* ]]; then out=\$(echo \$input | awk \'{print \$3\\" days\\"}\'); if [[ \$input == *min* ]]; then out=\$(echo \\"\$out and \\" && echo \$input | awk \'{print \$5\\" minutes\\"}\'); else out=\$(echo \\"\$out, \\" && echo \$input | awk \'{print \$5}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi elif [[ \$input == *min* ]]; then out=\$(echo \$input | awk \'{print \$3\\" minutes\\"}\'); else out=\$(echo \$input | awk \'{print \$3}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi; echo \$out;" ;'

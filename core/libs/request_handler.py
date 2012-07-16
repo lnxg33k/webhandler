@@ -3,8 +3,11 @@ from random import randint
 from urllib import urlencode, quote
 from urllib2 import ProxyHandler, build_opener, install_opener
 
-from core.libs.menu import getargs, Colors
+import re
+import time
 
+from core.libs.listen_handler import listen
+from core.libs.menu import getargs, Colors
 
 USER_AGENTS = [
         "curl/7.7.2 (powerpc-apple-darwin6.0) libcurl 7.7.2 (OpenSSL 0.9.6b)",
@@ -24,7 +27,6 @@ USER_AGENTS = [
         "Opera/9.80 (X11; Linux i686; U; pl) Presto/2.6.30 Version/10.61",
         ]
 
-
 class MakeRequest(object):
     '''
     Check for the used method POST or GET
@@ -42,45 +44,80 @@ class MakeRequest(object):
 
     def get_page_source(self, cmd):
         self.cmd = cmd
-        proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
-        opener = build_opener(proxy_support)
-        if self.random_agent:
-            opener.addheaders = [('User-agent', USER_AGENTS[randint(0, len(USER_AGENTS) - 1)])]
-        elif self.user_agent:
-            opener.addheaders = [('User-agent', self.user_agent)]
-        else:
-            pass
-        install_opener(opener)
-        errmsg = '\n{0}[!] Check your network connection and/or the proxy (if you\'re using one){1}'.format(Colors.RED, Colors.END)
-        fourzerofourmsg = '\n{0}[!] Please make sure the page (\'{1}\') requested exists!{2}'.format(Colors.RED, self.url, Colors.END)
-        # Check if the method is post or get
-        if self.method == 'post' or self.parameter:
-            self.method = 'post'
-            parameters = urlencode({self.parameter: self.cmd})
+        result = re.match ('sudo', self.cmd)
+        if result:
+            command = self.cmd.replace('sudo', '{0}sudo{1}'.format(Colors.RED, Colors.YELLOW))
+            print '\n{0}[!] Warning this command ({1}) could break the connection. Stop processing it{2}'.format(Colors.YELLOW, command, Colors.END)
+        if getargs.mode == "url":
+            # Proxy support
+            proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
+            opener = build_opener(proxy_support)
+            
+            # User angent
+            if self.random_agent:
+                opener.addheaders = [('User-agent', USER_AGENTS[randint(0, len(USER_AGENTS) - 1)])]
+            elif self.user_agent:
+                opener.addheaders = [('User-agent', self.user_agent)]
+            else:
+                pass
+            install_opener(opener)
+            
+            errmsg = '\n{0}[!] Check your network connection and/or the proxy (if you\'re using one){1}'.format(Colors.RED, Colors.END)
+            fourzerofourmsg = '\n{0}[!] Please make sure the page (\'{1}\') requested exists!{2}'.format(Colors.RED, self.url, Colors.END)
+            
+            # Check if the method is POST
+            if self.method == 'post' or self.parameter:
+                self.method = 'post'
+                parameters = urlencode({self.parameter: self.cmd})
+                try:
+                    sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
+                    if not self.turbo:
+                        parameters = urlencode({self.parameter: ''})
+                        garpage = map(str.rstrip, opener.open(self.url, parameters).readlines())
+                        garpage = list(set(sc).intersection(garpage))
+                        sc = [i for i in sc if not i in garpage]
+                    return sc
+                except InvalidURL:
+                    exit(errmsg)
+                except:
+                    exit(fourzerofourmsg)
+                    
+            # If the used method set GET
+            else:
+                try:
+                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd))).readlines())
+                    if not self.turbo:
+                        garpage = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(''))).readlines())
+                        garpage = list(set(sc).intersection(garpage))
+                        sc = [i for i in sc if not i in garpage]
+                    return sc
+                except InvalidURL:
+                    exit(errmsg)
+                except:
+                    exit(fourzerofourmsg)
+        elif getargs.mode == "listen":           
             try:
-                sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
-                if not self.turbo:
-                    parameters = urlencode({self.parameter: ''})
-                    garpage = map(str.rstrip, opener.open(self.url, parameters).readlines())
-                    garpage = list(set(sc).intersection(garpage))
-                    sc = [i for i in sc if not i in garpage]
-                return sc
-            except InvalidURL:
-                exit(errmsg)
+                if(listen.socket.sendall(cmd + "\n") != None): print '\n{0}[!] Error in sending data (#1){1}'.format(Colors.RED, Colors.END)
+                time.sleep(0.1)
+
+                sc = ''
+                buffer = listen.socket.recv(1024)
+                if buffer == '':
+                    print '\n{0}[!] Lost connection. Exiting...{1}'.format(Colors.RED, Colors.END)
+                    listen.socket.close()
+                    exit(1)
+                while buffer != '':
+                    sc = sc + buffer
+                    try:
+                        buffer = listen.socket.recv(1024)
+                    except:
+                        buffer = ''
+                return sc.split('\n')[:-1]
             except:
-                exit(fourzerofourmsg)
-        # If the used method set get
+                if(listen.socket.sendall(cmd + "\n") != None): print '\n{0}[!] Error in sending data (#2){1}'.format(Colors.RED, Colors.END)
+                pass
         else:
-            try:
-                sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd))).readlines())
-                if not self.turbo:
-                    garpage = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(''))).readlines())
-                    garpage = list(set(sc).intersection(garpage))
-                    sc = [i for i in sc if not i in garpage]
-                return sc
-            except InvalidURL:
-                exit(errmsg)
-            except:
-                exit(fourzerofourmsg)
+            print '\n{0}[!] Unsupported mode: {1}{2}'.format(Colors.RED, getargs.mode, Colors.END)
+            exit(1)
 
 make_request = MakeRequest()
