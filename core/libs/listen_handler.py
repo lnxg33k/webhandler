@@ -14,7 +14,7 @@ class Listener(object):
     def wait_connection(self):
         os = platform.platform()
         if "windows" in os.lower():
-            print '\n{0}[!] This feature isn\'t (yet) supported when used on a Windows operating system{1}'.format(Colors.RED, Colors.END)
+            print '\n{0}[!] This feature isn\'t (yet) supported with a Windows operating system{1}'.format(Colors.RED, Colors.END)
             exit(2)
 
         print '\n{0}[i] Waiting on port: {1}{2}{3}'.format(Colors.GREEN, Colors.YELLOW, self.port, Colors.END)

