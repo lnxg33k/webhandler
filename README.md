@@ -37,14 +37,14 @@ It also supports HTTP proxies (`--proxy http://<ip>:<port>`)
 
 ### Dependencies
 ---
-If your [Python][]'s version < 2.7.x, then [argparse][] **is required**.
+If your [Python][]'s version < 2.7.x, then [argparse][] **is required**
 To install it run: `sudo (apt-get|yum) install python-setuptools && sudo easy_install argparse` **OR** `sudo pip --install argparse`.
 
 [readline][] **is optional**.
-This module it used to provide elaborate line editing and history features.
+This module it used to provide elaborate line editing and history features
 
 [git][] **is optional**.
-This allows for the project to be kept up-to-date.
+This allows for the project to be kept up-to-date
 
 ### Links
 ---
