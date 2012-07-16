@@ -2,7 +2,13 @@ from os import path, getcwd
 from subprocess import Popen, PIPE
 from sys import argv
 
-import argparse
+try:
+    import argparse
+except ImportError:
+    print '\n[!] The "argparse" module is required\n[i] Run: \'sudo (apt-get|yum) install python-setuptools && sudo easy_install argparse\' OR \'sudo pip --install argparse\''
+    exit(1)
+else:
+    pass
 
 
 class Colors(object):
@@ -10,12 +16,12 @@ class Colors(object):
     GREEN = '\033[92m'
     BLUE = '\033[94m'
     YELLOW = '\033[93m'
-    HOT = '\033[97m'
+    HOT = BLUE
     END = '\033[0m'
 
 
 class Banner(object):
-    banner = ''
+    banner = None
     current_commit = '???'
     if not path.exists(path.join(getcwd(), ".git")):
         banner = '\n{0}[!] "non-git". Keep up-to-date by running \'--update\'{1}'.format(Colors.RED, Colors.END)
@@ -30,8 +36,8 @@ class Banner(object):
 \t\t  \ \/  \/ / _ \ '_ \|  __  |/ _` | '_ \ / _` | |/ _ \ '__|
 \t\t   \  /\  /  __/ |_) | |  | | (_| | | | | (_| | |  __/ |
 \t\t    \/  \/ \___|_.__/|_|  |_|\__,_|_| |_|\__,_|_|\___|_|
-\t\t-----------------------------------------------------------
-\t\t\t\t\t\t\t{3}{1}Version: {2}{3}""".format(Colors.YELLOW, Colors.GREEN, current_commit, Colors.END)
+\t\t{1}-----------------------------------------------------------
+\t\t\t\t\t\t\t{0}Version: {1}{2}{3}""".format(Colors.YELLOW, Colors.GREEN, current_commit, Colors.END)
 
 
 class GetArgs(object):

