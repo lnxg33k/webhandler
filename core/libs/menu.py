@@ -5,7 +5,7 @@ from sys import argv
 try:
     import argparse
 except ImportError:
-    print '\n[!] The "argparse" module is required'
+    print '\n[!] The "argparse" module is required\n[i] Run: \'sudo (apt-get|yum) install python-setuptools && sudo easy_install argparse\' OR \'sudo pip --install argparse\''
     exit(1)
 else:
     pass

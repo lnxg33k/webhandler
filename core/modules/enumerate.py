@@ -20,11 +20,13 @@ class Enumerate(object):
         cmd = 'cat /etc/group;'
         groups = make_request.get_page_source(cmd)
 
-        line='{0}{1}{2}'.format(Colors.GREEN, "-"*55, Colors.END)
+        header = '{0}{1:10} | {2:11} | {3:8} | {4:8}{5}'.format(Colors.GREEN, "Group Name", "Password", "Group ID", "Group List", Colors.END)
+        line='{0}{1}{2}'.format(Colors.GREEN, "-"*len(header), Colors.END)
 
         print '{0}[+] Total number of groups: {1}{2}'.format(Colors.GREEN, len(groups), Colors.END)
+        
         print line
-        print '{0}{1:10} | {2:11} | {3:8} | {4:8}{5}'.format(Colors.GREEN, "Group Name", "Password", "Group ID", "Group List", Colors.END)
+        print header
         print line
         c = 1
         for group in groups:
@@ -41,11 +43,13 @@ class Enumerate(object):
         cmd = 'cat /etc/passwd;'
         users = make_request.get_page_source(cmd)
 
-        line='{0}{1}{2}'.format(Colors.GREEN, "-"*125, Colors.END)
+        header='{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(Colors.GREEN, "Username", "Password", "User ID", "Group ID", "User Info", "Home Directory", "Shell", Colors.END)
+        line='{0}{1}{2}'.format(Colors.GREEN, "-"*len(header), Colors.END)
 
         print '{0}[+] Total number of users: {1}{2}'.format(Colors.GREEN, len(users), Colors.END)
+        
         print line
-        print '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(Colors.GREEN, "Username", "Password", "User ID", "Group ID", "User Info", "Home Directory", "Shell", Colors.END)
+        print header
         print line
         c = 1
         for user in users:
