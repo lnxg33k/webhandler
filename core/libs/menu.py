@@ -21,15 +21,14 @@ class Colors(object):
 
 
 class Banner(object):
-    banner = None
+    #banner = None
     current_commit = '???'
     if not path.exists(path.join(getcwd(), ".git")):
         banner = '\n{0}[!] "non-git". Keep up-to-date by running \'--update\'{1}'.format(Colors.RED, Colors.END)
     else:
         f = Popen('git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
         current_commit = f.communicate()[0]
-
-    banner = banner + """{0}
+    banner = """{0}
 \t\t__          __  _     _    _                 _ _
 \t\t\ \        / / | |   | |  | |               | | |
 \t\t \ \  /\  / /__| |__ | |__| | __ _ _ __   __| | | ___ _ __
