@@ -86,7 +86,7 @@ Examples:
         random_agent = options.random_agent
         turbo = options.turbo
         update = options.update
-        
+
         if url:
             mode = "url"
         elif listen:

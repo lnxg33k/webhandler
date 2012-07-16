@@ -1,5 +1,4 @@
-import os, platform 
-import select
+import platform
 import socket
 import sys
 import time
@@ -9,7 +8,8 @@ from core.libs.menu import getargs, Colors
 
 class Listener(object):
     def __init__(self, port=None):
-        if getargs.mode == "listen": self.port = int(getargs.listen)
+        if getargs.mode == "listen":
+            self.port = int(getargs.listen)
 
     def wait_connection(self):
         os = platform.platform()
@@ -31,7 +31,7 @@ class Listener(object):
             print '\n{0}[!] Wasn\'t able to open a port. Make sure to run WebHanlder with a user which can (e.g. superuser){1}'.format(Colors.RED, Colors.END)
             exit(3)
 
-    def connected(self):        
+    def connected(self):
         while True:
             try:
                 buffer = self.socket.recv(1024)
@@ -43,15 +43,16 @@ class Listener(object):
                     sys.stdout.write(buffer)
                     sys.stdout.flush()
                     buffer = self.socket.recv(1024)
-            except socket.error as err:
+            except socket.error:
                 pass
-                
+
             try:
-                cmd = raw_input("Command [>]: ")                         
-                if(self.socket.sendall(cmd + "\n") != None):                       
-                    print '\n{0}[!] Error in sending data{1}'.format(Colors.RED, Colors.END)                  
+                cmd = raw_input("Command [>]: ")
+                if(self.socket.sendall(cmd + "\n") != None):
+                    print '\n{0}[!] Error in sending data{1}'.format(Colors.RED, Colors.END)
                 time.sleep(0.1)
             except KeyboardInterrupt:
+                print ""
                 pass
 
 listen = Listener()
