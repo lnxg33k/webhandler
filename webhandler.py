@@ -37,7 +37,7 @@ from core.libs.update import update
 if 'windows' in OS().lower():
     errmsg = '[!] WebHandler doesn\'t support Windows OS yet, '
     errmsg += 'still working on it.'
-    print '\n{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END)
+    exit('\n{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
 
 # Check for arguments dependencies
 if getargs.url:
