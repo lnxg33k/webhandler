@@ -34,11 +34,6 @@ from core.libs.listen_handler import listen
 from core.libs.menu import getargs, banner, Colors
 from core.libs.update import update
 
-if 'windows' in OS().lower():
-    errmsg = '[!] WebHandler doesn\'t support Windows OS yet, '
-    errmsg += 'still working on it.'
-    exit('\n{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
-
 # Check for arguments dependencies
 if getargs.url:
     if getargs.method == 'post' and not getargs.parameter:
@@ -53,7 +48,12 @@ if getargs.url:
         commander.BackConnect()                                 # Call BackConnect method to handle input
 
 elif getargs.listen:
-    listen.wait_connection()                                    # Call wait_connection to wait for a connection
+    if 'windows' in OS().lower():
+        errmsg = '[!] WebHandler doesn\'t support Windows OS yet, '
+        errmsg += 'still working on it.'
+        exit('\n{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
+    else:
+        listen.wait_connection()                                # Call wait_connection to wait for a connection
 
 elif getargs.update:
     update()                                                    # Update the script
