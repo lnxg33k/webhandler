@@ -21,20 +21,21 @@ class Enumerate(object):
         groups = make_request.get_page_source(cmd)
 
         header = '{0}{1:10} | {2:11} | {3:8} | {4:8}{5}'.format(Colors.GREEN, "Group Name", "Password", "Group ID", "Group List", Colors.END)
-        line='{0}{1}{2}'.format(Colors.GREEN, "-"*len(header), Colors.END)
+        line = '{0}{1}{2}'.format(Colors.GREEN, "-" * len(header), Colors.END)
 
         print '{0}[+] Total number of groups: {1}{2}'.format(Colors.GREEN, len(groups), Colors.END)
-        
+
         print line
         print header
         print line
         c = 1
         for group in groups:
-            gname=group.split(':')[0]
-            passwd=group.split(':')[1]
-            if passwd == "x": passwd = "*In shadow*"
-            guid=group.split(':')[2]
-            glist=group.split(':')[3]
+            gname = group.split(':')[0]
+            passwd = group.split(':')[1]
+            if passwd == "x":
+                passwd = "*In shadow*"
+            guid = group.split(':')[2]
+            glist = group.split(':')[3]
             print '{0}{1:10} | {2:11} | {3:8} | {4:8}{5}'.format(Colors.GREEN, gname, passwd, guid, glist, Colors.END)
             c += 1
         print line
@@ -43,28 +44,46 @@ class Enumerate(object):
         cmd = 'cat /etc/passwd;'
         users = make_request.get_page_source(cmd)
 
-        header='{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(Colors.GREEN, "Username", "Password", "User ID", "Group ID", "User Info", "Home Directory", "Shell", Colors.END)
-        line='{0}{1}{2}'.format(Colors.GREEN, "-"*len(header), Colors.END)
+        header = '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(
+                Colors.GREEN,
+                "Username",
+                "Password",
+                "User ID",
+                "Group ID",
+                "User Info",
+                "Home Directory",
+                "Shell",
+                Colors.END)
+        line = '{0}{1}{2}'.format(Colors.GREEN, "-" * len(header), Colors.END)
 
         print '{0}[+] Total number of users: {1}{2}'.format(Colors.GREEN, len(users), Colors.END)
-        
+
         print line
         print header
         print line
         c = 1
         for user in users:
-            uname=user.split(':')[0]
-            passwd=user.split(':')[1]
-            if passwd == "x": passwd = "*In shadow*"
-            uid=user.split(':')[2]
-            guid=user.split(':')[3]
-            uinfo=user.split(':')[4]
-            home=user.split(':')[5]
-            shell=user.split(':')[6]
-            print '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(Colors.GREEN, uname, passwd, uid, guid, uinfo, home, shell, Colors.END)
+            uname = user.split(':')[0]
+            passwd = user.split(':')[1]
+            if passwd == "x":
+                passwd = "*In shadow*"
+            uid = user.split(':')[2]
+            guid = user.split(':')[3]
+            uinfo = user.split(':')[4]
+            home = user.split(':')[5]
+            shell = user.split(':')[6]
+            print '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(
+                    Colors.GREEN,
+                    uname,
+                    passwd,
+                    uid,
+                    guid,
+                    uinfo,
+                    home,
+                    shell,
+                    Colors.END)
             c += 1
         print line
-
 
     def system(self):
         cmd = 'bash -c "input=\$(uptime); if [[ \$input == *day* ]]; then out=\$(echo \$input | awk \'{print \$3\\" days\\"}\'); if [[ \$input == *min* ]]; then out=\$(echo \\"\$out and \\" && echo \$input | awk \'{print \$5\\" minutes\\"}\'); else out=\$(echo \\"\$out, \\" && echo \$input | awk \'{print \$5}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi elif [[ \$input == *min* ]]; then out=\$(echo \$input | awk \'{print \$3\\" minutes\\"}\'); else out=\$(echo \$input | awk \'{print \$3}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi; echo \$out;" ;'

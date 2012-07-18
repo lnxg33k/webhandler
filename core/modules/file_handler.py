@@ -13,7 +13,7 @@ class FileHandler(object):
             cmd = 'cat {0}'.format(rfile_path)
             try:
                 with open(lfile_path, 'w') as dest_file:
-                    dest_file.write('\n'.join(make_request.get_page_source(cmd)))
+                    dest_file.write('\n'.join(make_request.get_page_source(cmd)) + '\n')
                 print '\n[+] Successfully downloaded "{0}" to "{1}"'.format(rfile_path, lfile_path)
             except IOError, e:
                 print '\n{0}[!] {1}{2}'.format(Colors.RED, e, Colors.END)
@@ -29,7 +29,7 @@ class FileHandler(object):
                     cmd = 'cat {0}'.format(file)
                     try:
                         with open(os.path.join(lfile_path, file), 'w') as dest_file:
-                            dest_file.write('\n'.join(make_request.get_page_source(cmd)))
+                            dest_file.write('\n'.join(make_request.get_page_source(cmd)) + '\n')
                     except IOError, e:
                         print '\n{0}[!] Error: {1}{2}'.format(Colors.RED, e, Colors.END)
                 else:
@@ -37,8 +37,6 @@ class FileHandler(object):
             print '\n{0}[+] Files downloaded successfully to: {1}{2}'.format(Colors.GREEN, Colors.END, lfile_path)
         else:
             print '\n{0}[!]The file/directory doesn\'t exist or I don\'t have permission{1}'.format(Colors.RED, Colors.END)
-
-
 
     # A method for uploading files to the box
     def upload_file(self, lfile_path, rfile_path):

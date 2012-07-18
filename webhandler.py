@@ -26,17 +26,21 @@ Developers:
 '''
 
 # Importing modules
+from platform import platform as OS
+
+from core.modules.info import info
 from core.libs.executer import commander
 from core.libs.listen_handler import listen
 from core.libs.menu import getargs, banner, Colors
 from core.libs.update import update
-from core.modules.info import info
 
-from core.libs.request_handler import make_request
-
+if 'windows' in OS().lower():
+    errmsg = '[!] WebHandler doesn\'t support Windows OS yet, '
+    errmsg += 'still working on it.'
+    print '\n{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END)
 
 # Check for arguments dependencies
-if getargs.mode == 'url' or getargs.mode == 'listen':
+if getargs.url:
     if getargs.method == 'post' and not getargs.parameter:
         errmsg = '\n{[!] Using post method requires --parameter flag, check help'
         exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
@@ -45,9 +49,11 @@ if getargs.mode == 'url' or getargs.mode == 'listen':
         exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
     else:
         print banner                                            # Print the banner
-        if getargs.mode == "listen": listen.wait_connection()   # Call wait_connection to wait for a connection
         info.get_information()                                  # Call get_information and print info
         commander.BackConnect()                                 # Call BackConnect method to handle input
 
-elif getargs.mode == "update":
-    update()                                    # Update the script
+elif getargs.listen:
+    listen.wait_connection()                                    # Call wait_connection to wait for a connection
+
+elif getargs.update:
+    update()                                                    # Update the script

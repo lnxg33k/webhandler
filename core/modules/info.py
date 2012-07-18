@@ -1,3 +1,4 @@
+import datetime
 from urllib2 import urlopen, URLError
 
 from core.libs.menu import Colors
@@ -18,7 +19,6 @@ class TargetBox(object):
         self.available_commands = "['@backdoor', '@download', '@enum', '@history', '@info', '@update', '@upload', 'clear', 'exit']"
 
     def get_information(self):
-        import datetime
         now = datetime.datetime.now()
 
         # Call get_page_source() method then assign it to self.source
@@ -31,7 +31,7 @@ class TargetBox(object):
         self.perm_cwd = source[4]
         self.uptime = source[5]
         self.host_ip = ', '.join(source[6:])
-        self.session = '{0}_-_{1}'.format(now.strftime("%Y-%m-%d_%H-%M"), self.host_ip)
+        self.session = now.strftime("%Y-%m-%d")
         try:
             # Get the attacker's ip address (Thanks @mandreko)
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
@@ -44,7 +44,7 @@ class TargetBox(object):
         {red}User{end}        :  {green}{current_user}{end}
         {red}ID{end}          :  {green}{current_id}{end}
         {red}Kernel{end}      :  {green}{kernel_info}{end}
-        {red}CWD{end}         :  {green}{cwd}{end}\t{hot}{perm_cwd}{end}
+        {red}CWD{end}         :  {green}{cwd}{end}\t\t{hot}{perm_cwd}{end}
         {red}Uptime{end}      :  {green}{uptime}{end}
         {red}Target's IPs{end}:  {green}{host_ip}{end}
         {red}Our IP{end}      :  {green}{local_ip}{end}
