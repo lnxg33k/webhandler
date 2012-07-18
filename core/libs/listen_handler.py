@@ -1,4 +1,3 @@
-import platform
 import socket
 import sys
 import time
@@ -8,25 +7,23 @@ from core.libs.menu import getargs, Colors
 
 class Listener(object):
     def __init__(self, port=None):
-        if getargs.mode == "listen":
-            self.port = int(getargs.listen)
+            self.port = getargs.listen
 
     def wait_connection(self):
-        os = platform.platform()
-        if "windows" in os.lower():
-            print '\n{0}[!] This feature isn\'t (yet) supported with a Windows operating system{1}'.format(Colors.RED, Colors.END)
-            exit(2)
-
-        print '\n{0}[i] Waiting on port: {1}{2}{3}'.format(Colors.GREEN, Colors.YELLOW, self.port, Colors.END)
         try:
+            print '\n{0}[i] Waiting on port: {1}{2}{3}'.format(Colors.GREEN, Colors.YELLOW, self.port, Colors.END)
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             server.bind(('0.0.0.0', self.port))
             server.listen(1)
-            self.socket, self.address = server.accept()
-            self.socket.setblocking(0)
-            targetIP, targetPort = self.address
-            print '{0}[+] Received connection from: {1}{2}'.format(Colors.HOT, targetIP, Colors.END)
+            try:
+                self.socket, self.address = server.accept()
+                self.socket.setblocking(0)
+                targetIP, targetPort = self.address
+                print '{0}[+] Received connection from: {1}{2}'.format(Colors.HOT, targetIP, Colors.END)
+                self.connected()
+            except KeyboardInterrupt:
+                print '\n{0}[!] Lost connection. Exiting...{1}'.format(Colors.RED, Colors.END)
         except socket.error:
             print '\n{0}[!] Wasn\'t able to open a port. Make sure to run WebHanlder with a user which can (e.g. superuser){1}'.format(Colors.RED, Colors.END)
             exit(3)
