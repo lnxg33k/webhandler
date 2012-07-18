@@ -1,9 +1,6 @@
-from os import getcwd
+from os import getcwd, makedirs, path
 from subprocess import Popen
 from urllib import unquote
-
-import platform
-import os
 
 from core.libs.menu import Colors, banner
 from core.libs.request_handler import make_request
@@ -45,11 +42,7 @@ class Commander(object):
                 history.append(unquote(command))
                 if command not in ['exit', 'quit', 'bye']:
                     if command == 'clear':
-                        os = platform.platform()
-                        if "windows" in os.lower():
-                            Popen('cls', shell=True).wait()
-                        else:
-                            Popen('clear', shell=True).wait()
+                        Popen('clear', shell=True).wait()
 
                     # Getting all commands attackr's did on the server
                     elif command == '@history':
@@ -142,14 +135,15 @@ class Commander(object):
                             enumerate.list()
 
                     elif command.startswith('@download'):
-                        if len(command.split()) != 2 and len(command.split()) != 3 :
+                        if len(command.split()) != 2 and len(command.split()) != 3:
                             print '\n{0}[!] Usage: @download [remote_file_path] <local_file_path>{1}'.format(Colors.RED, Colors.END)
                         else:
                             rfile_path = command.split()[1]
                             if len(command.split()) == 2:
-                                lfile_path = '{0}/loot/{1}{2}'.format(getcwd(),info.session, rfile_path)
+                                lfile_path = '{0}/output/{1}{2}_{3}'.format(getcwd(), info.host_ip, rfile_path, info.session)
                                 lfolder = '/'.join(lfile_path.split('/')[:-1])
-                                if not os.path.exists(lfolder): os.makedirs(lfolder)
+                                if not path.exists(lfolder):
+                                    makedirs(lfolder)
                             else:
                                 lfile_path = command.split()[2]
                             file_handler.download_file(rfile_path, lfile_path)
