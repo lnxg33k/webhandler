@@ -5,8 +5,10 @@ from sys import argv
 try:
     import argparse
 except ImportError:
-    print '\n[!] The "argparse" module is required\n[i] Run: \'sudo (apt-get|yum) install python-setuptools && sudo easy_install argparse\' OR \'sudo pip --install argparse\''
-    exit(1)
+    errmsg = '\n[!] The "argparse" module is required'
+    errmsg += '\n[i] Run: \'sudo (apt-get|yum) install python-setuptools '
+    errmsg += '&& sudo easy_install argparse\' OR \'sudo pip --install argparse\''
+    exit(errmsg)
 else:
     pass
 
@@ -14,9 +16,8 @@ else:
 class Colors(object):
     RED = '\033[91m'
     GREEN = '\033[92m'
-    BLUE = '\033[94m'
+    HOT = '\033[94m'
     YELLOW = '\033[93m'
-    HOT = BLUE
     END = '\033[0m'
 
 
@@ -67,21 +68,31 @@ Examples:
     python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
 
     python %(prog)s --listen 1234
-    python %(prog)s -l 4321''')
-        optional = parser.add_argument_group('Optional arguments')
-        optional.add_argument('-u', '--url', dest='url', help='\t\tFull URL for the uploaded PHP code', metavar='')
-        optional.add_argument('-l', '--listen', dest='listen', help='\t\tListen for a connection', metavar='')
-        optional.add_argument('-h', '--help', action='help', help='\t\tPrint this help message then exit')
-        optional.add_argument('-c', '--turbo', dest='turbo', help='\t\tIncrease the execution speed if the out-put doesn\'t contain garbage', action='store_true')
-        optional.add_argument('-m', '--method', dest='method', help='\t\tThe method used in the uploaded PHP code (e.g. post)', metavar='')
-        optional.add_argument('-p', '--parameter', dest='parameter', help='\t\tParameter that used in the shell (e.g. cmd)', metavar='')
-        optional.add_argument('-x', '--proxy', dest='proxy', help='\t\tProxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
-        optional.add_argument('-g', '--user-agent', dest='agent', help='\t\tuser-agent (e.g. \'Mozilla/5.0\')', metavar='')
-        optional.add_argument('-rg', '--random-agent', dest='random_agent', help='\t\tWebHandler will use some random user-agent', action='store_true')
-        optional.add_argument('-up', '--update', dest='update', help='\t\tUpdate webhandler from git cli "GitHub repo"', action='store_true')
+    python %(prog)s -l 4444''')
+
+        # shell controller group
+        shell_handler = parser.add_argument_group('Shell Handler')
+        shell_handler.add_argument('-u', '--url', dest='url', help='\t\tFull URL for the uploaded PHP code', metavar='')
+        shell_handler.add_argument('-t', '--turbo', dest='turbo', help='\t\tIncrease the execution speed if the out-put doesn\'t contain garbage', action='store_true')
+        shell_handler.add_argument('-m', '--method', dest='method', help='\t\tThe method used in the uploaded PHP code (e.g. post)', metavar='')
+        shell_handler.add_argument('-p', '--parameter', dest='parameter', help='\t\tParameter that used in the shell (e.g. cmd)', metavar='')
+        shell_handler.add_argument('-x', '--proxy', dest='proxy', help='\t\tProxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
+        shell_handler.add_argument('-g', '--user-agent', dest='agent', help='\t\tuser-agent (e.g. \'Mozilla/5.0\')', metavar='')
+        shell_handler.add_argument('-rg', '--random-agent', dest='random_agent', help='\t\tWebHandler will use some random user-agent', action='store_true')
+
+        # nc alternative group
+        nc_alternative = parser.add_argument_group('NetCat Alternative')
+        nc_alternative.add_argument('-l', '--listen', dest='listen', type=int, help='\t\tListen for a connection', metavar='')
+
+        # general group
+        general = parser.add_argument_group('General')
+        general.add_argument('-h', '--help', action='help', help='\t\tPrint this help message then exit')
+        general.add_argument('-up', '--update', dest='update', help='\t\tUpdate webhandler from git cli "GitHub repo"', action='store_true')
 
         options = parser.parse_args()
         url = options.url
+        if url:
+            url = url if url.startswith('http') else 'http://' + url
         listen = options.listen
         method = options.method.lower() if options.method else None
         parameter = options.parameter
@@ -90,19 +101,6 @@ Examples:
         random_agent = options.random_agent
         turbo = options.turbo
         update = options.update
-
-        if url:
-            mode = "url"
-        elif listen:
-            mode = "listen"
-        else:
-            mode = "update"
-
-        # URL might not be set (e.g. 'update'/'listen')
-        if url:
-            # Did they forget to add "http" infront?
-            if not url.startswith('http'):
-                url = "http://" + url
 
 getargs = GetArgs()
 banner = Banner().banner
