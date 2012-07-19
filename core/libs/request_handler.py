@@ -44,7 +44,7 @@ class MakeRequest(object):
         self.turbo = getargs.turbo
 
     def get_page_source(self, cmd):
-#        self.cmd = cmd
+        self.cmd = cmd
 #        result = re.match('sudo', self.cmd)
 #        if result:
 #            command = self.cmd.replace('sudo', '{0}sudo{1}'.format(Colors.RED, Colors.YELLOW))
