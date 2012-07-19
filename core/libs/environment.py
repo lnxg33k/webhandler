@@ -13,7 +13,12 @@ COMMANDS = info.available_commands
 RE_SPACE = re.compile('.*\s+$', re.M)
 
 
+#http://stackoverflow.com/questions/5637124/tab-completion-in-pythons-raw-input
 class Completer(object):
+    '''
+    internal readline buffer to determine the state of the overall completion,
+    which makes the state logic a bit simpler
+    '''
     def complete(self, text, state):
         "Generic readline completion entry point."
         buffer = readline.get_line_buffer()
