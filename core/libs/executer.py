@@ -4,18 +4,12 @@ from urllib import unquote
 
 from core.libs.menu import Colors, banner
 from core.libs.request_handler import make_request
+from core.libs.environment import complete
 from core.libs.update import update
 from core.modules.backdoor import backdoor
 from core.modules.enumerate import enumerate
 from core.modules.file_handler import file_handler
 from core.modules.info import info
-
-try:
-    import readline
-except ImportError:
-    print '\n[!] The "readline" module is required to provide elaborate line editing and history features'
-else:
-    pass
 
 
 class Commander(object):
@@ -24,6 +18,7 @@ class Commander(object):
     '''
     def BackConnect(self):
         self.cwd = info.cwd
+        complete.tab()      # calling auto-complete method
         i = 1
         # Empty list to save attacker's pushed commands
         history = []
@@ -34,7 +29,7 @@ class Commander(object):
                     command = raw_input('{user}{red}@{end}{green}{host_ip}{end}:~{yellow}({cwd}){end}-$ '.format(user=info.current_user,
                         red=Colors.RED, green=Colors.GREEN, yellow=Colors.YELLOW, end=Colors.END,
                         host_ip=info.host_ip.split(',')[0],
-                        cwd=self.cwd))
+                        cwd=self.cwd)).strip()
                 # If something went wrong screw the list
                 except IndexError:
                     command = raw_input('WebHandler@server:$ ')
