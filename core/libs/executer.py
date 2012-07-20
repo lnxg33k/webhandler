@@ -135,7 +135,7 @@ class Commander(object):
                         else:
                             rfile_path = command.split()[1]
                             if len(command.split()) == 2:
-                                lfile_path = '{0}/output/{1}{2}_{3}'.format(getcwd(), info.host_ip, rfile_path, info.session)
+                                lfile_path = '{0}/output/{1}{2}_{3}'.format(getcwd(), info.url.split('/')[-1], rfile_path, info.session)
                                 lfolder = '/'.join(lfile_path.split('/')[:-1])
                                 if not path.exists(lfolder):
                                     makedirs(lfolder)

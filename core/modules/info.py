@@ -1,7 +1,7 @@
 import datetime
 from urllib2 import urlopen, URLError
 
-from core.libs.menu import Colors
+from core.libs.menu import Colors, getargs
 from core.libs.request_handler import make_request
 
 
@@ -38,6 +38,7 @@ class TargetBox(object):
         self.uptime = get(source, 5)
         self.host_ip = get(source, 6)
         self.session = now.strftime("%Y-%m-%d")
+        self.url = '/'.join(getargs.url.split('/', 3)[:3])
         try:
             # Get the attacker's ip address (Thanks @mandreko)
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
