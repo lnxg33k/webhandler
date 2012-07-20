@@ -24,13 +24,19 @@ class TargetBox(object):
         # Call get_page_source() method then assign it to self.source
         source = make_request.get_page_source(self.cmd)
 
-        self.current_user = source[0]
-        self.current_id = source[1]
-        self.kernel_info = source[2]
-        self.cwd = source[3]
-        self.perm_cwd = source[4]
-        self.uptime = source[5]
-        self.host_ip = ', '.join(source[6:])
+        def get(seq, index, default='Unknown'):
+            try:
+                return seq[index]
+            except:
+                return default
+
+        self.current_user = get(source, 0)
+        self.current_id = get(source, 1)
+        self.kernel_info = get(source, 2)
+        self.cwd = get(source, 3)
+        self.perm_cwd = get(source, 4)
+        self.uptime = get(source, 5)
+        self.host_ip = get(source, 6)
         self.session = now.strftime("%Y-%m-%d")
         try:
             # Get the attacker's ip address (Thanks @mandreko)
@@ -52,8 +58,9 @@ class TargetBox(object):
 
         {hot}[+] Available commands: {available_commands}{end}
         {hot}[+] Inserting{end} {red}!{end} {hot}at the begining of the command will execute the command locally ({red}on your box{end}){end}
-        '''.format(dashed='-' * int(len(self.kernel_info) + 16),
-                red=Colors.RED, green=Colors.GREEN, end=Colors.END, hot=Colors.HOT,
+        '''.format(
+                dashed='-' * int(len(self.kernel_info) + 16),
+                red=Colors.RED, green=Colors.GREEN, hot=Colors.HOT,
                 current_user=self.current_user,
                 current_id=self.current_id,
                 kernel_info=self.kernel_info,
@@ -62,7 +69,8 @@ class TargetBox(object):
                 host_ip=self.host_ip,
                 local_ip=self.local_ip,
                 uptime=self.uptime,
-                available_commands=self.available_commands,)
+                available_commands=self.available_commands,
+                end=Colors.END,)
         print self.info
 
 info = TargetBox()
