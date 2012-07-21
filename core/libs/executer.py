@@ -82,8 +82,8 @@ class Commander(object):
                                 #    backdoor.msf_php(ip, port)
                                 elif command.split()[1] == "netcat" or command.split()[1] == "nc":
                                     backdoor.netcat(ip, port)
-				elif command.split()[1] == "bash" or command.split()[1] =="sh":
-				    backdoor.bash(ip,port)
+                                elif command.split()[1] == "bash" or command.split()[1] == "sh":
+                                    backdoor.bash(ip, port)
                                 elif command.split()[1] == "perl" or command.split()[1] == "pl":
                                     backdoor.perl(ip, port)
                                 #elif command.split()[1] == "php":

