@@ -82,8 +82,8 @@ class Commander(object):
                                 #    backdoor.msf_php(ip, port)
                                 elif command.split()[1] == "netcat" or command.split()[1] == "nc":
                                     backdoor.netcat(ip, port)
-				elif command.split()[1] == "bash" or command.split()[1] =="sh":
-				    backdoor.bash(ip,port)
+                                elif command.split()[1] == "bash" or command.split()[1] == "sh":
+                                    backdoor.bash(ip, port)
                                 elif command.split()[1] == "perl" or command.split()[1] == "pl":
                                     backdoor.perl(ip, port)
                                 #elif command.split()[1] == "php":
@@ -95,7 +95,9 @@ class Commander(object):
                                 elif command.split()[1] == "ruby" or command.split()[1] == "rb":
                                     backdoor.ruby(ip, port)
                                 elif command.split()[1] == "xterm":
-                                    backdoor.xterm(ip)
+                                    backdoor.xterm(ip,port)
+                                elif command.split()[1] == "testall":
+                                    backdoor.testall(ip,port)
                                 else:
                                     backdoor.list()
                         elif len(command.split()) == 2:
