@@ -95,7 +95,9 @@ class Commander(object):
                                 elif command.split()[1] == "ruby" or command.split()[1] == "rb":
                                     backdoor.ruby(ip, port)
                                 elif command.split()[1] == "xterm":
-                                    backdoor.xterm(ip)
+                                    backdoor.xterm(ip,port)
+                                elif command.split()[1] == "testall":
+                                    backdoor.testall(ip,port)
                                 else:
                                     backdoor.list()
                         elif len(command.split()) == 2:
