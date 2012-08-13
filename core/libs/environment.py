@@ -41,8 +41,12 @@ class Completer(object):
         return results[state]
 
     def tab(self):
-        readline.set_completer_delims(' \t\n;')
-        readline.parse_and_bind("tab: complete")
-        readline.set_completer(self.complete)
+        # to work with non nix systems
+        try:
+            readline.set_completer_delims(' \t\n;')
+            readline.parse_and_bind("tab: complete")
+            readline.set_completer(self.complete)
+        except:
+            pass
 
 complete = Completer()

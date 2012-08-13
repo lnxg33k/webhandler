@@ -2,7 +2,8 @@ import socket
 import sys
 import time
 
-from core.libs.menu import getargs, Colors
+from core.libs.menu import getargs
+from core.libs.termcolor import colored, cprint
 
 
 class Listener(object):
@@ -11,7 +12,7 @@ class Listener(object):
 
     def wait_connection(self):
         try:
-            print '\n{0}[i] Waiting on port: {1}{2}{3}'.format(Colors.GREEN, Colors.YELLOW, self.port, Colors.END)
+            print colored('\n[i] Waiting on port: ', 'green') + colored(self.port, 'yellow')
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             server.bind(('0.0.0.0', self.port))
@@ -20,12 +21,12 @@ class Listener(object):
                 self.socket, self.address = server.accept()
                 self.socket.setblocking(0)
                 targetIP, targetPort = self.address
-                print '{0}[+] Received connection from: {1}{2}'.format(Colors.HOT, targetIP, Colors.END)
+                cprint('[+] Received connection from: {0}'.format(targetIP), 'magenta')
                 self.connected()
             except KeyboardInterrupt:
-                print '\n{0}[!] Lost connection. Exiting...{1}'.format(Colors.RED, Colors.END)
+                cprint('\n[!] Lost connection. Exiting...', 'red')
         except socket.error:
-            print '\n{0}[!] Wasn\'t able to open a port. Make sure to run WebHanlder with a user which can (e.g. superuser){1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Wasn\'t able to open a port. Make sure to run WebHanlder with a user which can (e.g. superuser)', 'red')
             exit(3)
 
     def connected(self):
@@ -33,7 +34,7 @@ class Listener(object):
             try:
                 buffer = self.socket.recv(1024)
                 if buffer == '':
-                    print '\n{0}[!] Lost connection. Exiting...{1}'.format(Colors.RED, Colors.END)
+                    cprint('\n[!] Lost connection. Exiting...', 'red')
                     self.socket.close()
                     exit(1)
                 while buffer != '':
@@ -46,7 +47,7 @@ class Listener(object):
             try:
                 cmd = raw_input("Command [>]: ")
                 if(self.socket.sendall(cmd + "\n") != None):
-                    print '\n{0}[!] Error in sending data{1}'.format(Colors.RED, Colors.END)
+                    cprint('\n[!] Error in sending data', 'red')
                 time.sleep(0.1)
             except KeyboardInterrupt:
                 print ""

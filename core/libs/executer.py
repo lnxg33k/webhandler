@@ -2,7 +2,8 @@ from os import getcwd, makedirs, path
 from subprocess import Popen
 from urllib import unquote
 
-from core.libs.menu import Colors, banner
+from core.libs.menu import banner
+from core.libs.termcolor import colored, cprint
 from core.libs.request_handler import make_request
 from core.libs.environment import complete
 from core.libs.update import update
@@ -26,10 +27,10 @@ class Commander(object):
             try:
                 try:
                     # Getting command to be executed from the user
-                    command = raw_input('{user}{red}@{end}{green}{host_ip}{end}:~{yellow}({cwd}){end}-$ '.format(user=info.current_user,
-                        red=Colors.RED, green=Colors.GREEN, yellow=Colors.YELLOW, end=Colors.END,
-                        host_ip=info.host_ip.split(',')[0],
-                        cwd=self.cwd)).strip()
+                    command = raw_input(info.current_user +
+                            colored('@', 'red') +
+                            colored(info.host_ip.split(',')[0], 'green') + ':~' +
+                            colored('({0})'.format(self.cwd), 'yellow') + ':$ ').strip()
                 # If something went wrong screw the list
                 except IndexError:
                     command = raw_input('WebHandler@server:$ ')
@@ -95,9 +96,9 @@ class Commander(object):
                                 elif command.split()[1] == "ruby" or command.split()[1] == "rb":
                                     backdoor.ruby(ip, port)
                                 elif command.split()[1] == "xterm":
-                                    backdoor.xterm(ip,port)
+                                    backdoor.xterm(ip, port)
                                 elif command.split()[1] == "testall":
-                                    backdoor.testall(ip,port)
+                                    backdoor.testall(ip, port)
                                 else:
                                     backdoor.list()
                         elif len(command.split()) == 2:
@@ -135,7 +136,7 @@ class Commander(object):
 
                     elif command.startswith('@download'):
                         if len(command.split()) != 2 and len(command.split()) != 3:
-                            print '\n{0}[!] Usage: @download [remote_file_path] <local_file_path>{1}'.format(Colors.RED, Colors.END)
+                            cprint('\[!] Usage: @download [remote_file_path] <local_file_path>', 'red')
                         else:
                             rfile_path = command.split()[1]
                             if len(command.split()) == 2:
@@ -149,7 +150,7 @@ class Commander(object):
 
                     elif command.startswith('@upload'):
                         if len(command.split()) != 3:
-                            print '\n{0}[!] Usage: @upload [local_file_path] [remote_file_path]{1}'.format(Colors.RED, Colors.END)
+                            cprint('\n[!] Usage: @upload [local_file_path] [remote_file_path]', 'red')
                         else:
                             lfile_path = command.split()[1]
                             rfile_path = command.split()[2]

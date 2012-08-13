@@ -29,19 +29,20 @@ Developers:
 from platform import platform as OS
 
 from core.modules.info import info
+from core.libs.termcolor import cprint as colorize
 from core.libs.executer import commander
 from core.libs.listen_handler import listen
-from core.libs.menu import getargs, banner, Colors
+from core.libs.menu import getargs, banner
 from core.libs.update import update
 
 # Check for arguments dependencies
 if getargs.url:
     if getargs.method == 'post' and not getargs.parameter:
-        errmsg = '\n{[!] Using post method requires --parameter flag, check help'
-        exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
+        errmsg = '\n[!] Using post method requires --parameter flag, check help'
+        exit(colorize(errmsg, 'red'))
     elif getargs.method == 'get' and getargs.parameter:
         errmsg = '\n[!] Using get method doesn\'t require --parameter flag, check help'
-        exit('{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
+        exit(colorize(errmsg, 'red'))
     else:
         print banner                                            # Print the banner
         info.get_information()                                  # Call get_information and print info
@@ -51,7 +52,7 @@ elif getargs.listen:
     if 'windows' in OS().lower():
         errmsg = '[!] WebHandler doesn\'t support Windows OS yet, '
         errmsg += 'still working on it.'
-        exit('\n{0}{1}{2}'.format(Colors.RED, errmsg, Colors.END))
+        exit(colorize(errmsg, 'red'))
     else:
         listen.wait_connection()                                # Call wait_connection to wait for a connection
 

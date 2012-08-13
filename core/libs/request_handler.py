@@ -3,11 +3,8 @@ from random import randint
 from urllib import urlencode, quote
 from urllib2 import ProxyHandler, build_opener, install_opener
 
-#import re
-#import time
-
-#from core.libs.listen_handler import listen
-from core.libs.menu import getargs, Colors
+from core.libs.menu import getargs
+from core.libs.termcolor import colored
 
 USER_AGENTS = [
         "curl/7.7.2 (powerpc-apple-darwin6.0) libcurl 7.7.2 (OpenSSL 0.9.6b)",
@@ -45,11 +42,6 @@ class MakeRequest(object):
 
     def get_page_source(self, cmd):
         self.cmd = cmd
-#        result = re.match('sudo', self.cmd)
-#        if result:
-#            command = self.cmd.replace('sudo', '{0}sudo{1}'.format(Colors.RED, Colors.YELLOW))
-#            print '\n{0}[!] Warning this command ({1}) could break the connection. Stop processing it{2}'.format(Colors.YELLOW, command, Colors.END)
-#        if getargs.url:
         # Proxy support
         proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
         opener = build_opener(proxy_support)
@@ -63,8 +55,8 @@ class MakeRequest(object):
             pass
         install_opener(opener)
 
-        errmsg = '\n{0}[!] Check your network connection and/or the proxy (if you\'re using one){1}'.format(Colors.RED, Colors.END)
-        fourzerofourmsg = '\n{0}[!] Please make sure the page (\'{1}\') requested exists!{2}'.format(Colors.RED, self.url, Colors.END)
+        errmsg = colored('\n[!] Check your network connection and/or the proxy (if you\'re using one)', 'red')
+        fourzerofourmsg = colored('\n[!] Please make sure the page (\'{0}\') requested exists!'.format(self.url), 'red')
 
         # Check if the method is POST
         if self.method == 'post' or self.parameter:
@@ -96,31 +88,5 @@ class MakeRequest(object):
                 exit(errmsg)
             except:
                 exit(fourzerofourmsg)
-#        elif getargs.listen:
-#            try:
-#                if (listen.socket.sendall(cmd + "\n") != None):
-#                    print '\n{0}[!] Error in sending data (#1){1}'.format(Colors.RED, Colors.END)
-#                time.sleep(0.1)
-#
-#                sc = ''
-#                buffer = listen.socket.recv(1024)
-#                if buffer == '':
-#                    print '\n{0}[!] Lost connection. Exiting...{1}'.format(Colors.RED, Colors.END)
-#                    listen.socket.close()
-#                    exit(1)
-#                while buffer != '':
-#                    sc = sc + buffer
-#                    try:
-#                        buffer = listen.socket.recv(1024)
-#                    except:
-#                        buffer = ''
-#                return sc.split('\n')[:-1]
-#            except:
-#                if(listen.socket.sendall(cmd + "\n") != None):
-#                    print '\n{0}[!] Error in sending data (#2){1}'.format(Colors.RED, Colors.END)
-#                pass
-#        else:
-#            print '\n{0}[!] Unsupported mode: {1}{2}'.format(Colors.RED, getargs.mode, Colors.END)
-#            exit(1)
 
 make_request = MakeRequest()

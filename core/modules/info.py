@@ -1,7 +1,8 @@
 import datetime
 from urllib2 import urlopen, URLError
 
-from core.libs.menu import Colors, getargs
+from core.libs.menu import getargs
+from core.libs.termcolor import colored
 from core.libs.request_handler import make_request
 
 
@@ -45,33 +46,20 @@ class TargetBox(object):
         except URLError:
             self.local_ip = 'Unknown'
 
-        self.info = \
-        '''
-        {dashed}
-        {red}User{end}        :  {green}{current_user}{end}
-        {red}ID{end}          :  {green}{current_id}{end}
-        {red}Kernel{end}      :  {green}{kernel_info}{end}
-        {red}CWD{end}         :  {green}{cwd}{end}\t\t{hot}{perm_cwd}{end}
-        {red}Uptime{end}      :  {green}{uptime}{end}
-        {red}Target's IPs{end}:  {green}{host_ip}{end}
-        {red}Our IP{end}      :  {green}{local_ip}{end}
-        {dashed}
+        self.info = '\t' + '-' * int(len(self.kernel_info) + 16) + '\n'
+        self.info += colored("\tUser         : ", 'red') + colored(self.current_user, 'green') + '\n'
+        self.info += colored("\tID           : ", 'red') + colored(self.current_id, 'green') + '\n'
+        self.info += colored("\tKernel       : ", 'red') + colored(self.kernel_info, 'green') + '\n'
+        self.info += colored("\tCWD          : ", 'red') + colored(self.cwd, 'green') + colored('\t\t' + self.perm_cwd, 'grey', attrs=['bold']) + '\n'
+        self.info += colored("\tUptime       : ", 'red') + colored(self.uptime, 'green') + '\n'
+        self.info += colored("\tTarget's IPs : ", 'red') + colored(self.host_ip, 'green') + '\n'
+        self.info += colored("\tOur IP       : ", 'red') + colored(self.local_ip, 'green') + '\n'
+        self.info += '\t' + '-' * int(len(self.kernel_info) + 16)
+        self.info += "\n\n"
 
-        {hot}[+] Available commands: {available_commands}{end}
-        {hot}[+] Inserting{end} {red}!{end} {hot}at the begining of the command will execute the command locally ({red}on your box{end}){end}
-        '''.format(
-                dashed='-' * int(len(self.kernel_info) + 16),
-                red=Colors.RED, green=Colors.GREEN, hot=Colors.HOT,
-                current_user=self.current_user,
-                current_id=self.current_id,
-                kernel_info=self.kernel_info,
-                cwd=self.cwd,
-                perm_cwd=self.perm_cwd,
-                host_ip=self.host_ip,
-                local_ip=self.local_ip,
-                uptime=self.uptime,
-                available_commands=self.available_commands,
-                end=Colors.END,)
+        self.info += colored("\t[+] Available commands: " + ', '.join(self.available_commands), 'blue', attrs=['underline', 'bold']) + '\n'
+        self.info += colored("\t[+] Inserting ! at the begining of the command will execute the command locally (on your box)", 'blue', attrs=['underline', 'bold'])
+        self.info += "\n"
         print self.info
 
 info = TargetBox()

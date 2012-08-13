@@ -1,4 +1,4 @@
-from core.libs.menu import Colors
+from core.libs.termcolor import cprint
 from core.libs.request_handler import make_request
 from core.modules.shell_handler import linux
 
@@ -20,14 +20,14 @@ class Enumerate(object):
         cmd = 'cat /etc/group;'
         groups = make_request.get_page_source(cmd)
 
-        header = '{0}{1:10} | {2:11} | {3:8} | {4:8}{5}'.format(Colors.GREEN, "Group Name", "Password", "Group ID", "Group List", Colors.END)
-        line = '{0}{1}{2}'.format(Colors.GREEN, "-" * len(header), Colors.END)
+        header = '{0:15} | {1:11} | {2:8} | {3:8} |'.format("Group Name", "Password", "Group ID", "Group List")
+        line = "-" * len(header)
 
-        print '{0}[+] Total number of groups: {1}{2}'.format(Colors.GREEN, len(groups), Colors.END)
+        cprint('[+] Total number of groups: {0}'.format(len(groups)), 'magenta')
 
-        print line
-        print header
-        print line
+        cprint(line, 'green')
+        cprint(header, 'green')
+        cprint(line, 'green')
         c = 1
         for group in groups:
             gname = group.split(':')[0]
@@ -36,31 +36,29 @@ class Enumerate(object):
                 passwd = "*In shadow*"
             guid = group.split(':')[2]
             glist = group.split(':')[3]
-            print '{0}{1:10} | {2:11} | {3:8} | {4:8}{5}'.format(Colors.GREEN, gname, passwd, guid, glist, Colors.END)
+            cprint('{0:15} | {1:11} | {2:8} | {3:8} {4:2}|'.format(gname, passwd, guid, glist, ' '), 'green')
             c += 1
-        print line
+        cprint(line, 'green')
 
     def passwd(self):
         cmd = 'cat /etc/passwd;'
         users = make_request.get_page_source(cmd)
 
-        header = '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(
-                Colors.GREEN,
+        header = '{0:17} | {1:11} | {2:7} | {3:8} | {4:35} | {5:28} | {6}'.format(
                 "Username",
                 "Password",
                 "User ID",
                 "Group ID",
                 "User Info",
                 "Home Directory",
-                "Shell",
-                Colors.END)
-        line = '{0}{1}{2}'.format(Colors.GREEN, "-" * len(header), Colors.END)
+                "Shell",)
+        line = "-" * len(header)
 
-        print '{0}[+] Total number of users: {1}{2}'.format(Colors.GREEN, len(users), Colors.END)
+        cprint('[+] Total number of users: {0}'.format(len(users)), 'magenta')
 
-        print line
-        print header
-        print line
+        cprint(line, 'green')
+        cprint(header, 'green')
+        cprint(line, 'green')
         c = 1
         for user in users:
             uname = user.split(':')[0]
@@ -72,18 +70,16 @@ class Enumerate(object):
             uinfo = user.split(':')[4]
             home = user.split(':')[5]
             shell = user.split(':')[6]
-            print '{0}{1:15} | {2:11} | {3:7} | {4:8} | {5:35} | {6:20} | {7}{8}'.format(
-                    Colors.GREEN,
+            cprint('{0:17} | {1:11} | {2:7} | {3:8} | {4:35} | {5:28} | {6}'.format(
                     uname,
                     passwd,
                     uid,
                     guid,
                     uinfo,
                     home,
-                    shell,
-                    Colors.END)
+                    shell,), 'green')
             c += 1
-        print line
+        cprint(line, 'green')
 
     def system(self):
         cmd = 'bash -c "input=\$(uptime); if [[ \$input == *day* ]]; then out=\$(echo \$input | awk \'{print \$3\\" days\\"}\'); if [[ \$input == *min* ]]; then out=\$(echo \\"\$out and \\" && echo \$input | awk \'{print \$5\\" minutes\\"}\'); else out=\$(echo \\"\$out, \\" && echo \$input | awk \'{print \$5}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi elif [[ \$input == *min* ]]; then out=\$(echo \$input | awk \'{print \$3\\" minutes\\"}\'); else out=\$(echo \$input | awk \'{print \$3}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi; echo \$out;" ;'
@@ -100,17 +96,19 @@ class Enumerate(object):
 
         system = make_request.get_page_source(cmd)
 
-        print '\n{0}[+] Uptime: {1}{2}'.format(Colors.GREEN, system[0], Colors.END)
-        print '{0}[+] Idletime: {1}{2}'.format(Colors.GREEN, system[1], Colors.END)
-        print '{0}[+] Users Logged in: {1}{2}'.format(Colors.GREEN, system[2], Colors.END)
-        print '{0}[+] Total Users: {1}{2}'.format(Colors.GREEN, system[3], Colors.END)
-        print '{0}[+] Total Groups: {1}{2}'.format(Colors.GREEN, system[4], Colors.END)
-        print '{0}[+] CPU Load (1, 5, 15 mins): {1}{2}'.format(Colors.GREEN, system[5], Colors.END)
-        print '{0}[+] Memory Load (Used %): {1}{2}'.format(Colors.GREEN, system[6], Colors.END)
-        print '{0}[+] Established TCP Connections: {1}{2}'.format(Colors.GREEN, system[7], Colors.END)
-        print '{0}[+] Listening TCP Services: {1}{2}'.format(Colors.GREEN, system[8], Colors.END)
-        print '{0}[+] User Processors: {1}{2}'.format(Colors.GREEN, system[9], Colors.END)
-        print '{0}[+] Total Processor: {1}{2}'.format(Colors.GREEN, system[10], Colors.END)
+        output = '\n[+] Uptime: {0}\n'.format(system[0])
+        output += '[+] Idletime: {0}\n'.format(system[1])
+        output += '[+] Users Logged in: {0}\n'.format(system[2])
+        output += '[+] Total Users: {0}\n'.format(system[3])
+        output += '[+] Total Groups: {0}\n'.format(system[4])
+        output += '[+] CPU Load (1, 5, 15 mins): {0}\n'.format(system[5])
+        output += '[+] Memory Load (Used %): {0}\n'.format(system[6])
+        output += '[+] Established TCP Connections: {0}\n'.format(system[7])
+        output += '[+] Listening TCP Services: {0}\n'.format(system[8])
+        output += '[+] User Processors: {0}\n'.format(system[9])
+        output += '[+] Total Processor: {0}'.format(system[10])
+
+        cprint(output, 'green')
 
     def ip(self):
         cmd = "ip addr show | grep inet | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
@@ -123,11 +121,13 @@ class Enumerate(object):
 
         ip = make_request.get_page_source(cmd)
 
-        print '\n{0}[+] Internal IP/subnet: {1}{2}'.format(Colors.GREEN, ip[0], Colors.END)
-        print '{0}[+] External IP: {1}{2}'.format(Colors.GREEN, ip[1], Colors.END)
-        print '{0}[+] DNS: {1}{2}'.format(Colors.GREEN, ip[2], Colors.END)
-        print '{0}[+] Gateway: {1}{2}'.format(Colors.GREEN, ip[3], Colors.END)
-        print '{0}[+] DHCP?: {1}{2}'.format(Colors.GREEN, ip[4], Colors.END)
+        output = '\n[+] Internal IP/subnet: {0}\n'.format(ip[0])
+        output += '[+] External IP: {0}\n'.format(ip[1])
+        output += '[+] DNS: {0}\n'.format(ip[2])
+        output += '[+] Gateway: {0}\n'.format(ip[3])
+        output += '[+] DHCP?: {0}'.format(ip[4])
+
+        cprint(output, 'green')
 
     def os(self):
         cmd = "hostname;"
@@ -141,12 +141,14 @@ class Enumerate(object):
 
         os = make_request.get_page_source(cmd)
 
-        print '\n{0}[+] Hostname: {1}{2}'.format(Colors.GREEN, os[0], Colors.END)
-        print '{0}[+] Kernel: {1}{2}'.format(Colors.GREEN, os[1], Colors.END)
-        print '{0}[+] OS: {1}{2}'.format(Colors.GREEN, os[2], Colors.END)
-        print '{0}[+] Local Time: {1}{2}'.format(Colors.GREEN, os[3], Colors.END)
-        print '{0}[+] Timezone (UTC): {1}{2}'.format(Colors.GREEN, os[4], Colors.END)
-        print '{0}[+] Language: {1}{2}'.format(Colors.GREEN, os[5], Colors.END)
+        output = '\n[+] Hostname: {0}\n'.format(os[0])
+        output += '[+] Kernel: {0}\n'.format(os[1])
+        output += '[+] OS: {0}\n'.format(os[2])
+        output += '[+] Local Time: {0}\n'.format(os[3])
+        output += '[+] Timezone (UTC): {0}\n'.format(os[4])
+        output += '[+] Language: {0}'.format(os[5])
+
+        cprint(output, 'green')
 
     def keys(self):
         cmd = "find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo \"{}\"'"
@@ -157,7 +159,7 @@ class Enumerate(object):
                 print '{0:2d}.) {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!] Didn\'t find any SSL certs{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find any SSL certs', 'red')
 
         cmd = "find / -type f -print0 | xargs -0 -I '{}' bash -c 'openssl x509 -in {} -noout > /dev/null 2>&1; [[ $? == '0' ]] && echo \"{}\"'"
         self.sshpub = make_request.get_page_source(cmd)
@@ -167,7 +169,7 @@ class Enumerate(object):
                 print '{0:2d}.) {1}'.format(c, path)
                 c += 1
         else:
-            print '\n{0}[!] Didn\'t find any public SSH keys{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find any public SSH keys', 'red')
 
         # Private keys
         #find / -type f -exec bash -c 'ssh-keygen -yf {} >/dev/null 2>&1' \; -exec bash -c 'echo {}' \;        #grep -r "SSH PRIVATE KEY FILE FORMAT" /{etc,home,root} 2> /dev/null | wc -l    # find / -name "*host_key*"
@@ -179,10 +181,10 @@ class Enumerate(object):
         if self.writable:
             c = 1
             for path in self.writable:
-                print '{0}{1:2d}.) {2}{3}'.format(Colors.GREEN, c, path, Colors.END)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
         else:
-            print '\n{0}[!] Didn\'t find any wriable directories{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find any wriable directories', 'red')
 
     def history(self):
         cmd = 'for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do [ -f $i/.bash_history ] && echo "bash_history: $i"; [ -f $i/.nano_history ] && echo "nano_history: $i"; [ -f $i/.atftp_history ] && echo "atftp_history: $i"; [ -f $i/.mysql_history ] && echo "mysql_history: $i"; [ -f $i/.php_history ] && echo "php_history: $i";done'
@@ -190,9 +192,9 @@ class Enumerate(object):
         if self.history:
             c = 1
             for path in self.history:
-                print '{0:2d}.) {1}'.format(c, path)
+                cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
         else:
-            print '\n{0}[!] Didn\'t find any \'history\' files{1}'.format(Colors.RED, Colors.END)
+            cprint('\n[!] Didn\'t find any \'history\' files', 'red')
 
 enumerate = Enumerate()
