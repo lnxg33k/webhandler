@@ -43,7 +43,7 @@ class GetArgs(object):
         cprint("--   Alternative 'netcat listener'    --", 'blue')
         cprint("1-   netcat -l -p 1234", 'yellow')
         cprint("2-   nc -lvvp 4321\n", 'yellow')
-        print "Run: " + colored("{0} -h".format(argv[0]), 'red') + "for help"
+        print "Run: " + colored("{0} -h".format(argv[0]), 'red') + " for help"
         exit(1)
     else:
         parser = argparse.ArgumentParser(

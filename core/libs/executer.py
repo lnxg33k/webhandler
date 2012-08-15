@@ -158,6 +158,7 @@ class Commander(object):
 
                     else:
                         try:
+                            #Handle the current working directory 'cwd'
                             if command.split()[0] == 'cd' and len(command.split()) > 1:
                                 cwd = self.cwd
                                 if '../' in command.split()[-1] or '..' in command.split()[-1]:
@@ -177,7 +178,7 @@ class Commander(object):
                                             print 'bash: cd: {0}: No such file or directory'.format(command.split()[-1])
 
                             elif command.split()[0] == 'cd' and len(command.split()) == 1:
-                                self.cwd = info.cwd  # dirty patch
+                                self.cwd = info.cwd  # dirty patch to get the original cwd
 
                             else:
                                 # Setting aliases for some commands to avoid
@@ -196,11 +197,12 @@ class Commander(object):
 
                                 # If the executed command doesn't exist
                                 else:
-                                    errmsg = '{0}: command not found'.format(unquote(command))
+                                    errmsg = '{0}: command not found '.format(unquote(command))
+                                    errmsg += 'or I don\'t have permission to execute it'
                                     if command.split()[0] == 'echo':
                                         pass
                                     else:
-                                        print errmsg
+                                        cprint(errmsg, 'red')
                         except IndexError:
                             pass
 
