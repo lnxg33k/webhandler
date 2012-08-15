@@ -18,8 +18,8 @@ def update():
         f = Popen('git pull; git rev-parse --short HEAD', shell=True, stdout=PIPE, stderr=PIPE)
         out, err = f.communicate()
         if out and not err:
-            msg = '[+] Updated successfully to: {0}\n'
-            msg += '\n[i] Make sure to re-run WebHandler to use the updated version'.format(out.split()[-1])
+            msg = '[+] Updated successfully to: {0}\n'.format(out.split()[-1])
+            msg += '\n[i] Make sure to re-run WebHandler to use the updated version'
             cprint(msg, 'green')
         else:
             errmsg = '\n[!] \'git\' is required to update webhandler from CLI'
