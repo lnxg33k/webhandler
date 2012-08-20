@@ -1,6 +1,6 @@
 from urllib2 import urlopen
 
-from core.libs.termcolor import cprint
+from core.libs.thirdparty.termcolor import cprint
 from core.libs.request_handler import make_request
 
 

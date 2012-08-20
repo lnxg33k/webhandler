@@ -4,7 +4,7 @@ from urllib import urlencode, quote
 from urllib2 import ProxyHandler, build_opener, install_opener
 
 from core.libs.menu import getargs
-from core.libs.termcolor import colored
+from core.libs.thirdparty.termcolor import colored
 
 USER_AGENTS = [
         "curl/7.7.2 (powerpc-apple-darwin6.0) libcurl 7.7.2 (OpenSSL 0.9.6b)",

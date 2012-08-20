@@ -1,6 +1,6 @@
-from core.libs.termcolor import cprint
+from modules.shell_handler import linux
 from core.libs.request_handler import make_request
-from core.modules.shell_handler import linux
+from core.libs.thirdparty.termcolor import cprint
 
 
 class Enumerate(object):

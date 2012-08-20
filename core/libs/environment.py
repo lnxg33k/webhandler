@@ -7,7 +7,7 @@ except ImportError:
 else:
     pass
 
-from core.modules.info import info
+from modules.info import info
 
 COMMANDS = info.available_commands
 RE_SPACE = re.compile('.*\s+$', re.M)

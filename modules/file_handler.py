@@ -1,6 +1,6 @@
 import os
 
-from core.libs.termcolor import colored, cprint
+from core.libs.thirdparty.termcolor import cprint, colored
 from core.libs.request_handler import make_request
 
 

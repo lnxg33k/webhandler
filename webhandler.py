@@ -28,12 +28,12 @@ Developers:
 # Importing modules
 from platform import platform as OS
 
-from core.modules.info import info
-from core.libs.termcolor import cprint as colorize
+from modules.info import info
 from core.libs.executer import commander
 from core.libs.listen_handler import listen
 from core.libs.menu import getargs, banner
 from core.libs.update import update
+from core.libs.thirdparty.termcolor import cprint as colorize
 
 # Check for arguments dependencies
 if getargs.url:
@@ -45,7 +45,7 @@ if getargs.url:
         exit(colorize(errmsg, 'red'))
     else:
         print banner                                            # Print the banner
-        info.get_information()                                  # Call get_information and print info
+        print info.get_information()                            # Call get_information and print info
         commander.BackConnect()                                 # Call BackConnect method to handle input
 
 elif getargs.listen:

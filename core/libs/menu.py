@@ -2,17 +2,8 @@ from os import path, getcwd
 from subprocess import Popen, PIPE
 from sys import argv
 
-try:
-    import argparse
-except ImportError:
-    errmsg = '\n[!] The "argparse" module is required'
-    errmsg += '\n[i] Run: \'sudo (apt-get|yum) install python-setuptools '
-    errmsg += '&& sudo easy_install argparse\' OR \'sudo pip --install argparse\''
-    exit(errmsg)
-else:
-    pass
-
-from core.libs.termcolor import colored, cprint
+from core.libs.thirdparty import argparse
+from core.libs.thirdparty.termcolor import colored, cprint
 
 
 class Banner(object):

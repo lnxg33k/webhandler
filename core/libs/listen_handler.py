@@ -3,7 +3,7 @@ import sys
 import time
 
 from core.libs.menu import getargs
-from core.libs.termcolor import colored, cprint
+from core.libs.thirdparty.termcolor import colored, cprint
 
 
 class Listener(object):

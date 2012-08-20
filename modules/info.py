@@ -2,8 +2,8 @@ import datetime
 from urllib2 import urlopen, URLError
 
 from core.libs.menu import getargs
-from core.libs.termcolor import colored
 from core.libs.request_handler import make_request
+from core.libs.thirdparty.termcolor import colored
 
 
 class TargetBox(object):
@@ -60,6 +60,6 @@ class TargetBox(object):
         self.info += colored("\t[+] Available commands: " + ', '.join(self.available_commands), 'blue', attrs=['underline', 'bold']) + '\n'
         self.info += colored("\t[+] Inserting ! at the begining of the command will execute the command locally (on your box)", 'blue', attrs=['underline', 'bold'])
         self.info += "\n"
-        print self.info
+        return self.info
 
 info = TargetBox()

