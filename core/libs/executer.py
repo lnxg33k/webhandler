@@ -32,7 +32,6 @@ class Commander(object):
 
         self.history = []  # Command history
 
-
     def BackConnect(self):
         info.get_information()
         self.cwd = info.cwd
@@ -117,7 +116,9 @@ class Commander(object):
                             pass
                 # Exit WebHandler if user provides exit as a command
                 else:
-                    print '\n[+] Preformed "%d" commands on the server, %s\n[*] Connection closed' % (cmdcount, info.host_ip.split(',')[0])
+                    on_exit = '\n[+] Preformed "{0}" commands on the server, {1}'.format(cmdcount, info.host_ip.split(',')[0])
+                    on_exit += '\n[*] Connection closed'
+                    cprint(on_exit, 'red')
                     break
 
             # If recieved a break (^c)... Do nothing!
