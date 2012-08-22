@@ -565,7 +565,7 @@ class HelpFormatter(object):
             if isinstance(result, tuple):
                 return result
             else:
-                return (result, ) * tuple_size
+                return (result,) * tuple_size
         return format
 
     def _format_args(self, action, default_metavar):
@@ -1110,7 +1110,7 @@ class FileType(object):
             the builtin open() function.
     """
 
-    def __init__(self, mode='r', bufsize=-1):
+    def __init__(self, mode='r', bufsize= -1):
         self._mode = mode
         self._bufsize = bufsize
 
@@ -1595,12 +1595,12 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
         default_prefix = '-' if '-' in prefix_chars else prefix_chars[0]
         if self.add_help:
             self.add_argument(
-                default_prefix+'h', default_prefix*2+'help',
+                default_prefix + 'h', default_prefix * 2 + 'help',
                 action='help', default=SUPPRESS,
                 help=_('show this help message and exit'))
         if self.version:
             self.add_argument(
-                default_prefix+'v', default_prefix*2+'version',
+                default_prefix + 'v', default_prefix * 2 + 'version',
                 action='version', default=SUPPRESS,
                 version=self.version,
                 help=_("show program's version number and exit"))
