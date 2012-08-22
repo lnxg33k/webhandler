@@ -26,6 +26,8 @@
 """ANSII Color formatting for output in terminal."""
 
 from __future__ import print_function
+from core.libs.menu import getargs
+from platform import platform as OS
 import os
 
 
@@ -101,7 +103,7 @@ def colored(text, color=None, on_color=None, attrs=None):
         colored('Hello, World!', 'red', 'on_grey', ['blue', 'blink'])
         colored('Hello, World!', 'green')
     """
-    if os.getenv('ANSI_COLORS_DISABLED') is None:
+    if os.getenv('ANSI_COLORS_DISABLED') is None and not getargs.color and not 'windows' in OS().lower():
         fmt_str = '\033[%dm%s'
         if color is not None:
             text = fmt_str % (COLORS[color], text)

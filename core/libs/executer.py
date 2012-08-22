@@ -7,7 +7,7 @@ from modules.enumerate import enumerate
 from modules.file_handler import file_handler
 from modules.backdoor import backdoor
 
-from core.libs.menu import banner
+from core.libs.banner import banner
 from core.libs.request_handler import make_request
 from core.libs.environment import complete
 from core.libs.update import update
@@ -33,7 +33,7 @@ class Commander(object):
         self.history = []  # Command history
 
     def BackConnect(self):
-        info.get_information()
+        print info.get_information()    # printing information banner
         self.cwd = info.cwd
         complete.tab()      # calling auto-complete method
         cmdcount = 1

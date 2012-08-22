@@ -2,7 +2,8 @@ import socket
 import sys
 import time
 
-from core.libs.menu import getargs, banner
+from core.libs.menu import getargs
+from core.libs.banner import banner
 from core.libs.thirdparty.termcolor import colored, cprint
 
 
