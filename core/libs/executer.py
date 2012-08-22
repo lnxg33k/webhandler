@@ -33,7 +33,7 @@ class Commander(object):
         self.history = []  # Command history
 
     def BackConnect(self):
-        info.get_information()
+        print info.get_information()    # printing information banner
         self.cwd = info.cwd
         complete.tab()      # calling auto-complete method
         cmdcount = 1

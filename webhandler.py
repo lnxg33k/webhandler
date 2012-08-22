@@ -28,7 +28,6 @@ Developers:
 # Importing modules
 from platform import platform as OS
 
-from modules.info import info
 from core.libs.executer import commander
 from core.libs.listen_handler import listen
 from core.libs.menu import getargs, banner
@@ -45,7 +44,6 @@ if getargs.url:
         exit(colorize(errmsg, 'red'))
     else:
         print banner                                            # Print the banner
-        print info.get_information()                            # Call get_information and print info
         commander.BackConnect()                                 # Call BackConnect method to handle input
 
 elif getargs.listen:
