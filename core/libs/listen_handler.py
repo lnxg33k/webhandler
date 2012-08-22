@@ -2,7 +2,7 @@ import socket
 import sys
 import time
 
-from core.libs.menu import getargs
+from core.libs.menu import getargs, banner
 from core.libs.thirdparty.termcolor import colored, cprint
 
 
@@ -12,6 +12,7 @@ class Listener(object):
 
     def wait_connection(self):
         try:
+            print banner
             print colored('\n[i] Waiting on port: ', 'green') + colored(self.port, 'yellow')
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
