@@ -14,7 +14,7 @@ class Listener(object):
     def wait_connection(self):
         try:
             print banner
-            print colored('\n[i] Waiting on port: ', 'green') + colored(self.port, 'yellow')
+            print colored('\n[i] Waiting on port: ', 'green') + colored(str(self.port), 'yellow')
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             server.bind(('0.0.0.0', self.port))
