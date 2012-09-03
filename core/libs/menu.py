@@ -33,7 +33,7 @@ python %(prog)s -l 4444''')
     # general group
     general = parser.add_argument_group('General')
     general.add_argument('-h', '--help', action='help', help='\t\tPrint this help message then exit')
-    general.add_argument('-up', '--update', dest='update', help='\t\tUpdate webhandler from git cli "GitHub repo"', action='store_true')
+    general.add_argument('-up', '--update', dest='update', help='\t\tUpdate WebHandler from git cli "GitHub repo"', action='store_true')
     general.add_argument('-nc', '--no-color', dest='color', help="\t\tDesable a colorful output.", action="store_true")
 
     options = parser.parse_args()
