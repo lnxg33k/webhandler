@@ -27,7 +27,7 @@ class Listener(object):
             except KeyboardInterrupt:
                 cprint('\n[!] Lost connection. Exiting...', 'red')
         except socket.error:
-            cprint('\n[!] Wasn\'t able to open a port. Make sure to run WebHanlder with a user which can (e.g. superuser)', 'red')
+            cprint('\n[!] Wasn\'t able to open a port. Make sure to run WebHandler with a user which can (e.g. superuser)', 'red')
             exit(3)
 
 listen = Listener()

@@ -3,7 +3,7 @@
 '''
 -*- coding: utf-8 -*-
 
-A hanlder for PHP 'system functions' & also an alternative 'netcat' hanlder
+A handler for PHP 'system functions' & also an alternative 'netcat' handler
     - <?php system($_REQUEST['parameter']); ?>
     - netcat -l -p 1234
 
@@ -39,7 +39,7 @@ from core.libs.thirdparty.termcolor import cprint, colored
 
 
 if len(argv) <= 1:
-    cprint("-- Hanlder for PHP 'system functions' & also an alternative 'netcat' hanlder --\n", 'cyan')
+    cprint("-- handler for PHP 'system functions' & also an alternative 'netcat' handler --\n", 'cyan')
     
     cprint("--   Works for POST and GET requests   --", 'blue')
     cprint(" Target's side:", 'green')

