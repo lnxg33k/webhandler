@@ -6,5 +6,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 chmod -R 700 "$(pwd)/webhandler.py"
+
 ln -s "$(pwd)/webhandler.py" /bin/webhandler
 ln -s "$(pwd)/webhandler.py" /bin/wh
+
+./webhandler.py --update

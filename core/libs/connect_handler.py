@@ -20,7 +20,6 @@ class Connecter(object):
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.ip, self.port))
             self.socket.setblocking(0)
-            #self.socket.shutdown(socket.SHUT_WR)
 
         except socket.error:
             cprint('\n[!] Wasn\'t able to connect to: {0}, on port: {1}.'.format(self.ip, self.port), 'red')
