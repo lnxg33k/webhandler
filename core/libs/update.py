@@ -20,7 +20,7 @@ def update():
         if 'windows' in OS().lower():
             command = "xcopy \"%CD%\" \"%CD%_old\" /E /C /I /G /H /R /Y && set rmdir=\"%CD%\" && cd %HOME% && rmdir %rmdir% /s /q & git clone https://github.com/lnxg33k/webhandler.git \"%CD%\""            
         else:
-            command = "mv -f \"$(pwd){,_old}\" && git clone https://github.com/lnxg33k/webhandler.git \"$(pwd)\""
+            command = "mv -f $(pwd){,_old} && git clone https://github.com/lnxg33k/webhandler.git \"$(pwd)\""
         msg = '\n[i] Executing: %s' % (command)
         cprint(msg, 'green')
         
