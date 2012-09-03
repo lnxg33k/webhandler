@@ -14,7 +14,10 @@ python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent --turb
 python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
 
 python %(prog)s --listen 1234
-python %(prog)s -l 4444''')
+python %(prog)s -l 5555
+
+python %(prog)s --connect mywebsite.com:5678
+python %(prog)s -c mywebsite.com:5555''')
 
     # shell controller group
     shell_handler = parser.add_argument_group('Shell Handler')
@@ -29,6 +32,7 @@ python %(prog)s -l 4444''')
     # nc alternative group
     nc_alternative = parser.add_argument_group('NetCat Alternative')
     nc_alternative.add_argument('-l', '--listen', dest='listen', type=int, help='\t\tListen for a connection', metavar='')
+    nc_alternative.add_argument('-c', '--connect', dest='connect', help='\t\tConnect to a remote machine', metavar='')
 
     # general group
     general = parser.add_argument_group('General')
@@ -41,6 +45,7 @@ python %(prog)s -l 4444''')
     if url:
         url = url if url.startswith('http') else 'http://' + url
     listen = options.listen
+    connect = options.connect
     method = options.method.lower() if options.method else None
     parameter = options.parameter
     proxy = options.proxy

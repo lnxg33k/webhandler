@@ -4,6 +4,7 @@ from urllib import urlencode, quote
 from urllib2 import ProxyHandler, build_opener, install_opener
 
 from core.libs.listen_handler import listen
+from core.libs.connect_handler import connect
 
 from core.libs.menu import getargs
 from core.libs.thirdparty.termcolor import colored
@@ -111,13 +112,14 @@ class MakeRequest(object):
                                 
                 sc = ''
                 buffer = listen.socket.recv(1024)
+                
                 if buffer == '':
                     errmsg = colored('\n[!] Lost connection. Exiting...', 'red')
                     cprint(errmsg, 'red')
                     listen.socket.close()
                     exit(1)
                 while buffer != '':
-                    sc = sc + buffer
+                    sc = sc + buffer     # sc +=+ buffer # convert " to '
                     try:
                         buffer = listen.socket.recv(1024)
                     except:
@@ -128,8 +130,33 @@ class MakeRequest(object):
                     errmsg = colored('\n[!] [!] Error in sending data (#2)', 'red')
                     cprint(errmsg, 'red')
                 pass
+        elif getargs.connect:
+            try:    
+                if (connect.socket.send(cmd + "\n") == None):
+                    errmsg = colored('\n[!] Error in sending data (#1)', 'red')
+                    cprint(errmsg, 'red')
+                time.sleep(0.1)
+                                
+                sc = ''
+                buffer = connect.socket.recv(1024)
+                
+                if buffer == '':
+                    errmsg = colored('\n[!] Lost connection. Exiting...', 'red')
+                    cprint(errmsg, 'red')
+                    connect.socket.close()
+                    exit(1)
+                while buffer != '':
+                    sc = sc + buffer 
+                    try:
+                        buffer = connect.socket.recv(1024)
+                    except:
+                        buffer = ''
+                
+                return sc.split('\n')[:-1]
+            except:
+                pass         
         else:
-            errmsg = colored('\n[!] Unsupported mode: {0}'.format(getargs.mode), 'red')
+            errmsg = colored('\n[!] Unsupported mode!', 'red')
             cprint(errmsg, 'red')        
             exit(1)             
 
