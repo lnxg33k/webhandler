@@ -24,7 +24,7 @@ class TargetBox(object):
 
         # Call get_page_source() method then assign it to self.source
         source = make_request.get_page_source(self.cmd)
-
+        
         source = iter(source)
         self.current_user = next(source, "Unknown")
         self.current_id = next(source, "Unknown")
@@ -34,7 +34,11 @@ class TargetBox(object):
         self.uptime = next(source, "Unknown")
         self.host_ip = next(source, "Unknow")
         self.session = now.strftime("%Y-%m-%d")
-        self.url = '/'.join(getargs.url.split('/', 3)[:3])
+        if getargs.url:
+            self.url = '/'.join(getargs.url.split('/', 3)[:3])
+        else:
+            self.url = "n/a"
+            
         try:
             # Get the attacker's ip address (Thanks @mandreko)
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
@@ -45,7 +49,7 @@ class TargetBox(object):
         self.info += colored("\tUser         : ", 'red') + colored(self.current_user, 'green') + '\n'
         self.info += colored("\tID           : ", 'red') + colored(self.current_id, 'green') + '\n'
         self.info += colored("\tKernel       : ", 'red') + colored(self.kernel_info, 'green') + '\n'
-        self.info += colored("\tCWD          : ", 'red') + colored(self.cwd, 'green') + colored('\t\t' + self.perm_cwd, 'grey', attrs=['bold']) + '\n'
+        self.info += colored("\tCWD          : ", 'red') + colored(self.cwd, 'green') + colored('\t\t' + self.perm_cwd, 'yellow', attrs=['bold']) + '\n'
         self.info += colored("\tUptime       : ", 'red') + colored(self.uptime, 'green') + '\n'
         self.info += colored("\tTarget's IPs : ", 'red') + colored(self.host_ip, 'green') + '\n'
         self.info += colored("\tOur IP       : ", 'red') + colored(self.local_ip, 'green') + '\n'

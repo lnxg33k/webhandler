@@ -116,8 +116,8 @@ class Commander(object):
                             pass
                 # Exit WebHandler if user provides exit as a command
                 else:
-                    on_exit = '\n[+] Preformed "{0}" commands on the server, {1}'.format(cmdcount, info.host_ip.split(',')[0])
-                    on_exit += '\n[*] Connection closed'
+                    #on_exit = '\n[+] Preformed "{0}" commands on the server, {1}'.format(cmdcount, info.host_ip.split(',')[0])
+                    on_exit = '\n[*] Connection closed'
                     cprint(on_exit, 'red')
                     break
 
