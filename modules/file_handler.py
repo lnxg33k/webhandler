@@ -27,12 +27,15 @@ class FileHandler(object):
                 cmd = 'if [ -e {0} ]; then if [ -f {0} ]; then echo file; else echo dir; fi; fi'.format(file)
                 file_type = make_request.get_page_source(cmd)[0]
                 if file_type == 'dir':
-                    if not os.path.exists(os.path.join(lfile_path, file)):
-                        os.makedirs(os.path.join(lfile_path, file))
+                    #folder = os.path.exists(os.path.join(lfile_path, file))  # Didn't like: @download /media/CD /root/
+                    folder = lfile_path + file
+                    if not os.path.exists(folder):
+                        os.makedirs(folder)
                 elif file_type == 'file':
                     cmd = 'cat {0}'.format(file)
                     try:
-                        with open(os.path.join(lfile_path, file), 'w') as dest_file:
+                        #with open(os.path.join(lfile_path, file), 'w') as dest_file:  # Didn't like: @download /media/CD /root/
+                        with open(lfile_path + file, 'w') as dest_file:
                             dest_file.write('\n'.join(make_request.get_page_source(cmd)) + '\n')
                     except IOError, e:
                         cprint('\n[!] Error: {0}'.format(e), 'red')
