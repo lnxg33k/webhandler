@@ -8,7 +8,10 @@ class FileHandler(object):
     # A method for downloading files from the box
     def download_file(self, rfile_path, lfile_path):
         cmd = 'if [ -e {0} ]; then if [ -f {0} ]; then echo file; else echo dir; fi; fi'.format(rfile_path)
-        file_type = make_request.get_page_source(cmd)[0]
+        file_type = make_request.get_page_source(cmd)
+        if file_type:
+            file_type = file_type[0]
+            
         if file_type == 'file':
             cmd = 'cat {0}'.format(rfile_path)
             try:
@@ -35,7 +38,7 @@ class FileHandler(object):
                         cprint('\n[!] Error: {0}'.format(e), 'red')
                 else:
                     print colored('[!] Coudln\'t download the following file:', 'red'), file
-            print colored('\n[+] Files downloaded successfully to:', 'green'), lfile_path
+            print colored('\n[+] Downloaded successfully to:', 'green'), lfile_path
         else:
             cprint('\n[!]The file/directory doesn\'t exist or I don\'t have permission', 'red')
 
