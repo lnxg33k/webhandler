@@ -24,7 +24,8 @@ class FileHandler(object):
                 cmd = 'if [ -e {0} ]; then if [ -f {0} ]; then echo file; else echo dir; fi; fi'.format(file)
                 file_type = make_request.get_page_source(cmd)[0]
                 if file_type == 'dir':
-                    os.makedirs(os.path.join(lfile_path, file))
+                    if not os.path.exists(os.path.join(lfile_path, file)):
+                        os.makedirs(os.path.join(lfile_path, file))
                 elif file_type == 'file':
                     cmd = 'cat {0}'.format(file)
                     try:
