@@ -92,7 +92,7 @@ class Commander(object):
                             else:
                                 # Setting aliases for some commands to avoid
                                 # Issues realted to empty directories
-                                command = command.replace('ls', 'ls -lha') if command_list[0] == 'ls' else command
+                                command = command.replace('ll', 'ls -lha') if command_list[0] == 'ls' else command
                                 command = command.replace('rm', 'rm -v') if command_list[0] == 'rm' else command
                                 command = command.replace('cp', 'cp -v') if command_list[0] == 'cp' else command
                                 command = command.replace('ifconfig', '/sbin/ifconfig')

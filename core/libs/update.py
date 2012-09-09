@@ -14,17 +14,18 @@ def update():
         errmsg += '\n[i] E.g. "cd {0}", and then try again.'.format(baseFolder)
         cprint(errmsg, 'red')
         sys.exit(1)
+        
+    if Popen("git --version", shell=True, stdout=PIPE, stderr=PIPE).wait() != 0:
+        errmsg = '\n[!] Didn\'t detect git. Therefore unable to update.'
+        errmsg += '\n[!] e.g. sudo apt-get install git OR sudo yum install git. Else visit http://git-scm.com/'
+        errmsg += '[!] Update: Aborted'
+        cprint(errmsg, 'red')
+        return        
     
     if not path.exists(path.join(baseFolder, ".git")):
         errmsg = '\n[!] ".git" directory doesn\'t exist here.'
         cprint(errmsg, 'red')
-        
-        if Popen("git --version", shell=True, stdout=PIPE, stderr=PIPE).wait() != 0:
-            errmsg = '\n[!] Didn\'t detect git. Therefore unable to update.'
-            errmsg += '[!] Update: Aborted'
-            cprint(errmsg, 'red')
-            return
-            
+                    
         msg = '\n[i] Detected git, cloning WebHandler'
         if 'windows' in OS().lower():
             command = "xcopy \"%CD%\" \"%CD%_old\" /E /C /I /G /H /R /Y && set rmdir=\"%CD%\" && cd %HOME% && rmdir %rmdir% /s /q & git clone https://github.com/lnxg33k/webhandler.git \"%CD%\""            
@@ -51,6 +52,6 @@ def update():
             msg += '\n[i] Make sure to re-run WebHandler to use the updated version'
             cprint(msg, 'green')
         else:
-            errmsg = '\n[!] \'git\' is required to update WebHandler from CLI'
-            errmsg += '\n[!] e.g. sudo apt-get install git OR sudo yum install git. Else visit http://git-scm.com/'
+            errmsg = '\n[!] Unable to update'
+            errmsg += '\n[!] Make sure you have an internet connection'           
             cprint(errmsg, 'red')
