@@ -6,6 +6,7 @@ from modules.info import info
 from modules.enumerate import enumerate
 from modules.file_handler import file_handler
 from modules.backdoor import backdoor
+from modules.bruters.bruter import brute
 
 from core.libs.banner import banner
 from core.libs.request_handler import make_request
@@ -27,7 +28,8 @@ class Commander(object):
             '@backdoor': self.backdoor,
             '@enum': self.enum,
             '@download': self.download,
-            '@upload': self.upload
+            '@upload': self.upload,
+            '@brute': self.brute,
         }
 
         self.history = []  # Command history
@@ -64,7 +66,7 @@ class Commander(object):
                         try:
                             self.commands[command_list[0]](command_list)
                         except KeyError:
-                            cprint('[+] {0}module does not exist!'.format(command_list[0]), 'red')
+                            cprint('[+] {0} module does not exist!'.format(command_list[0]), 'red')
                     else:
                         try:
                             #Handle the current working directory 'cwd'
@@ -143,6 +145,15 @@ class Commander(object):
 
     def banner(self, command):
         print banner
+
+    def brute(self, command):
+        if len(command) == 2:
+            if command[1] == 'ftp':
+                brute.ftp()
+            else:
+                brute.help()
+        else:
+            brute.help()
 
     def backdoor(self, command):
         if len(command) == 3:

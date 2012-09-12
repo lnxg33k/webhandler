@@ -11,7 +11,7 @@ class FileHandler(object):
         file_type = make_request.get_page_source(cmd)
         if file_type:
             file_type = file_type[0]
-            
+
         if file_type == 'file':
             cmd = 'cat {0}'.format(rfile_path)
             try:
@@ -49,9 +49,9 @@ class FileHandler(object):
     def upload_file(self, lfile_path, rfile_path):
         with open(lfile_path) as local_file:
             data_to_upload = local_file.read().encode('base64').strip()
-        #for line in data_to_upload:
-        cmd = 'echo {0} | base64 -d > {1}'.format(data_to_upload, rfile_path)
-        make_request.get_page_source(cmd)
-        print '\n[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path)
+
+        data = 'echo {0}| base64 -d > {1}'.format(''.join(data_to_upload.split()), rfile_path)
+        make_request.get_page_source(cmd=data)
+        print '[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path)
 
 file_handler = FileHandler()

