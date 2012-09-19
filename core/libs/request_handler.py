@@ -76,28 +76,27 @@ class MakeRequest(object):
             # Check if the method is POST
             if self.method == 'post' or self.parameter:
                 self.method = 'post'
-                parameters = urlencode({self.parameter: self.cmd})
+                parameters = urlencode({self.parameter: 'echo ::command_start::;' + self.cmd + ';echo ::command_end::;'})
                 try:
-                    sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
-                    if not self.turbo:
-                        parameters = urlencode({self.parameter: ''})
-                        garpage = map(str.rstrip, opener.open(self.url, parameters).readlines())
-                        garpage = list(set(sc).intersection(garpage))
-                        sc = [i for i in sc if not i in garpage]
+                    sc = map(str.rstrip, opener.open(self.url, parameters).readlines()) 
+                    sc =  '::command_deli::'.join(sc)
+                    sc = re.search('::command_start::(.+)::command_end::', sc)
+                    if sc:
+                        sc = sc.group(1).split('::command_deli::')[1:-1]
                     return sc
                 except InvalidURL:
                     exit(errmsg)
-                except:
-                    exit(fourzerofourmsg)
+#                except:
+#                    exit(fourzerofourmsg)
 
             # If the used method set GET
             else:
                 try:
-                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd))).readlines())
-                    if not self.turbo:
-                        garpage = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(''))).readlines())
-                        garpage = list(set(sc).intersection(garpage))
-                        sc = [i for i in sc if not i in garpage]
+                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('echo ::command_start::;' +self.cmd+';echo ::command_end::;'))).readlines())
+                    sc =  '::command_deli::'.join(sc)
+                    sc = re.search('::command_start::(.+)::command_end::', sc)
+                    if sc:
+                        sc = sc.group(1).split('::command_deli::')[1:-1]
                     return sc
                 except InvalidURL:
                     exit(errmsg)
