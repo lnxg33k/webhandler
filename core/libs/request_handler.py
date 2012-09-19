@@ -1,7 +1,7 @@
 from httplib import InvalidURL
 from random import randint
 from urllib import urlencode, quote
-from urllib2 import ProxyHandler, build_opener, install_opener
+from urllib2 import ProxyHandler, build_opener, install_opener, HTTPError
 
 from core.libs.listen_handler import listen
 from core.libs.connect_handler import connect
@@ -76,7 +76,7 @@ class MakeRequest(object):
             # Check if the method is POST
             if self.method == 'post' or self.parameter:
                 self.method = 'post'
-                parameters = urlencode({self.parameter: 'echo ::command_start::;' + self.cmd + ';echo ::command_end::;'})
+                parameters = urlencode({self.parameter: 'echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'})
                 try:
                     sc = map(str.rstrip, opener.open(self.url, parameters).readlines()) 
                     sc =  '::command_deli::'.join(sc)
@@ -92,7 +92,7 @@ class MakeRequest(object):
             # If the used method set GET
             else:
                 try:
-                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('echo ::command_start::;' +self.cmd+';echo ::command_end::;'))).readlines())
+                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('echo ::command_start::;' +self.cmd.strip(';')+';echo ::command_end::;'))).readlines())
                     sc =  '::command_deli::'.join(sc)
                     sc = re.search('::command_start::(.+)::command_end::', sc)
                     if sc:
@@ -100,8 +100,10 @@ class MakeRequest(object):
                     return sc
                 except InvalidURL:
                     exit(errmsg)
-                except:
-                    exit(fourzerofourmsg)
+                except HTTPError:
+                    cprint('[!] This is a 414 error code and you need to work with a POST method', 'red')
+                    exit()
+
         elif getargs.listen:
             try:
                 if (listen.socket.sendall(cmd + "\n") != None):
