@@ -150,6 +150,8 @@ class Commander(object):
         if len(command) == 2:
             if command[1] == 'ftp':
                 brute.ftp()
+            elif command[1] == 'mysql':
+                brute.mysql()
             else:
                 brute.help()
         else:
