@@ -1,52 +1,73 @@
-import re
+#!/usr/bin/python
 
-try:
-    import readline
-except ImportError:
-    print '\n[!] The "readline" module is required to provide elaborate line editing and history features'
-else:
-    pass
-
-from modules.info import info
-
-COMMANDS = info.available_commands
-RE_SPACE = re.compile('.*\s+$', re.M)
+import readline
 
 
-#http://stackoverflow.com/questions/5637124/tab-completion-in-pythons-raw-input
-class Completer(object):
-    '''
-    internal readline buffer to determine the state of the overall completion,
-    which makes the state logic a bit simpler
-    '''
+class ARLCompleter:
+    def __init__(self, logic):
+        self.logic = logic
+
+    def traverse(self, tokens, tree):
+        if tree is None:
+            return []
+        elif len(tokens) == 0:
+            return []
+        if len(tokens) == 1:
+            return [x + ' ' for x in tree if x.startswith(tokens[0])]
+        else:
+            if tokens[0] in tree.keys():
+                return self.traverse(tokens[1:], tree[tokens[0]])
+            else:
+                return []
+        return []
+
     def complete(self, text, state):
-        "Generic readline completion entry point."
-        buffer = readline.get_line_buffer()
-        line = readline.get_line_buffer().split()
-        # show all commands
-        if not line:
-            return [c + ' ' for c in COMMANDS][state]
-        # account for last argument ending in a space
-        if RE_SPACE.match(buffer):
-            line.append('')
-        # resolve command to the implementation function
-        cmd = line[0].strip()
-        if cmd in COMMANDS:
-            impl = getattr(self, 'complete_%s' % cmd)
-            args = line[1:]
-            if args:
-                return (impl(args) + [None])[state]
-            return [cmd + ' '][state]
-        results = [c + ' ' for c in COMMANDS if c.startswith(cmd)] + [None]
-        return results[state]
-
-    def tab(self):
-        # to work with non nix systems
         try:
-            readline.set_completer_delims(' \t\n;')
-            readline.parse_and_bind("tab: complete")
-            readline.set_completer(self.complete)
-        except:
+            tokens = readline.get_line_buffer().split()
+            if not tokens or readline.get_line_buffer()[-1] == ' ':
+                results = [x + ' ' for x in list(logic[tokens[0]]) if x.startswith(text)] + [None]
+                return results[state]
+                tokens.append()
+            results = self.traverse(tokens, self.logic) + [None]
+            return results[state]
+        except Exception:
             pass
 
-complete = Completer()
+logic = {
+         '@brute':
+         {
+          'mysql': None,
+          'ftp': None,
+          },
+         '@enum':
+         {
+          'group': None,
+          'history': None,
+          'network': None,
+          'os': None,
+          'passwd': None,
+          'system': None,
+          'writable': None,
+          },
+         '@backdoor':
+         {'bash': None,
+          'msf': None,
+          'perl': None,
+          'php': None,
+          'netcat': None,
+          'python': None,
+          'ruby': None,
+          'spread': None,
+          },
+         '@info':{},
+         '@update':{},
+         '@download':{},
+         '@upload':{},
+         'exit': {},
+         'clear': {},
+         'banner': {},
+         }
+
+readline.set_completer_delims(' \t\n;')
+readline.parse_and_bind("tab: complete")
+completer = ARLCompleter(logic)

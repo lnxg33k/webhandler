@@ -10,7 +10,7 @@ from modules.bruters.bruter import brute
 
 from core.libs.banner import banner
 from core.libs.request_handler import make_request
-from core.libs.environment import complete
+from core.libs.environment import completer, readline
 from core.libs.update import update
 from core.libs.thirdparty.termcolor import colored, cprint
 
@@ -37,7 +37,7 @@ class Commander(object):
     def BackConnect(self):
         print info.get_information()    # printing information banner
         self.cwd = info.cwd
-        complete.tab()      # calling auto-complete method
+        readline.set_completer(completer.complete)      # calling auto-complete method
         cmdcount = 1
         while True:
             try:
@@ -190,8 +190,6 @@ class Commander(object):
                     backdoor.ruby(ip, port)
                 elif command[1] == "xterm":
                     backdoor.xterm(ip, port)
-                elif command[1] == "testall":
-                    backdoor.testall(ip, port)
                 else:
                     backdoor.list()
             else:

