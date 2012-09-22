@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import readline
 
 
@@ -59,10 +57,10 @@ logic = {
           'ruby': None,
           'spread': None,
           },
-         '@info':{},
-         '@update':{},
-         '@download':{},
-         '@upload':{},
+         '@info': {},
+         '@update': {},
+         '@download': {},
+         '@upload': {},
          'exit': {},
          'clear': {},
          'banner': {},
