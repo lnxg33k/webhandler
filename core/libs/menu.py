@@ -50,7 +50,6 @@ python %(prog)s -c mywebsite.com:5555''')
     proxy = options.proxy
     agent = options.agent
     random_agent = options.random_agent
-    turbo = options.turbo
     update = options.update
     color = options.color
 

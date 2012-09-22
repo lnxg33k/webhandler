@@ -46,7 +46,6 @@ class MakeRequest(object):
         self.proxy = getargs.proxy
         self.user_agent = getargs.agent
         self.random_agent = getargs.random_agent
-        self.turbo = getargs.turbo
 
     def get_page_source(self, cmd):
         self.cmd = cmd
