@@ -1,4 +1,9 @@
-import readline
+try:
+    import readline
+except ImportError:
+    print '\n[!] The "readline" module is required to provide elaborate line editing and history features'
+else:
+    pass
 
 
 class ARLCompleter:
