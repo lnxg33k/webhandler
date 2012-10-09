@@ -82,6 +82,9 @@ class MakeRequest(object):
                     sc = re.search('::command_start::(.+)::command_end::', sc)
                     if sc:
                         sc = sc.group(1).split('::command_deli::')[1:-1]
+                    else:
+                        parameters = urlencode({self.parameter: self.cmd.strip(';')})
+                        sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
                     return sc
                 except InvalidURL:
                     exit(errmsg)
@@ -96,6 +99,9 @@ class MakeRequest(object):
                     sc = re.search('::command_start::(.+)::command_end::', sc)
                     if sc:
                         sc = sc.group(1).split('::command_deli::')[1:-1]
+                    else:
+                        sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd.strip(';')))).readlines())
+
                     return sc
                 except InvalidURL:
                     exit(errmsg)
