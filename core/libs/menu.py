@@ -24,9 +24,10 @@ python %(prog)s -c mywebsite.com:5555''')
     shell_handler.add_argument('-u', '--url', dest='url', help='\t\tFull URL for the uploaded PHP code', metavar='')
     shell_handler.add_argument('-m', '--method', dest='method', help='\t\tThe method used in the uploaded PHP code (e.g. post)', metavar='')
     shell_handler.add_argument('-p', '--parameter', dest='parameter', help='\t\tParameter that used in the shell (e.g. cmd)', metavar='')
-    shell_handler.add_argument('-x', '--proxy', dest='proxy', help='\t\tProxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
     shell_handler.add_argument('-g', '--user-agent', dest='agent', help='\t\tuser-agent (e.g. \'Mozilla/5.0\')', metavar='')
     shell_handler.add_argument('-rg', '--random-agent', dest='random_agent', help='\t\tWebHandler will use some random user-agent', action='store_true')
+    shell_handler.add_argument('-x', '--proxy', dest='proxy', help='\t\tProxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
+    shell_handler.add_argument('-t', '--tor', dest='tor', help='Use Tor anonymity network', action='store_true')
 
     # nc alternative group
     nc_alternative = parser.add_argument_group('NetCat Alternative')
@@ -48,6 +49,7 @@ python %(prog)s -c mywebsite.com:5555''')
     method = options.method.lower() if options.method else None
     parameter = options.parameter
     proxy = options.proxy
+    tor = options.tor
     agent = options.agent
     random_agent = options.random_agent
     update = options.update

