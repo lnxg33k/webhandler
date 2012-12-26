@@ -95,18 +95,19 @@ class Enumerate(object):
         cmd += "awk '{split($4,a,\"/\"); print a[2];}' /proc/loadavg;"
 
         system = make_request.get_page_source(cmd)
+        system = iter(system)
 
-        output = '\n[+] Uptime: {0}\n'.format(system[0])
-        output += '[+] Idletime: {0}\n'.format(system[1])
-        output += '[+] Users Logged in: {0}\n'.format(system[2])
-        output += '[+] Total Users: {0}\n'.format(system[3])
-        output += '[+] Total Groups: {0}\n'.format(system[4])
-        output += '[+] CPU Load (1, 5, 15 mins): {0}\n'.format(system[5])
-        output += '[+] Memory Load (Used %): {0}\n'.format(system[6])
-        output += '[+] Established TCP Connections: {0}\n'.format(system[7])
-        output += '[+] Listening TCP Services: {0}\n'.format(system[8])
-        output += '[+] User Processors: {0}\n'.format(system[9])
-        output += '[+] Total Processor: {0}'.format(system[10])
+        output = '\n[+] Uptime: {0}\n'.format(next(system, "Unknown"))
+        output += '[+] Idletime: {0}\n'.format(next(system, "Unknown"))
+        output += '[+] Users Logged in: {0}\n'.format(next(system, "Unknown"))
+        output += '[+] Total Users: {0}\n'.format(next(system, "Unknown"))
+        output += '[+] Total Groups: {0}\n'.format(next(system, "Unknown"))
+        output += '[+] CPU Load (1, 5, 15 mins): {0}\n'.format(next(system, "Unknown"))
+        output += '[+] Memory Load (Used %): {0}\n'.format(next(system, "Unknown"))
+        output += '[+] Established TCP Connections: {0}\n'.format(next(system, "Unknown"))
+        output += '[+] Listening TCP Services: {0}\n'.format(next(system, "Unknown"))
+        output += '[+] User Processors: {0}\n'.format(next(system, "Unknown"))
+        output += '[+] Total Processor: {0}'.format(next(system, "Unknown"))
 
         cprint(output, 'green')
 
@@ -120,12 +121,13 @@ class Enumerate(object):
         cmd += 'dhcp_ip=`grep dhcp-server /var/lib/dhcp*/dhclient.* 2>/dev/null | uniq | awk \'{print $4}\' | tr -d ";"`; if [ $dhcp_ip ] ; then echo "Yes ($dhcp_ip)"; else echo "No"; fi;'
 
         ip = make_request.get_page_source(cmd)
+        ip = iter(ip)
 
-        output = '\n[+] Internal IP/subnet: {0}\n'.format(ip[0])
-        output += '[+] External IP: {0}\n'.format(ip[1])
-        output += '[+] DNS: {0}\n'.format(ip[2])
-        output += '[+] Gateway: {0}\n'.format(ip[3])
-        output += '[+] DHCP?: {0}'.format(ip[4])
+        output = '\n[+] Internal IP/subnet: {0}\n'.format(next(ip, "Unknown"))
+        output += '[+] External IP: {0}\n'.format(next(ip, "Unknown"))
+        output += '[+] DNS: {0}\n'.format(next(ip, "Unknown"))
+        output += '[+] Gateway: {0}\n'.format(next(ip, "Unknown"))
+        output += '[+] DHCP?: {0}'.format(next(ip, "Unknown"))
 
         cprint(output, 'green')
 
@@ -140,13 +142,14 @@ class Enumerate(object):
         cmd += "echo $LANG;"
 
         os = make_request.get_page_source(cmd)
+        os = iter(os)
 
-        output = '\n[+] Hostname: {0}\n'.format(os[0])
-        output += '[+] Kernel: {0}\n'.format(os[1])
-        output += '[+] OS: {0}\n'.format(os[2])
-        output += '[+] Local Time: {0}\n'.format(os[3])
-        output += '[+] Timezone (UTC): {0}\n'.format(os[4])
-        output += '[+] Language: {0}'.format(os[5])
+        output = '\n[+] Hostname: {0}\n'.format(next(os, "Unknown"))
+        output += '[+] Kernel: {0}\n'.format(next(os, "Unknown"))
+        output += '[+] OS: {0}\n'.format(next(os, "Unknown"))
+        output += '[+] Local Time: {0}\n'.format(next(os, "Unknown"))
+        output += '[+] Timezone (UTC): {0}\n'.format(next(os, "Unknown"))
+        output += '[+] Language: {0}'.format(next(os, "Unknown"))
 
         cprint(output, 'green')
 
