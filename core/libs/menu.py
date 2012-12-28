@@ -8,16 +8,16 @@ class GetArgs(object):
             formatter_class=argparse.RawTextHelpFormatter,
             epilog='''
 Examples:
-python %(prog)s --url http://www.mywebsite.com/shell.php?cmd=
-python %(prog)s --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
-python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent --turbo
-python %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
+\tpython %(prog)s --url http://www.mywebsite.com/shell.php?cmd=
+\tpython %(prog)s --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
+\tpython %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent --tor
+\tpython %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
 
-python %(prog)s --listen 1234
-python %(prog)s -l 5555
+\tpython %(prog)s --listen 1234
+\tpython %(prog)s -l 5555
 
-python %(prog)s --connect mywebsite.com:5678
-python %(prog)s -c mywebsite.com:5555''')
+\tpython %(prog)s --connect mywebsite.com:5678
+\tpython %(prog)s -c mywebsite.com:5555''')
 
     # shell controller group
     shell_handler = parser.add_argument_group('Shell Handler')
@@ -27,7 +27,7 @@ python %(prog)s -c mywebsite.com:5555''')
     shell_handler.add_argument('-g', '--user-agent', dest='agent', help='\t\tuser-agent (e.g. \'Mozilla/5.0\')', metavar='')
     shell_handler.add_argument('-rg', '--random-agent', dest='random_agent', help='\t\tWebHandler will use some random user-agent', action='store_true')
     shell_handler.add_argument('-x', '--proxy', dest='proxy', help='\t\tProxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
-    shell_handler.add_argument('-t', '--tor', dest='tor', help='Use Tor anonymity network', action='store_true')
+    shell_handler.add_argument('-t', '--tor', dest='tor', help='\t\tUse Tor anonymity network', action='store_true')
 
     # nc alternative group
     nc_alternative = parser.add_argument_group('NetCat Alternative')
