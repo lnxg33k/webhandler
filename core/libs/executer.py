@@ -88,13 +88,13 @@ class Commander(object):
                                         else:
                                             print 'bash: cd: {0}: No such file or directory'.format(command_list[-1])
 
-                            elif command_list[0] == 'cd' and len(command) == 1:
+                            elif command_list[0] == 'cd' and len(command_list) == 1:
                                 self.cwd = info.cwd  # dirty patch to get the original cwd
 
                             else:
                                 # Setting aliases for some commands to avoid
                                 # Issues realted to empty directories
-                                command = command.replace('ll', 'ls -lha') if command_list[0] == 'll' else command
+                                command = command.replace('ls', 'ls -lh') if command_list[0] == 'ls' else command
                                 command = command.replace('rm', 'rm -v') if command_list[0] == 'rm' else command
                                 command = command.replace('cp', 'cp -v') if command_list[0] == 'cp' else command
                                 command = command.replace('ifconfig', '/sbin/ifconfig')
@@ -250,4 +250,5 @@ class Commander(object):
             file_handler.upload_file(lfile_path, rfile_path)
 
 # Taking an instance from the main class
+commander = Commander()
 commander = Commander()
