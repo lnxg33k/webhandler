@@ -10,7 +10,7 @@ setup(name="webhandler",
     - Reserve shell connections (e.g. `nc -lvvp 1234`)
     """,
     author=["lnxg33k", "g0tmi1k"],
-    author_email=['ahmedelantry@gmail.com', 'have.you.g0tmi1k@gmail.com'],
+    author_email='ahmedelantry@gmail.com',
     url="https://github.com/lnxg33k/webhandler/",
     download_url="https://github.com/lnxg33k/webhandler/archive/master.zip",
     platforms=['any'],

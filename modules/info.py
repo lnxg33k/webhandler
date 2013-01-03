@@ -24,7 +24,7 @@ class TargetBox(object):
 
         # Call get_page_source() method then assign it to self.source
         source = make_request.get_page_source(self.cmd)
-        
+
         source = iter(source)
         self.current_user = next(source, "Unknown")
         self.current_id = next(source, "Unknown")
@@ -38,11 +38,11 @@ class TargetBox(object):
             self.url = '/'.join(getargs.url.split('/', 3)[:3])
         else:
             self.url = "n/a"
-            
+
         try:
             # Get the attacker's ip address (Thanks @mandreko)
             self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip()
-        except URLError:
+        except (URLError, KeyboardInterrupt):
             self.local_ip = 'Unknown'
 
         self.info = '\t' + '-' * int(len(self.kernel_info) + 16) + '\n'
