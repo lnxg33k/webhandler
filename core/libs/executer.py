@@ -14,6 +14,7 @@ from core.libs.environment import completer, readline
 from core.libs.update import update
 from core.libs.thirdparty.termcolor import colored, cprint
 
+from modules.services.mysql_shell import MySQLConnection
 
 class Commander(object):
     '''
@@ -30,6 +31,7 @@ class Commander(object):
             '@download': self.download,
             '@upload': self.upload,
             '@brute': self.brute,
+            '@mysql': self.mysql,
         }
 
         self.history = []  # Command history
@@ -249,6 +251,16 @@ class Commander(object):
             rfile_path = command[2]
             file_handler.upload_file(lfile_path, rfile_path)
 
+    def mysql(self, command):
+        if len(command) == 3:
+            con = MySQLConnection(command[1], command[2])
+            con.run()
+        elif len(command) == 2:
+            con = MySQLConnection(command[1], '')
+            con.run()
+        else:
+            MySQLConnection.help()
+
+
 # Taking an instance from the main class
-commander = Commander()
 commander = Commander()
