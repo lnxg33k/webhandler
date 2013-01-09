@@ -17,7 +17,7 @@ class TargetBox(object):
         self.cmd += 'bash -c "input=\$(uptime); if [[ \$input == *day* ]]; then out=\$(echo \$input | awk \'{print \$3\\" days\\"}\'); if [[ \$input == *min* ]]; then out=\$(echo \\"\$out and \\" && echo \$input | awk \'{print \$5\\" minutes\\"}\'); else out=\$(echo \\"\$out, \\" && echo \$input | awk \'{print \$5}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi elif [[ \$input == *min* ]]; then out=\$(echo \$input | awk \'{print \$3\\" minutes\\"}\'); else out=\$(echo \$input | awk \'{print \$3}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi; echo \$out;" ;'
         self.cmd += "/sbin/ifconfig | grep -e 'inet addr' | grep -v '127.0.0.1' | cut -f2 -d':' | cut -f1 -d' '"
 
-        self.available_commands = ['@backdoor', '@download', '@enum', '@history', '@info', '@update', '@upload', '@brute', 'clear', 'exit']
+        self.available_commands = ['@backdoor', '@download', '@enum', '@history', '@info', '@update', '@upload', '@brute', '@mysql', 'exit']
 
     def get_information(self):
         now = datetime.datetime.now()
@@ -45,7 +45,7 @@ class TargetBox(object):
         except (URLError, KeyboardInterrupt):
             self.local_ip = 'Unknown'
 
-        self.info = '\t' + '-' * int(len(self.kernel_info) + 16) + '\n'
+        self.info = '\t' + '-' * int(len(self.kernel_info) + 18) + '\n'
         self.info += colored("\tUser         : ", 'red') + colored(self.current_user, 'green') + '\n'
         self.info += colored("\tID           : ", 'red') + colored(self.current_id, 'green') + '\n'
         self.info += colored("\tKernel       : ", 'red') + colored(self.kernel_info, 'green') + '\n'
@@ -53,7 +53,7 @@ class TargetBox(object):
         self.info += colored("\tUptime       : ", 'red') + colored(self.uptime, 'green') + '\n'
         self.info += colored("\tTarget's IPs : ", 'red') + colored(self.host_ip, 'green') + '\n'
         self.info += colored("\tOur IP       : ", 'red') + colored(self.local_ip, 'green') + '\n'
-        self.info += '\t' + '-' * int(len(self.kernel_info) + 16)
+        self.info += '\t' + '-' * int(len(self.kernel_info) + 18)
         self.info += "\n\n"
 
         self.info += colored("\t[+] Available commands: " + ', '.join(self.available_commands), 'blue', attrs=['underline', 'bold']) + '\n'

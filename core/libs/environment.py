@@ -69,6 +69,7 @@ logic = {
          'exit': {},
          'clear': {},
          'banner': {},
+         '@mysql': {},
          }
 
 readline.set_completer_delims(' \t\n;')
