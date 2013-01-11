@@ -98,20 +98,6 @@ class MakeRequest(object):
 #                except:
 #                    exit(fourzerofourmsg)
 
-            elif self.method == 'cookie':
-                opener.addheaders += [
-                        ('Cookie', '{0}={1}'.format(self.parameter, quote('echo ::command_start::;' + self.cmd.rstrip().strip(';') + ';echo ::command_end::;'))),
-                        ]
-                sc = map(str.rstrip, opener.open(self.url).readlines())
-                sc = '::command_deli::'.join(sc)
-                sc = re.search('::command_start::(.+)::command_end::', sc)
-                if sc:
-                    sc = sc.group(1).split('::command_deli::')[1:-1]
-                else:
-                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd.strip(';')))).readlines())
-
-                return sc
-
             # If the used method set GET
             else:
                 try:
