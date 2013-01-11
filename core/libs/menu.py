@@ -8,10 +8,10 @@ class GetArgs(object):
             formatter_class=argparse.RawTextHelpFormatter,
             epilog='''
 Examples:
-\tpython %(prog)s --url http://www.mywebsite.com/shell.php?cmd=
+\tpython %(prog)s -u http://www.mywebsite.com/shell.php --method cookie -p "__utma" --user-agent "spoofed-header"
+\tpython %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080 --ranodm-agent
 \tpython %(prog)s --url http://www.mywebsite.com/shell.php --method POST --parameter cmd
-\tpython %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent --tor
-\tpython %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080
+\tpython %(prog)s -u http://www.mywebsite.com/shell.php?cmd= --random-agent --tor --no-color
 
 \tpython %(prog)s --listen 1234
 \tpython %(prog)s -l 5555
