@@ -2,9 +2,9 @@ from modules.shell_handler import linux
 from modules.file_handler import file_handler
 
 from core.libs.request_handler import make_request
-from core.libs.thirdparty.termcolor import cprint, colored
+from core.libs.thirdparty.termcolor import cprint
 from tablize import Tablize
-import ast
+
 
 class MySQLConnection:
 
@@ -49,15 +49,14 @@ class MySQLConnection:
         except:
             cprint(res, 'red')
 
-
     def run(self):
         if self.authorized:
             while True:
                 try:
-                    sql = raw_input('mysql>')
+                    sql = raw_input('mysql> ').rstrip()
                     if sql == "exit":
                         self.clean()
-                        break
+                        return
                     if 'use ' in sql:
                         self.db = sql.split('use ')[-1].split()[0]
 
@@ -69,9 +68,8 @@ class MySQLConnection:
                     self.clean()
                     break
 
-
     def clean(self):
-        cmd = "rm -rf %s/{auth.php,mysql.php,auth.txt,sql.txt}" % self.hostDir
+        cmd = "rm {0}/auth.*; rm {0}/mysql.php; rm {0}/sql.txt".format(self.hostDir)
         cprint("\n[+] Removing uploaded files...", 'blue')
         make_request.get_page_source(cmd)
 

