@@ -49,9 +49,20 @@ class FileHandler(object):
     def upload_file(self, lfile_path, rfile_path):
         with open(lfile_path) as local_file:
             data_to_upload = local_file.read().encode('base64').strip()
+            #split the data then join it to escap special chars and new lines
+            data_to_upload = ''.join(data_to_upload.splitlines())
 
-        data = 'echo {0}| base64 -d > {1}'.format(''.join(data_to_upload.split()), rfile_path)
-        make_request.get_page_source(cmd=data)
+        def chuncks(seq, length):
+            return [seq[i:i + length] for i in xrange(0, len(seq), length)]
+
+        if len(data_to_upload) > 300 and make_request.method != 'post':
+            for i in chuncks(data_to_upload, 200):
+                data = 'echo {0}| base64 -d >> {1}'.format(i, rfile_path)
+                make_request.get_page_source(data)
+        else:
+            data = 'echo {0}| base64 -d > {1}'.format(data_to_upload, rfile_path)
+            make_request.get_page_source(cmd=data)
+
         print '[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path)
 
 file_handler = FileHandler()
