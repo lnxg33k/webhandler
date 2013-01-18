@@ -5,7 +5,7 @@ from random import choice
 from itertools import product
 from base64 import b64encode
 
-from modules.shell_handler import linux
+from core.libs.shell_handler import linux
 from core.libs.menu import getargs
 from core.libs.request_handler import make_request
 from core.libs.thirdparty.termcolor import cprint, colored
