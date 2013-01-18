@@ -252,11 +252,18 @@ class Commander(object):
             file_handler.upload_file(lfile_path, rfile_path)
 
     def mysql(self, command):
-        if len(command) == 3:
-            con = MySQLConnection(command[1], command[2])
-            con.run()
-        elif len(command) == 2:
-            con = MySQLConnection(command[1], '')
+        username = ''
+        password = ''
+        host = 'localhost'
+        for i in command:
+            if i.startswith('-u'):
+                username = i.split('-u')[1]
+            elif i.startswith('-p'):
+                password = i.split('-p')[1]
+            elif i.startswith('-h'):
+                host = i.split('-h')[1]
+        if len(command) >= 2:
+            con = MySQLConnection(host, username, password)
             con.run()
         else:
             MySQLConnection.help()
