@@ -1,6 +1,5 @@
-from modules.shell_handler import linux
-from modules.file_handler import file_handler
-
+from core.libs.shell_handler import linux
+from core.libs.file_handler import file_handler
 from core.libs.request_handler import make_request
 from core.libs.thirdparty.termcolor import cprint, colored
 

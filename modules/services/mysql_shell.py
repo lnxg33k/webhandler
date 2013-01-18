@@ -1,6 +1,5 @@
-from modules.shell_handler import linux
-from modules.file_handler import file_handler
-
+from core.libs.shell_handler import linux
+from core.libs.file_handler import file_handler
 from core.libs.request_handler import make_request
 from core.libs.thirdparty.termcolor import cprint
 from tablize import Tablize
@@ -29,8 +28,9 @@ class MySQLConnection:
             cmd = "cd {0}; php {1}".format(self.hostDir, 'auth.php')
             res = make_request.get_page_source(cmd)
             if 'failure' in res:
-                cprint("\n[+]Access denied for user '{0}'@'localhost'".format(self.username), 'red')
+                cprint("\n[+] Access denied for user '{0}'@'localhost'".format(self.username), 'red')
                 self.authorized = False
+                self.clean()
             else:
                 cprint("\n[+]Login Successful", 'green')
                 self.authorized = True

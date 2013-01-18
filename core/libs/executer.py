@@ -2,19 +2,19 @@ from os import getcwd, makedirs, path
 from subprocess import Popen, call
 from urllib import unquote
 
-from modules.info import info
 from modules.enumerate import enumerate
-from modules.file_handler import file_handler
 from modules.backdoor import backdoor
 from modules.bruters.bruter import brute
+from modules.services.mysql_shell import MySQLConnection
 
+from core.libs.file_handler import file_handler
+from core.libs.info import info
 from core.libs.banner import banner
 from core.libs.request_handler import make_request
 from core.libs.environment import completer, readline
 from core.libs.update import update
 from core.libs.thirdparty.termcolor import colored, cprint
 
-from modules.services.mysql_shell import MySQLConnection
 
 class Commander(object):
     '''

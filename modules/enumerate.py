@@ -1,4 +1,4 @@
-from modules.shell_handler import linux
+from core.libs.shell_handler import linux
 from core.libs.request_handler import make_request
 from core.libs.thirdparty.termcolor import cprint
 
