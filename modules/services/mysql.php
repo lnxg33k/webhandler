@@ -2,7 +2,7 @@
 
 $auth = file_get_contents('auth.txt');
 $auth = explode(',', $auth);
-mysql_connect('localhost', trim($auth[0]), trim($auth[1]));
+mysql_connect(trim($auth[2]), trim($auth[0]), trim($auth[1]));
 $query = file_get_contents('sql.txt');
 $queies = explode(";", $query);
 foreach ($queies as $query) {

@@ -7,8 +7,9 @@ from tablize import Tablize
 
 class MySQLConnection:
 
-    def __init__(self, username, password):
+    def __init__(self, host, username, password):
         cprint("\n[+] Please type 'exit' when your done to remove the files uploaded on the server")
+        self.host = host
         self.username = username
         self.password = password
         self.hostDir = linux.get_writble_dir()
@@ -21,14 +22,14 @@ class MySQLConnection:
             for i in self.phpFile:
                 file_handler.upload_file('modules/services/{0}'.format(i.split('/')[-1]), i)
 
-            cmd = 'echo "%s,%s" > %s/auth.txt' % (self.username, self.password, self.hostDir)
+            cmd = 'echo "%s,%s,%s" > %s/auth.txt' % (self.username, self.password, self.host, self.hostDir)
             cprint('\n[+] Authenticating with the server...', 'blue')
             make_request.get_page_source(cmd)
 
             cmd = "cd {0}; php {1}".format(self.hostDir, 'auth.php')
             res = make_request.get_page_source(cmd)
             if 'failure' in res:
-                cprint("\n[+] Access denied for user '{0}'@'localhost'".format(self.username), 'red')
+                cprint("\n[+] Access denied for user '{0}'@'{1}'".format(self.username, self.host), 'red')
                 self.authorized = False
                 self.clean()
             else:
@@ -75,4 +76,6 @@ class MySQLConnection:
 
     @staticmethod
     def help():
-        cprint("\n[+] Type: @mysql username [password]", 'blue')
+        cprint("\n[+] Type: @mysql [-hhost] -uusername* [-ppassword]", 'blue')
+        cprint("[+] Example: @mysql -uroot -p123456", 'white')
+        cprint("[+] Example: @mysql -h192.168.1.3 -uroot", "white")
