@@ -1,6 +1,6 @@
 # WebHandler #
-## _A handler for PHP system functions & also an alternative 'netcat' handler_ ##
 ---
+A handler for PHP system functions & also an alternative 'netcat' handler
 ![My image](http://s12.postimage.org/t5ujo2om5/Untitled_1.png)
 
 ### Info ###
