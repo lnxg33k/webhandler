@@ -77,7 +77,8 @@ else:
             errmsg = '\n[!] Using get method doesn\'t require --parameter flag, check help'
             exit(cprint(errmsg, 'red'))
         else:
-            print banner                                            # Print the banner
+            if not getargs.banner:
+                print banner                                        # Print the banner
             commander.BackConnect()                                 # Call BackConnect method to handle input
 
     elif getargs.listen or getargs.connect:

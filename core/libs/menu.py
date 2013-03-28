@@ -38,6 +38,7 @@ Examples:
     general = parser.add_argument_group('General')
     general.add_argument('-h', '--help', action='help', help='\t\tPrint this help message then exit')
     general.add_argument('-up', '--update', dest='update', help='\t\tUpdate WebHandler from git cli "GitHub repo"', action='store_true')
+    general.add_argument('-nb', '--no-baner', dest='banner', help="\t\tRun webhandler without a banner", action="store_true")
     general.add_argument('-nc', '--no-color', dest='color', help="\t\tDesable a colorful output.", action="store_true")
 
     options = parser.parse_args()
@@ -53,6 +54,7 @@ Examples:
     agent = options.agent
     random_agent = options.random_agent
     update = options.update
+    banner = options.banner
     color = options.color
 
 getargs = GetArgs()
