@@ -70,6 +70,7 @@ logic = {
          'clear': {},
          'banner': {},
          '@mysql': {},
+         '@crack': {},
          }
 
 readline.set_completer_delims(' \t\n;')
