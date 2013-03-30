@@ -8,6 +8,7 @@ from modules.bruters.bruter import brute
 from modules.services.mysql_shell import MySQLConnection
 from modules.icrackhash.cracker import singleCrack
 from modules.icrackhash import cracker
+from modules.scanners.scanner import scanner
 
 from core.libs.file_handler import file_handler
 from core.libs.info import info
@@ -35,6 +36,7 @@ class Commander(object):
             '@brute': self.brute,
             '@mysql': self.mysql,
             '@crack': self.cracker,
+            '@scan': self.scan,
         }
 
         self.history = []  # Command history
@@ -167,6 +169,12 @@ class Commander(object):
             cracker.help()
         else:
             print singleCrack(hash[1])
+
+    def scan(self, command):
+        if len(command) != 3:
+            scanner.help()
+        else:
+            scanner.scan_host(command[1], command[2])
 
     def backdoor(self, command):
         if len(command) == 3:
