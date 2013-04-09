@@ -8,8 +8,8 @@ A handler for PHP system functions & also an alternative 'netcat' handler
 WebHandler tries to simulate a 'Linux bash prompt' to handle and process:
 
     - PHP program execution functions _(e.g. `system`, `passthru`, `exec`, etc)_
-    - Bind shell connections _(e.g. `nc <ip> <port>`)_
-    - Reserve shell connections _(e.g. `nc -lvvp 1234`)_
+    - Bind shell connections
+    - Reserve shell connections
 
 Another feature is to spoof the "User-Agent" field in the HTTP header. (`--random-angent`).
 
