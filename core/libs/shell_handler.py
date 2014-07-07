@@ -9,13 +9,13 @@ class LinuxVersion(object):
         self.url = make_request.url
 
     def get_doc_root(self):
-        cmd = "echo \"<?php echo \$_SERVER['DOCUMENT_ROOT']; ?>\" > ~doc_root.php; [ -r ~doc_root.php ] && echo exists || echo not_exist"
+        cmd = "echo \"<?php echo \$_SERVER['DOCUMENT_ROOT']; ?>\" > .doc_root.php; [ -r .doc_root.php ] && echo exists || echo not_exist"
         # Make a request to create a php file (Thanks @0xAli)
         if make_request.get_page_source(cmd)[0] == 'exists':
-            make_request.url = make_request.url.replace(make_request.url.split('/')[-1], '~doc_root.php')
+            make_request.url = make_request.url.replace(make_request.url.split('/')[-1], '.doc_root.php')
             doc_root = urlopen(make_request.url).read().strip()
             make_request.url = self.url
-            cmd = "rm ~doc_root.php"
+            cmd = "rm .doc_root.php"
             make_request.get_page_source(cmd)
         else:
             correct_command = ['lsb_release -d', 'cat /etc/*-release']
