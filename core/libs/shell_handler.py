@@ -22,7 +22,7 @@ class LinuxVersion(object):
             for command in correct_command:
                 distrib_description = make_request.get_page_source(command)[0].lower()
                 if distrib_description:
-                    if 'ubuntu' in distrib_description:
+                    if 'ubuntu' in distrib_description or 'debian' in distrib_description:
                         try:
                             cmd = "grep -i \"DocumentRoot\" /etc/apache2/sites-available/default | awk '{print $2}'"
                             doc_root = make_request.get_page_source(cmd)[0]
