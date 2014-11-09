@@ -113,7 +113,7 @@ class Enumerate(object):
 
     def ip(self):
         cmd = "ip addr show | grep inet | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
-        cmd += "curl http://ifconfig.me/ip;"
+        cmd += "curl icanhazip.com;"
         cmd += "cat /etc/resolv.conf | grep nameserver | awk '{printf \", \" $2}' | sed 's/^, *//' && echo;"
         cmd += "/sbin/route -n | awk '{print $2}' | grep -v 0.0.0.0 | grep -v IP | grep -v Gateway | head -n 1;"
         #grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-eth0 2>/dev/null

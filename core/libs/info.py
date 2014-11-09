@@ -42,7 +42,7 @@ class TargetBox(object):
 
         try:
             # Get the attacker's ip address (Thanks @mandreko)
-            self.local_ip = (urlopen('http://ifconfig.me/ip').read()).strip() if not getargs.banner else 'Unknown'
+            self.local_ip = (urlopen('http://icanhazip.com').read()).strip() if not getargs.banner else 'Unknown'
         except:
             self.local_ip = 'Unknown'
 
