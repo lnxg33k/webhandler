@@ -72,6 +72,7 @@ logic = {
          '@mysql': {},
          '@crack': {},
          '@scan': {},
+         ':alias': {},
          }
 
 readline.set_completer_delims(' \t\n;')

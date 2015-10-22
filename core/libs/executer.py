@@ -37,9 +37,12 @@ class Commander(object):
             '@mysql': self.mysql,
             '@crack': self.cracker,
             '@scan': self.scan,
+            ':alias': self.alias,
         }
 
         self.history = []  # Command history
+
+        self.aliased_commands = {}
 
     def BackConnect(self):
         print info.get_information()    # printing information banner
@@ -69,7 +72,7 @@ class Commander(object):
                     elif command and command[0] == '!':
                         self.execute(command)
                     # Execute a module
-                    elif command and command[0] == '@':
+                    elif command and command[0].startswith(('@', ':')):
                         try:
                             self.commands[command_list[0]](command_list)
                         except KeyError:
@@ -105,6 +108,8 @@ class Commander(object):
                                 # command = command.replace('rm', 'rm -v') if command_list[0] == 'rm' else command
                                 # command = command.replace('cp', 'cp -v') if command_list[0] == 'cp' else command
                                 # command = command.replace('ifconfig', '/sbin/ifconfig')
+                                if self.aliased_commands.get(command):
+                                    command = self.aliased_commands[command].strip("'")
 
                                 # Get the source code cotenets
                                 cmd = 'cd {0};{1}'.format(self.cwd, command)
@@ -285,6 +290,16 @@ class Commander(object):
         else:
             MySQLConnection.help()
 
+    def alias(self, command):
+        # splitted_command = map(str.strip, command.split('='))
+        command = " ".join(command[1:])
+        # print command
+        splitted_command = map(str.strip, command.split('='))
+        try:
+            self.aliased_commands[splitted_command[0]] = splitted_command[1]
+        except:
+            cprint('\n[!] Usage: :alias command=alias', 'red')
+            cprint('[!] example: :alias ls=\'ls -lh --color\'', 'red')
 
 # Taking an instance from the main class
 commander = Commander()
