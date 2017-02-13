@@ -28,7 +28,7 @@ Examples:
     shell_handler.add_argument('-rg', '--random-agent', dest='random_agent', help='\t\tWebHandler will use some random user-agent', action='store_true')
     shell_handler.add_argument('-x', '--proxy', dest='proxy', help='\t\tProxy (e.g. \'http://127.0.0.1:8080\')', metavar='')
     shell_handler.add_argument('-t', '--tor', dest='tor', help='\t\tUse Tor anonymity network', action='store_true')
-    shell_handler.add_argument('-hd', '--headers', dest='headers', help='\t\tAdd custom headers to the request \'use :: as a seprator\' (e.g. X-Forwarded-For:10.3.3.88::Accept: */*)', metavar='')
+    shell_handler.add_argument('-hd', '--headers', dest='headers', help='\t\tAdd custom headers to the request \'use :: as a seprator\' (e.g. X-Forwarded-For:10.90.2.1::Accept: */*)', metavar='')
 
     # nc alternative group
     nc_alternative = parser.add_argument_group('NetCat Alternative')
