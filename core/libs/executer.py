@@ -71,6 +71,8 @@ class Commander(object):
                         Popen('clear', shell=True).wait()
                     elif command and command[0] == '!':
                         self.execute(command)
+                    elif command and command[0] == '#':
+                        continue
                     # Execute a module
                     elif command and command[0].startswith(('@', ':')):
                         try:

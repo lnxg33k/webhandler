@@ -1,5 +1,5 @@
 import datetime
-from urllib2 import urlopen
+from urllib2 import urlopen, Request
 
 from core.libs.menu import getargs
 from core.libs.request_handler import make_request
@@ -42,7 +42,8 @@ class TargetBox(object):
 
         try:
             # Get the attacker's ip address (Thanks @mandreko)
-            self.local_ip = (urlopen('http://icanhazip.com').read()).strip() if not getargs.banner else 'Unknown'
+            request = Request("http://ifconfig.co", headers={"User-Agent" : "curl/7.51.0"})
+            self.local_ip = (urlopen(request, timeout=3).read()).strip() if not getargs.banner else 'Unknown'
         except:
             self.local_ip = 'Unknown'
 

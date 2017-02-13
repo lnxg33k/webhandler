@@ -1,6 +1,8 @@
 import os
 from subprocess import Popen, PIPE
 
+from core.libs.thirdparty.tqdm import tqdm
+
 from core.libs.thirdparty.termcolor import cprint, colored
 from core.libs.request_handler import make_request
 
@@ -66,9 +68,11 @@ class FileHandler(object):
                     return [seq[i:i + length] for i in xrange(0, len(seq), length)]
 
                 if len(data_to_upload) > 300 and make_request.method != 'post':
-                    for i in chuncks(data_to_upload, 200):
+                    chuncked_data = chuncks(data_to_upload, 6000)
+                    cprint('\n[!] The amount of data being uploaded is big, I will chunck it into %d stages.' % len(chuncked_data), 'red')
+                    for i in tqdm(range(len(chuncked_data))):
                         # append data to pre-written file using >>
-                        data = 'echo {0}| base64 -d >> {1}'.format(i, rfile_path)
+                        data = 'echo {0}| base64 -d >> {1}'.format(chuncked_data[i], rfile_path)
                         make_request.get_page_source(data)
                 else:
                     data = 'echo {0}| base64 -d > {1}'.format(data_to_upload, rfile_path)

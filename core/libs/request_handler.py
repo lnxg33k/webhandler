@@ -61,7 +61,11 @@ class MakeRequest(object):
             # Proxy support
             proxy_support = ProxyHandler({'http': self.proxy} if self.proxy else {})
             opener = build_opener(proxy_support, HTTPHandler(debuglevel=0))
-
+            opener.addheaders = [('Accept', '*/*'), ]
+            if getargs.headers:
+                # print opener.addheaders
+                # print getargs.headers
+                opener.addheaders.extend(getargs.headers)
             # Tor support
             if self.tor:
                 opener = build_opener(SocksiPyHandler(PROXY_TYPE_SOCKS5, '127.0.0.1', 9050))
@@ -70,11 +74,12 @@ class MakeRequest(object):
 
             # User angent
             if getargs.random_agent:
-                opener.addheaders = [('User-agent', self.random_agent)]
+                opener.addheaders.extend([('User-agent', self.random_agent)])
             elif self.user_agent:
-                opener.addheaders = [('User-agent', self.user_agent)]
+                opener.addheaders.extend([('User-agent', self.user_agent)])
             else:
                 pass
+
             install_opener(opener)
 
             errmsg = colored('\n[!] Check your network connection and/or the proxy (if you\'re using one)', 'red')
