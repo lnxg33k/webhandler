@@ -91,7 +91,7 @@ class MakeRequest(object):
                 try:
                     sc = map(str.rstrip, opener.open(self.url, parameters).readlines())
                     sc = '::command_deli::'.join(sc)
-                    sc = re.search('::command_start::(.+)::command_end::', sc)
+                    sc = re.search('::command_start::(.*?)::command_end::', sc)
                     if sc:
                         sc = sc.group(1).split('::command_deli::')[1:-1]
                     else:
@@ -114,7 +114,7 @@ class MakeRequest(object):
                     else:
                         sc = map(str.rstrip, opener.open('{0}{1}'.format(self.url, quote('echo ::command_start::;' + self.cmd.strip(';') + ';echo ::command_end::;'))).readlines())
                     sc = '::command_deli::'.join(sc)
-                    sc = re.search('::command_start::(.+)::command_end::', sc)
+                    sc = re.search('::command_start::(.*?)::command_end::', sc)
                     if sc:
                         sc = sc.group(1).split('::command_deli::')[1:-1]
                     else:
