@@ -53,10 +53,10 @@ class Commander(object):
             try:
                 try:
                     # Getting command to be executed from the user
-                    command = raw_input(info.current_user +
+                    command = raw_input("[" + info.current_user +
                             colored('@', 'red') +
-                            colored(info.host_ip.split(',')[0], 'green') + ':~' +
-                            colored('({0})'.format(self.cwd), 'yellow') + ':$ ').strip()
+                            colored(info.hostname, 'green') +
+                            colored(' {0}'.format(self.cwd[:10]+'...'+self.cwd[-10:] if len(self.cwd) > 20 else self.cwd), 'magenta') + ' ]$ ').strip()
                 # If something went wrong screw the list
                 except IndexError:
                     command = raw_input('WebHandler@server:$ ').strip()
