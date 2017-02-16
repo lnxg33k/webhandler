@@ -50,9 +50,10 @@ class MakeRequest(object):
         self.tor = getargs.tor
         self.shouldIuseB64 = False
 
-        b64Useable = self.get_page_source("echo aGVsbG8gd29ybGQK | base64 -d")
-        if b64Useable and b64Useable[0] == 'hello world':
-            self.shouldIuseB64 = True
+        if not getargs.listen:
+            b64Useable = self.get_page_source("echo aGVsbG8gd29ybGQK | base64 -d")
+            if b64Useable and b64Useable[0] == 'hello world':
+                self.shouldIuseB64 = True
 
     def get_page_source(self, cmd):
         self.cmd = cmd
@@ -155,7 +156,8 @@ class MakeRequest(object):
                         buffer = listen.socket.recv(1024)
                     except:
                         buffer = ''
-                return sc.split('\n')[:-1]
+                sc = [i for i in sc.split('\n')[:-1] if not any(s in i for s in ['job control in this shell', 'cannot set terminal process group', 'can\'t access tty', '<'])]
+                return sc
             except:
                 if(listen.socket.sendall(cmd + "\n") != None):
                     errmsg = colored('\n[!] [!] Error in sending data (#2)', 'red')
