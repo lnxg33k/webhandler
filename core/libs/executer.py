@@ -86,6 +86,8 @@ class Commander(object):
                                 cwd = self.cwd
                                 if '../' in command_list[-1] or '..' in command_list[-1]:
                                     self.cwd = '/'.join(cwd.split('/')[:-len(command_list[-1].split('..'))+1])
+                                    if not self.cwd:
+                                        self.cwd = '/'
                                 else:
                                     if command_list[-1].startswith('/'):
                                         cmd = '[ -d {0} ] && echo is_valid'.format(command_list[-1])
