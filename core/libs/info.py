@@ -16,9 +16,9 @@ class TargetBox(object):
             self.cmd += 'if [ `pwd 2> /dev/null|wc -l` -ge 1 ];then pwd;else echo "unknown" ;fi;'
             self.cmd += 'ls -ld `pwd` | awk \'{print $1}\';'
             self.cmd += 'bash -c "input=\$(uptime); if [[ \$input == *day* ]]; then out=\$(echo \$input | awk \'{print \$3\\" days\\"}\'); if [[ \$input == *min* ]]; then out=\$(echo \\"\$out and \\" && echo \$input | awk \'{print \$5\\" minutes\\"}\'); else out=\$(echo \\"\$out, \\" && echo \$input | awk \'{print \$5}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi elif [[ \$input == *min* ]]; then out=\$(echo \$input | awk \'{print \$3\\" minutes\\"}\'); else out=\$(echo \$input | awk \'{print \$3}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi; echo \$out;" ;'
-            self.cmd += "/sbin/ifconfig | grep -e 'inet addr' | grep -v '127.0.0.1' | cut -f2 -d':' | cut -f1 -d' ';"
+            self.cmd += "if [ `ip route get 8.8.8.8 2>/dev/null|wc -l` -ge 1 ];then ip route get 8.8.8.8 | awk 'NR==1 {print $NF}'; else echo 'unknown'; fi;"
             self.cmd += 'if [ `hostname 2> /dev/null|wc -l` -ge 1 ];then hostname;else echo "unkown" ;fi;'
-            self.cmd += 'if [ `cat /etc/*-release 2> /dev/null|wc -l` -ge 1 ]; then cat /etc/*-release| grep DESCRIPTION|sed \'s/DISTRIB_DESCRIPTION=//\'|tr -d \'"\'; else echo; fi;'
+            self.cmd += 'if [ `cat /etc/*-release 2> /dev/null|wc -l` -ge 1 ]; then cat /etc/*-release| grep DESCRIPTION|sed \'s/DISTRIB_DESCRIPTION=//\'|tr -d \'"\'; else echo "unkown"; fi;'
 
             self.available_commands = ['@backdoor', '@download', '@enum', '@history', '@info', '@update', '@upload', '@brute', '@crack', '@mysql', ':alias', 'exit']
 
@@ -55,12 +55,12 @@ class TargetBox(object):
         self.info += colored("\tUser         : ", 'red') + colored(self.current_user, 'green') + '\n'
         self.info += colored("\tID           : ", 'red') + colored(self.current_id, 'green') + '\n'
         self.info += colored("\tKernel       : ", 'red') + colored(self.kernel_info, 'green') + '\n'
-        self.info += colored("\tCWD          : ", 'red') + colored(self.cwd, 'green') + colored('\t\t' + self.perm_cwd, 'yellow', attrs=['bold']) + '\n'
+        self.info += colored("\tCWD          : ", 'red') + colored(self.cwd, 'green') + colored('\t(' + self.perm_cwd + ')', 'yellow', attrs=['bold']) + '\n'
         self.info += colored("\tUptime       : ", 'red') + colored(self.uptime, 'green') + '\n'
-        self.info += colored("\thostname     : ", 'red') + colored(self.hostname, 'green') + '\n'
+        # self.info += colored("\thostname     : ", 'red') + colored(self.hostname, 'green') + '\n'
         self.info += colored("\tTarget's IPs : ", 'red') + colored(self.host_ip, 'green') + '\n'
         self.info += colored("\tOur IP       : ", 'red') + colored(self.local_ip, 'green') + '\n'
-        self.info += colored("\tHostname     : ", 'red') + colored(self.hostname, 'green') + colored('\t\t\t\t' + self.distrib, 'yellow', attrs=['bold']) + '\n'
+        self.info += colored("\tHostname     : ", 'red') + colored(self.hostname, 'green') + colored('\t(' + self.distrib + ')', 'yellow', attrs=['bold']) + '\n'
         self.info += '\t' + '-' * int(len(self.kernel_info) + 18)
         self.info += "\n\n"
 
