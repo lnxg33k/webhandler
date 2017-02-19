@@ -140,7 +140,7 @@ class MakeRequest(object):
                 if (listen.socket.sendall(cmd + "\n") != None):
                     errmsg = colored('\n[!] Error in sending data (#1)', 'red')
                     cprint(errmsg, 'red')
-                time.sleep(0.1)
+                time.sleep(1)
 
                 sc = ''
                 buffer = listen.socket.recv(1024)
@@ -168,7 +168,7 @@ class MakeRequest(object):
                 if (connect.socket.send(cmd + "\n") == None):
                     errmsg = colored('\n[!] Error in sending data (#1)', 'red')
                     cprint(errmsg, 'red')
-                time.sleep(0.1)
+                time.sleep(1)
 
                 sc = ''
                 buffer = connect.socket.recv(1024)

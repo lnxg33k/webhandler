@@ -116,7 +116,7 @@ class Commander(object):
                                     command = self.aliased_commands[command].strip("'")
 
                                 # Get the source code cotenets
-                                cmd = 'cd {0}&&{1}'.format(self.cwd, command)
+                                cmd = 'cd {0}&&{1} 2>&1'.format(self.cwd, command)
                                 source = make_request.get_page_source(cmd)
                                 if source:
                                     for line in source:
