@@ -47,7 +47,14 @@ class LinuxVersion(object):
             result = result[0]
             cprint('\n[+] Found a directory to use: \'{0}\''.format(result), 'green')
         else:
-            cprint('\n[!] Unable to find a suitable directory', 'red')
+            path = '/tmp'
+            cmd = "if [ -w \"%s\" ];then echo \"WRITABLE\"; fi" % path
+            result = make_request.get_page_source(cmd)
+            if result:
+                result = path
+                cprint('[+] /tmp is a writable directory.', 'green')
+            else:
+                cprint('\n[!] Unable to find a suitable directory', 'red')
         return result
 
 

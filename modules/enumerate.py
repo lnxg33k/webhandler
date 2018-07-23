@@ -187,7 +187,12 @@ class Enumerate(object):
                 cprint('{0:2d}.) {1}'.format(c, path), 'green')
                 c += 1
         else:
-            cprint('\n[!] Didn\'t find any wriable directories', 'red')
+            cmd = "if [ -w \"/tmp\" ];then echo \"WRITABLE\"; else echo \"NOT WRITABLE\"; fi"
+            self.writable = make_request.get_page_source(cmd)
+            if self.writable:
+                cprint('[+] /tmp is a writable directory.', 'green')
+            else:
+                cprint('\n[!] Didn\'t find any wriable directories', 'red')
 
     def history(self):
         cmd = 'for i in $(cut -d: -f6 /etc/passwd | sort | uniq); do [ -f $i/.bash_history ] && echo "bash_history: $i"; [ -f $i/.nano_history ] && echo "nano_history: $i"; [ -f $i/.atftp_history ] && echo "atftp_history: $i"; [ -f $i/.mysql_history ] && echo "mysql_history: $i"; [ -f $i/.php_history ] && echo "php_history: $i";done'
