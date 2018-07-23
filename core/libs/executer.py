@@ -35,7 +35,6 @@ class Commander(object):
             '@upload': self.upload,
             '@brute': self.brute,
             '@mysql': self.mysql,
-            '@crack': self.cracker,
             '@scan': self.scan,
             ':alias': self.alias,
         }
@@ -172,12 +171,6 @@ class Commander(object):
                 brute.help()
         else:
             brute.help()
-
-    def cracker(self, hash):
-        if len(hash) != 2:
-            cracker.help()
-        else:
-            print singleCrack(hash[1])
 
     def scan(self, command):
         if len(command) != 3:

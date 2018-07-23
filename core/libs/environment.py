@@ -66,11 +66,11 @@ logic = {
          '@update': {},
          '@download': {},
          '@upload': {},
+         '@history': {},
          'exit': {},
          'clear': {},
          'banner': {},
          '@mysql': {},
-         '@crack': {},
          '@scan': {},
          ':alias': {},
          }
