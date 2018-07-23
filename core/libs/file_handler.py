@@ -54,7 +54,7 @@ class FileHandler(object):
         Upload files to the remote server using base64 and chunks
         self.upload_file('local_file', 'remote_file')
         """
-        def write_file(rfilr_path):
+        def write_file(rfile_path):
             "nested function to be used within the file_exists conditions"
             try:
                 # open the the file in 'r' mode to upload it
@@ -68,7 +68,7 @@ class FileHandler(object):
                     return [seq[i:i + length] for i in xrange(0, len(seq), length)]
 
                 if len(data_to_upload) > 300 and make_request.method != 'post':
-                    chuncked_data = chuncks(data_to_upload, 6000)
+                    chuncked_data = chuncks(data_to_upload, 4000)
                     cprint('\n[!] Uploading %s...' % lfile_path, 'green')
                     cprint('[!] The amount of data being uploaded is big, I will chunck it into %d stages.' % len(chuncked_data), 'green')
                     for i in tqdm(range(len(chuncked_data))):
@@ -81,7 +81,7 @@ class FileHandler(object):
 
                 if self.check_fileSum(lfile_path, rfile_path):
                     "if the two files have the same md5sum"
-                    print '[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path)
+                    cprint('[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path), 'green')
                 else:
                     cprint('\n[!] Something went wrong while uploading the file, md5 checksum failed.', 'red')
                     choice = raw_input('[+] Should I keep going? (y/n): [y] ')
@@ -91,38 +91,38 @@ class FileHandler(object):
             except IOError:
                 cprint('\n[+] File: "{0}" doesn\'t exist'.format(lfile_path), 'red')
 
+        if rfile_path.split('/')[-1] != lfile_path and os.path.isfile(lfile_path) and self.is_rfile_dir(rfile_path):
+            rfile_path =  '%s/%s' % (rfile_path.rstrip('/'), lfile_path.split('/')[-1])
+
         if self.file_exists(rfile_path):
-            if rfile_path.split('/')[-1] == lfile_path:
-                cprint('\n[!] File: {0} already exists on the server'.format(rfile_path), 'red')
-                choice = raw_input('[+] Shall I overwrite the file (y/n): [n] ')
-                if choice.lower() == 'y':
-                    make_request.get_page_source("rm -rf {0}".format(rfile_path))
-                    write_file(rfile_path)  # call write_file function
-                else:
-                    """
-                    >>> x = "/var/www/uploads/x.php"
-                    >>> x.rsplit('/', 1)
-                    ['/var/www/uploads', 'x.php']
-                    >>>
-                    """
-                    rfile_path = rfile_path.rsplit('/', 1)[0] + '/' + raw_input("\n[+] Please, enter a unique file name: ")
-                    # in case of the new file name also exists
-                    while self.file_exists(rfile_path):
-                        cprint('\n[!] File: {0} already exists on the server'.format(rfile_path), 'red')
-                        rfile_path = rfile_path.rsplit('/', 1)[0] + '/' + raw_input("[+] Pick up another name: ")
-                    write_file(rfile_path)  # call write_file function
+            cprint('\n[!] File: {0} already exists on the server'.format(rfile_path), 'red')
+            choice = raw_input('[+] Shall I overwrite the file (y/n): [n] ')
+            if choice.lower() == 'y':
+                make_request.get_page_source("rm -f {0}".format(rfile_path))
+                write_file(rfile_path)  # call write_file function
             else:
-                # cprint('\n[!] Looks like you\'r trying to overwrite a directory')
-                choice = raw_input("[+] Shall I overwrite {0} (y/n): ".format(rfile_path))
-                if choice.lower() == 'y':
-                    make_request.get_page_source("rm -rf {0}".format(rfile_path))
-                    write_file(rfile_path)  # call write_file function
+                """
+                >>> x = "/var/www/uploads/x.php"
+                >>> x.rsplit('/', 1)
+                ['/var/www/uploads', 'x.php']
+                >>>
+                """
+                rfile_path = rfile_path.rsplit('/', 1)[0] + '/' + raw_input("\n[+] Please, enter a unique file name: ")
+                # in case of the new file name also exists
+                while self.file_exists(rfile_path):
+                    cprint('\n[!] File: {0} already exists on the server'.format(rfile_path), 'red')
+                    rfile_path = rfile_path.rsplit('/', 1)[0] + '/' + raw_input("[+] Pick up another name: ")
+                write_file(rfile_path)  # call write_file function
         else:
             write_file(rfile_path)  # call write_file function
 
     def file_exists(self, rfile):
         "check if the file we upload is already on the server or not !"
         cmd = 'if [ -e {0} ]; then echo "True"; fi;'.format(rfile)
+        return make_request.get_page_source(cmd)
+
+    def is_rfile_dir(self, rfile):
+        cmd = 'if [ -d {0} ]; then echo "True"; fi;'.format(rfile)
         return make_request.get_page_source(cmd)
 
     def check_fileSum(self, lfile_path, rfile_path):
