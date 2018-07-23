@@ -69,7 +69,8 @@ class FileHandler(object):
 
                 if len(data_to_upload) > 300 and make_request.method != 'post':
                     chuncked_data = chuncks(data_to_upload, 6000)
-                    cprint('\n[!] The amount of data being uploaded is big, I will chunck it into %d stages.' % len(chuncked_data), 'red')
+                    cprint('\n[!] Uploading %s...' % lfile_path, 'green')
+                    cprint('[!] The amount of data being uploaded is big, I will chunck it into %d stages.' % len(chuncked_data), 'green')
                     for i in tqdm(range(len(chuncked_data))):
                         # append data to pre-written file using >>
                         data = 'echo {0}| base64 -d >> {1}'.format(chuncked_data[i], rfile_path)
@@ -82,7 +83,10 @@ class FileHandler(object):
                     "if the two files have the same md5sum"
                     print '[+] Successfully uploaded {0} to {1}'.format(lfile_path, rfile_path)
                 else:
-                    cprint('[!] Something went wrong while uploading the file')
+                    cprint('\n[!] Something went wrong while uploading the file, md5 checksum failed.', 'red')
+                    choice = raw_input('[+] Should I keep going? (y/n): [y] ')
+                    if choice.lower() == 'n':
+                        self.clean(rfile_path)
             # throw an exception when the local file not exists
             except IOError:
                 cprint('\n[+] File: "{0}" doesn\'t exist'.format(lfile_path), 'red')
@@ -90,7 +94,7 @@ class FileHandler(object):
         if self.file_exists(rfile_path):
             if rfile_path.split('/')[-1] == lfile_path:
                 cprint('\n[!] File: {0} already exists on the server'.format(rfile_path), 'red')
-                choice = raw_input('[+] Shall I overwrite the file (y/n): ')
+                choice = raw_input('[+] Shall I overwrite the file (y/n): [n] ')
                 if choice.lower() == 'y':
                     make_request.get_page_source("rm -rf {0}".format(rfile_path))
                     write_file(rfile_path)  # call write_file function
@@ -108,7 +112,7 @@ class FileHandler(object):
                         rfile_path = rfile_path.rsplit('/', 1)[0] + '/' + raw_input("[+] Pick up another name: ")
                     write_file(rfile_path)  # call write_file function
             else:
-                cprint('\n[!] Looks like you\'r trying to overwrite a directory')
+                # cprint('\n[!] Looks like you\'r trying to overwrite a directory')
                 choice = raw_input("[+] Shall I overwrite {0} (y/n): ".format(rfile_path))
                 if choice.lower() == 'y':
                     make_request.get_page_source("rm -rf {0}".format(rfile_path))
@@ -123,9 +127,14 @@ class FileHandler(object):
 
     def check_fileSum(self, lfile_path, rfile_path):
         lfileSum = Popen('md5sum {0}'.format(lfile_path), shell=True, stdout=PIPE, stderr=PIPE)
-        rfileSum = "".join(make_request.get_page_source('md5sum ' + rfile_path)).split()[0]
         lfileSum = lfileSum.communicate()[0].split()[0]
-        return lfileSum == rfileSum
+        cmd = "$(for x in `whereis md5sum`; do file $x | grep ELF | awk '{print $1}' | tr -d ':'; done) %s" % rfile_path
+        r = make_request.get_page_source(cmd)
+        if r:
+            rfileSum = "".join(r).split()[0]
+            return lfileSum == rfileSum
+        else:
+            return False
 
     def clean(self, garbage):
         cmd = "rm -f {0}".format(garbage)
