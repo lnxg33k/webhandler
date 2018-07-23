@@ -6,8 +6,7 @@ from modules.enumerate import enumerate
 from modules.backdoor import backdoor
 from modules.bruters.bruter import brute
 from modules.services.mysql_shell import MySQLConnection
-from modules.icrackhash.cracker import singleCrack
-from modules.icrackhash import cracker
+
 from modules.scanners.scanner import scanner
 
 from core.libs.file_handler import file_handler
