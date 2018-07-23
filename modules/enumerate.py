@@ -179,7 +179,7 @@ class Enumerate(object):
 
     # A method to get all writable directories within CWD
     def writable(self):
-        cmd = "find {0} -depth -perm -0002 -type d".format(linux.get_doc_root())
+        cmd = "find {0} -maxdepth 1  -perm /200 -type d".format(linux.get_doc_root())
         writable = make_request.get_page_source(cmd)
         if writable:
             c = 1
