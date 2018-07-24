@@ -41,7 +41,7 @@ class LinuxVersion(object):
         return doc_root
 
     def get_writble_dir(self):
-        cmd = "find {0} -maxdepth 1 -perm /200 -type d 2>/dev/null | sort -R".format(self.get_doc_root())  # -print -quit
+        cmd = "find {0} -writable -type d 2>/dev/null | sort -R".format(self.get_doc_root())  # -print -quit
         result = make_request.get_page_source(cmd)
         if result:
             result = result[0]
