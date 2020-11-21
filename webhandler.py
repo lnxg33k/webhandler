@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Developers:
-    Ahmed Shawky ~ @lnxg33k (http://lnxg33k.wordpress.com)
+    Ahmed Shawky ~ @lnxg33k (https://twitter.com/lnxg33k)
     g0tmi1k ~ @g0tmi1k (https://blog.g0tmi1k.com/)
 '''
 
