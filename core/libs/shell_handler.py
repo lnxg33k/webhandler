@@ -41,13 +41,20 @@ class LinuxVersion(object):
         return doc_root
 
     def get_writble_dir(self):
-        cmd = "find {0} -perm -0003 -type d 2>/dev/null | sort -R".format(self.get_doc_root())  # -print -quit
+        cmd = "find {0} -writable -type d 2>/dev/null | sort -R".format(self.get_doc_root())  # -print -quit
         result = make_request.get_page_source(cmd)
         if result:
             result = result[0]
             cprint('\n[+] Found a directory to use: \'{0}\''.format(result), 'green')
         else:
-            cprint('\n[!] Unable to find a suitable directory', 'red')
+            path = '/tmp'
+            cmd = "if [ -w \"%s\" ];then echo \"WRITABLE\"; fi" % path
+            result = make_request.get_page_source(cmd)
+            if result:
+                result = path
+                cprint('[+] /tmp is a writable directory.', 'green')
+            else:
+                cprint('\n[!] Unable to find a suitable directory', 'red')
         return result
 
 

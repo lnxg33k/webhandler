@@ -16,11 +16,11 @@ class TargetBox(object):
             self.cmd += 'if [ `pwd 2> /dev/null|wc -l` -ge 1 ];then pwd;else echo "unknown" ;fi;'
             self.cmd += 'ls -ld `pwd` | awk \'{print $1}\';'
             self.cmd += 'bash -c "input=\$(uptime); if [[ \$input == *day* ]]; then out=\$(echo \$input | awk \'{print \$3\\" days\\"}\'); if [[ \$input == *min* ]]; then out=\$(echo \\"\$out and \\" && echo \$input | awk \'{print \$5\\" minutes\\"}\'); else out=\$(echo \\"\$out, \\" && echo \$input | awk \'{print \$5}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi elif [[ \$input == *min* ]]; then out=\$(echo \$input | awk \'{print \$3\\" minutes\\"}\'); else out=\$(echo \$input | awk \'{print \$3}\' | tr -d \\",\\" | awk -F \\":\\" \'{print \$1\\" hours and \\"\$2\\" minutes\\"}\'); fi; echo \$out;" ;'
-            self.cmd += "if [ `ip route get 8.8.8.8 2>/dev/null|wc -l` -ge 1 ];then ip route get 8.8.8.8 | awk 'NR==1 {print $NF}'; else echo 'unknown'; fi;"
+            self.cmd += "if [ `ip route get 8.8.8.8 2>/dev/null|wc -l` -ge 1 ];then ip route get 8.8.8.8 | awk 'NR==1 {print $7}'; else echo 'unknown'; fi;"
             self.cmd += 'if [ `hostname 2> /dev/null|wc -l` -ge 1 ];then hostname;else echo "unkown" ;fi;'
             self.cmd += 'if [ `cat /etc/*-release 2> /dev/null|wc -l` -ge 1 ]; then cat /etc/*-release| grep PRETTY_NAME|sed \'s/PRETTY_NAME=//\'|tr -d \'"\'; else echo "unkown"; fi;'
 
-            self.available_commands = ['@backdoor', '@download', '@enum', '@history', '@info', '@update', '@upload', '@brute', '@crack', '@mysql', ':alias', 'exit']
+            self.available_commands = ['@backdoor', '@download', '@enum', '@history', '@info', '@update', '@upload', '@brute', '@mysql', ':alias', 'exit']
 
     def get_information(self):
         now = datetime.datetime.now()
@@ -64,9 +64,9 @@ class TargetBox(object):
         self.info += '\t' + '-' * int(len(self.kernel_info) + 18)
         self.info += "\n\n"
 
-        self.info += colored("\t[+] Available commands: " + ', '.join(self.available_commands), 'blue', attrs=['underline', 'bold']) + '\n' \
+        self.info += "\t"+ colored("[+] Available commands: " + ', '.join(self.available_commands), 'blue', attrs=['underline', 'bold']) + '\n' \
         if not getargs.banner else ''
-        self.info += colored("\t[+] Inserting ! at the begining of the command will execute the command locally (on your box)", 'blue', attrs=['underline', 'bold'])
+        self.info += "\t" + colored("[+] Inserting ! at the begining of the command will execute the command locally (on your box)", 'blue', attrs=['underline', 'bold'])
         self.info += "\n"
         if not getargs.banner:
             return self.info
