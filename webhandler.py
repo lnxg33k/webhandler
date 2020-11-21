@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Developers:
     Ahmed Shawky ~ @lnxg33k (http://lnxg33k.wordpress.com)
-    g0tmi1k ~ @g0tmi1k (http://www.g0tmi1k.com)
+    g0tmi1k ~ @g0tmi1k (https://blog.g0tmi1k.com/)
 '''
 
 # Importing modules
